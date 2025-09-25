@@ -54,12 +54,10 @@ app/
 ```
 components/
 ├── ui/                      # Componentes base reutilizables
-│   ├── collapsible.tsx      # Acordeones expandibles
-│   ├── icon-symbol.tsx      # Sistema de iconos
-│   └── ...
-├── themed-text.tsx          # Texto con tema
-├── themed-view.tsx          # Vistas temáticas
-├── parallax-scroll-view.tsx # Scroll con paralaje
+│   ├── icon-symbol.tsx      # Sistema de iconos universal
+│   └── icon-symbol.ios.tsx  # Iconos específicos para iOS
+├── themed-text.tsx          # Texto con tema adaptativo
+├── themed-view.tsx          # Vistas con tema automático
 └── haptic-tab.tsx          # Navegación con feedback háptico
 ```
 
@@ -73,6 +71,18 @@ constants/
     ├── Spacing             # Sistema de espaciado
     ├── BorderRadius        # Bordes consistentes
     └── Shadows             # Elevaciones Material Design
+```
+
+### Assets Optimizados
+
+```
+assets/images/               # Solo recursos necesarios
+├── icon.png                # Icono principal de la app
+├── favicon.png             # Favicon para web
+├── splash-icon.png         # Pantalla de carga
+├── android-icon-background.png  # Fondo del icono Android
+├── android-icon-foreground.png  # Primer plano del icono Android
+└── android-icon-monochrome.png  # Versión monocromática
 ```
 
 ## 🚀 Instalación y Desarrollo
@@ -230,36 +240,3 @@ const filteredIngredients = ingredients.filter(ingredient => {
 - Compartir recetas en redes sociales
 - Mapa interactivo de restaurantes
 - Notificaciones de temporada de ingredientes
-
-## 🤝 Contribuciones
-
-Este proyecto está abierto a contribuciones de la comunidad. Para contribuir:
-
-1. Fork el repositorio
-2. Crea una rama para tu característica (`git checkout -b feature/nueva-caracteristica`)
-3. Commit tus cambios (`git commit -am 'Añadir nueva característica'`)
-4. Push a la rama (`git push origin feature/nueva-caracteristica`)
-5. Crea un Pull Request
-
-### Áreas de Contribución Prioritarias
-
-- 📝 **Contenido Cultural**: Añadir más recetas, ingredientes o establecimientos
-- 🎨 **Experiencia de Usuario**: Mejorar interfaces y flujos de navegación
-- 💻 **Funcionalidades**: Implementar características planificadas
-- 📱 **Testing**: Pruebas en diferentes dispositivos y sistemas
-- 🌐 **Accesibilidad**: Mejoras para usuarios con discapacidades
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ve el archivo [LICENSE](LICENSE) para detalles.
-
-## 📞 Contacto y Reconocimientos
-
-**Desarrollado para preservar y compartir la riqueza cultural de Arroyo Seco, Querétaro**
-
-Para más información sobre Expo y React Native:
-- [Expo documentation](https://docs.expo.dev/)
-- [React Native documentation](https://reactnative.dev/)
-- [Material Design 3](https://m3.material.io/)
-
----
