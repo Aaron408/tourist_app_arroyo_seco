@@ -178,7 +178,7 @@ export default function HomeScreen() {
           </ThemedText>
           <ThemedText style={[styles.modernInfoDescription, { color: colors.outline }]}>
             Preservamos el conocimiento gastronómico tradicional de Arroyo Seco, 
-            promoviendo la 
+            promoviendo la cultura local y el turismo sostenible.
           </ThemedText>
           <View style={styles.modernFeaturesList}>
             {[
