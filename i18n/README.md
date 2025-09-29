@@ -114,3 +114,7 @@ We extend with ISO 3166-1 alpha-2 for regions (US, MX).
 Translations are organized by screen/domain for clarity.
 
 The structure is scalable, maintainable, and standards-compliant.
+
+## References
+https://www.iso.org/iso-639-language-code
+https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes

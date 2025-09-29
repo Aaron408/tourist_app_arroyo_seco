@@ -4,11 +4,12 @@ import React from 'react';
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
+import { useLanguage } from '@/contexts/languageProvider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-
+  const { t } = useLanguage();
   return (
     <Tabs
       screenOptions={{
@@ -28,28 +29,28 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Inicio',
+          title: t('Layout.tabs.index'),
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="mountain.2.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="recipes"
         options={{
-          title: 'Recetas',
+          title: t('Layout.tabs.recipes'),
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="frying.pan.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="restaurants"
         options={{
-          title: 'Restaurantes',
+          title: t('Layout.tabs.restaurants'),
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="building.2.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explorar',
+          title: t('Layout.tabs.explore'),
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="map.fill" color={color} />,
         }}
       />

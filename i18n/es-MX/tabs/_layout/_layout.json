@@ -1,3 +1,8 @@
 {
-    "greet": "Hola"
+    "tabs":{
+        "index": "Inicio",
+        "recipes": "Recetas",
+        "restaurants":"Restaurantes",
+        "explore": "Explorar"
+    }
 }
