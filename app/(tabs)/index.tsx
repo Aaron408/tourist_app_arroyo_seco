@@ -1,11 +1,12 @@
+import { LanguageSwitcher } from '@/components/languageSwitcher';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BorderRadius, Colors, Shadows, Spacing, Typography } from '@/constants/theme';
+import { useLanguage } from '@/contexts/languageProvider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { router } from 'expo-router';
 import React from 'react';
 import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-
 const screenWidth = Dimensions.get('window').width;
 
 const sections = [
@@ -57,12 +58,18 @@ export default function HomeScreen() {
       router.push(`/(tabs)/${route}` as any);
     }
   };
+  // Language switch
+  const { currentLanguage, setLanguage } = useLanguage();
+
+  const toggleLanguage = () => {
+    setLanguage(currentLanguage === "es" ? "en" : "es");
+  };
 
   const SectionCard = ({ section }: { section: typeof sections[0] }) => (
     <TouchableOpacity
       style={[
-        styles.modernSectionCard, 
-        { 
+        styles.modernSectionCard,
+        {
           backgroundColor: colors.surface,
           ...Shadows.md,
         }
@@ -88,10 +95,10 @@ export default function HomeScreen() {
   );
 
   const StatCard = ({ stat }: { stat: typeof stats[0] }) => (
-    <View 
+    <View
       style={[
-        styles.modernStatCard, 
-        { 
+        styles.modernStatCard,
+        {
           backgroundColor: colors.surface,
           ...Shadows.sm,
         }
@@ -128,10 +135,11 @@ export default function HomeScreen() {
             Plataforma Turística Cultural
           </ThemedText>
           <View style={[styles.modernHeaderDivider, { backgroundColor: colors.outlineVariant }]} />
+          <LanguageSwitcher />
         </View>
       </View>
 
-      <ScrollView 
+      <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -177,7 +185,7 @@ export default function HomeScreen() {
             Acerca de la Plataforma
           </ThemedText>
           <ThemedText style={[styles.modernInfoDescription, { color: colors.outline }]}>
-            Preservamos el conocimiento gastronómico tradicional de Arroyo Seco, 
+            Preservamos el conocimiento gastronómico tradicional de Arroyo Seco,
             promoviendo la cultura local y el turismo sostenible.
           </ThemedText>
           <View style={styles.modernFeaturesList}>
@@ -363,7 +371,7 @@ const styles = StyleSheet.create({
     ...Typography.titleLarge,
     fontWeight: '600',
   },
-  
+
   // Estilos modernos para tarjetas de sección
   modernSectionCard: {
     marginHorizontal: Spacing.lg,
@@ -410,7 +418,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
     transform: [{ translateY: -6 }],
   },
-  
+
   // Estilos modernos para tarjetas de estadísticas
   modernStatCard: {
     width: (screenWidth - Spacing.lg * 3) / 2,
@@ -439,7 +447,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 16,
   },
-  
+
   // Estilos modernos para el header
   modernHeader: {
     paddingTop: 60,
@@ -476,7 +484,7 @@ const styles = StyleSheet.create({
     height: 3,
     borderRadius: BorderRadius.sm,
   },
-  
+
   // Estilos para secciones modernas
   modernStatsSection: {
     paddingHorizontal: Spacing.lg,
@@ -505,7 +513,7 @@ const styles = StyleSheet.create({
   modernModulesSection: {
     paddingTop: Spacing.lg,
   },
-  
+
   // Estilos para tarjeta de información moderna
   modernInfoCard: {
     margin: Spacing.lg,
@@ -553,7 +561,7 @@ const styles = StyleSheet.create({
     ...Typography.bodyMedium,
     flex: 1,
   },
-  
+
   // Estilos para botón CTA moderno
   modernCtaButton: {
     marginHorizontal: Spacing.lg,
@@ -582,5 +590,18 @@ const styles = StyleSheet.create({
   modernCtaText: {
     ...Typography.titleMedium,
     fontWeight: '600',
+  },
+  // Just as test
+  languageButton: {
+    marginTop: Spacing.md,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  languageButtonText: {
+    ...Typography.bodyMedium,
+    fontWeight: "600",
   },
 });
