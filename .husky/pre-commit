@@ -1,0 +1,4 @@
+#!/bin/sh
+
+npm run lint --prefix tests
+npm run test --prefix tests -- --passWithNoTests
