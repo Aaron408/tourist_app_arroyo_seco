@@ -9,7 +9,19 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@mobile/*": ["../mobile/*"],
+      "@pwa/*": ["../pwa/react-pwa/src/*"],
+      "@/*": ["../mobile/*", "../pwa/react-pwa/src/*"]
+    },
     "types": ["jest", "node"]
   },
-  "include": ["src/**/*.ts", "e2e/**/*.ts", "playwright.config.ts", "jest.config.ts"]
+  "include": [
+    "src/**/*.ts",
+    "e2e/**/*.ts",
+    "__mocks__/**/*.ts",
+    "playwright.config.ts",
+    "jest.config.ts"
+  ]
 }

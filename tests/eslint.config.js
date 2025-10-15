@@ -5,8 +5,10 @@ import globals from "globals";
 
 export default [
   {
+    ignores: ["dist/**", "node_modules/**", "coverage/**"]
+  },
+  {
     files: ["**/*.ts"],
-    ignores: ["dist/**", "node_modules/**"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
