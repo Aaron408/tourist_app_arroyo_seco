@@ -24,3 +24,5 @@
 ## Observaciones
 - Las pruebas acceden a codigo de `mobile/` y `pwa/react-pwa/` mediante alias `@mobile/*`, `@pwa/*` y `@/*`.
 - Se mockea `react-native` via `tests/__mocks__/react-native.ts` y definiciones en `tests/types/react-native.d.ts`.
+
+<img width="1844" height="465" alt="image" src="https://github.com/user-attachments/assets/14fbb9ad-e954-4a9d-b4b6-5df46814e2c1" />
