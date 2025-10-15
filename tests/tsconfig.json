@@ -21,6 +21,7 @@
     "src/**/*.ts",
     "e2e/**/*.ts",
     "__mocks__/**/*.ts",
+    "types/**/*.d.ts",
     "playwright.config.ts",
     "jest.config.ts"
   ]
