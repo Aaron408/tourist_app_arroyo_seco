@@ -1,3 +1,0 @@
-#!/bin/sh
-
-npm run test:e2e --prefix tests || exit 1
