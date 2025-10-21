@@ -1,15 +1,28 @@
-import { useEffect } from 'react'
-import Navigation from './Routes/Navigation'
-import { useLanguageStore } from './stores/languageStore'
-import './App.css'
+import './App.css';
+import { useEffect } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useLanguageStore } from './common/stores/languageStore';
+import { AuthProvider } from './admin/contexts/AuthContext';
+
+// Importar las rutas
+import { landingRoutes } from './landing/routes/LandingRoutes';
+import { adminRoutes } from './admin/routes/AdminRoutes';
+
+const router = createBrowserRouter([
+  ...landingRoutes,
+  ...adminRoutes,
+]);
 
 export default function App() {
   const { initializeLanguage } = useLanguageStore();
 
-  //Inicializar el idioma al cargar la aplicación
   useEffect(() => {
     initializeLanguage();
   }, []);
 
-  return <Navigation />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
