@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useLanguageStore } from '../../stores/languageStore';
 import { ROUTES } from '../../utils/constants';
+import FeatureCard from './components/FeatureCard';
 
 const Home = () => {
   const { t } = useLanguageStore();
@@ -52,58 +53,40 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Feature 1 - Gastronomía */}
-            <Link to={ROUTES.GASTRONOMIA} className="group">
-              <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all transform hover:-translate-y-2">
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <span className="text-3xl">🍽️</span>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  {t('gastronomy') || 'Gastronomía'}
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {t('gastronomyDesc') || 'Descubre recetas tradicionales, ingredientes locales y técnicas culinarias ancestrales de la región.'}
-                </p>
-                <span className="text-amber-600 font-semibold group-hover:underline">
-                  {t('learnMore') || 'Conocer más →'}
-                </span>
-              </div>
-            </Link>
+            <FeatureCard 
+              to={ROUTES.GASTRONOMIA}
+              bgGradient="from-orange-50 to-amber-50"
+              iconGradient="from-amber-500 to-orange-600"
+              icon="🍽️"
+              title={t('gastronomy') || 'Gastronomía'}
+              description={t('gastronomyDesc') || 'Descubre recetas tradicionales, ingredientes locales y técnicas culinarias ancestrales de la región.'}
+              linkText={t('learnMore') || 'Conocer más →'}
+              linkColor="text-amber-600"
+            />
 
             {/* Feature 2 - Ubicaciones */}
-            <Link to={ROUTES.UBICACIONES} className="group">
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all transform hover:-translate-y-2">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <span className="text-3xl">📍</span>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  {t('locations') || 'Ubicaciones'}
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {t('locationsDesc') || 'Explora lugares emblemáticos, restaurantes y puntos de interés en un mapa interactivo.'}
-                </p>
-                <span className="text-blue-600 font-semibold group-hover:underline">
-                  {t('explore') || 'Explorar →'}
-                </span>
-              </div>
-            </Link>
+            <FeatureCard 
+              to={ROUTES.UBICACIONES}
+              bgGradient="from-blue-50 to-cyan-50"
+              iconGradient="from-blue-500 to-cyan-600"
+              icon="📍"
+              title={t('locations') || 'Ubicaciones'}
+              description={t('locationsDesc') || 'Explora lugares emblemáticos, restaurantes y puntos de interés en un mapa interactivo.'}
+              linkText={t('explore') || 'Explorar →'}
+              linkColor="text-blue-600"
+            />
 
             {/* Feature 3 - Eventos */}
-            <Link to={ROUTES.EVENTOS} className="group">
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all transform hover:-translate-y-2">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <span className="text-3xl">🎉</span>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  {t('events') || 'Eventos'}
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {t('eventsDesc') || 'Participa en talleres gastronómicos, rutas guiadas y eventos culturales especiales.'}
-                </p>
-                <span className="text-purple-600 font-semibold group-hover:underline">
-                  {t('viewEvents') || 'Ver eventos →'}
-                </span>
-              </div>
-            </Link>
+            <FeatureCard 
+              to={ROUTES.EVENTOS}
+              bgGradient="from-purple-50 to-pink-50"
+              iconGradient="from-purple-500 to-pink-600"
+              icon="🎉"
+              title={t('events') || 'Eventos'}
+              description={t('eventsDesc') || 'Participa en talleres gastronómicos, rutas guiadas y eventos culturales especiales.'}
+              linkText={t('viewEvents') || 'Ver eventos →'}
+              linkColor="text-purple-600"
+            />
           </div>
         </div>
       </section>
