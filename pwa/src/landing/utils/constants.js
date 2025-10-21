@@ -24,29 +24,29 @@ export const ROUTES = {
   HOME: "/",
 
   // Gastronomía
-  GASTRONOMIA: "/gastronomia",
-  RECETAS: "/gastronomia/recetas",
-  INGREDIENTES: "/gastronomia/ingredientes",
-  MONITOREO_ESTACIONAL: "/gastronomia/ingredientes/estacional",
-  CICLOS_COSECHA: "/gastronomia/ingredientes/cosecha",
-  CONSERVACION: "/gastronomia/ingredientes/conservacion",
-  TECNICAS_CULINARIAS: "/gastronomia/tecnicas",
-  HERRAMIENTAS: "/gastronomia/herramientas",
-  RESTAURANTES_REFERENCIA: "/gastronomia/restaurantes",
+  GASTRONOMY: "/gastronomia",
+  RECIPES: "/gastronomia/recetas",
+  INGREDIENTS: "/gastronomia/ingredientes",
+  SEASONAL_MONITORING: "/gastronomia/ingredientes/estacional",
+  HARVEST_CYCLES: "/gastronomia/ingredientes/cosecha",
+  CONSERVATION: "/gastronomia/ingredientes/conservacion",
+  CULINARY_TECHNIQUES: "/gastronomia/tecnicas",
+  TOOLS: "/gastronomia/herramientas",
+  REFERENCE_RESTAURANTS: "/gastronomia/restaurantes",
 
   // Ubicaciones
-  UBICACIONES: "/ubicaciones",
-  LUGARES_EMBLEMATICOS: "/ubicaciones/lugares",
-  RESTAURANTES_RUTA: "/ubicaciones/restaurantes",
-  PUNTOS_INTERES: "/ubicaciones/puntos",
-  CROQUIS_INTERACTIVO: "/ubicaciones/croquis",
-  BUSQUEDA_CATEGORIA: "/ubicaciones/busqueda",
+  LOCATIONS: "/ubicaciones",
+  EMBLEMATIC_PLACES: "/ubicaciones/lugares",
+  ROUTE_RESTAURANTS: "/ubicaciones/restaurantes",
+  POINTS_OF_INTEREST: "/ubicaciones/puntos",
+  INTERACTIVE_SKETCH: "/ubicaciones/croquis",
+  CATEGORY_SEARCH: "/ubicaciones/busqueda",
   GOOGLE_MAPS_REDIRECT: "/ubicaciones/mapa",
 
   // Eventos
-  EVENTOS: "/eventos",
-  TALLERES: "/eventos/talleres",
-  RUTAS_GUIADAS: "/eventos/rutas",
+  EVENTS: "/eventos",
+  WORKSHOPS: "/eventos/talleres",
+  GUIDED_ROUTES: "/eventos/rutas",
 };
 
 /**

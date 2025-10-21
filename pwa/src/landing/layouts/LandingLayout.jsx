@@ -4,14 +4,14 @@ import { useLanguageStore } from '../stores/languageStore';
 import { ROUTES } from '../utils/constants';
 
 const LandingLayout = () => {
-  const { initializeLanguage, language, setLanguage, t } = useLanguageStore();
+  const { initializeLanguage, currentLanguage, setLanguage, t } = useLanguageStore();
 
   useEffect(() => {
     initializeLanguage();
   }, []);
 
   const toggleLanguage = () => {
-    setLanguage(language === 'es' ? 'en' : 'es');
+    setLanguage(currentLanguage === 'es-MX' ? 'en-US' : 'es-MX');
   };
 
   return (
@@ -45,21 +45,21 @@ const LandingLayout = () => {
               </Link>
               
               <Link 
-                to={ROUTES.GASTRONOMIA} 
+                to={ROUTES.GASTRONOMY} 
                 className="text-gray-700 hover:text-amber-600 transition-colors font-medium"
               >
                 {t('gastronomy') || 'Gastronomía'}
               </Link>
               
               <Link 
-                to={ROUTES.UBICACIONES} 
+                to={ROUTES.LOCATIONS} 
                 className="text-gray-700 hover:text-amber-600 transition-colors font-medium"
               >
                 {t('locations') || 'Ubicaciones'}
               </Link>
               
               <Link 
-                to={ROUTES.EVENTOS} 
+                to={ROUTES.EVENTS} 
                 className="text-gray-700 hover:text-amber-600 transition-colors font-medium"
               >
                 {t('events') || 'Eventos'}
@@ -71,7 +71,7 @@ const LandingLayout = () => {
               onClick={toggleLanguage}
               className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-amber-600 border-2 border-gray-300 rounded-lg hover:border-amber-600 transition-all"
             >
-              {language === 'es' ? '🇺🇸 English' : '🇲🇽 Español'}
+              {currentLanguage === 'es-MX' ? '🇺🇸 English' : '🇲🇽 Español'}
             </button>
           </div>
         </nav>
@@ -113,22 +113,22 @@ const LandingLayout = () => {
               </h3>
               <ul className="space-y-2">
                 <li>
-                  <Link to={ROUTES.RECETAS} className="hover:text-amber-400 transition-colors">
+                  <Link to={ROUTES.RECIPES} className="hover:text-amber-400 transition-colors">
                     {t('recipes') || 'Recetas'}
                   </Link>
                 </li>
                 <li>
-                  <Link to={ROUTES.INGREDIENTES} className="hover:text-amber-400 transition-colors">
+                  <Link to={ROUTES.INGREDIENTS} className="hover:text-amber-400 transition-colors">
                     {t('ingredients') || 'Ingredientes'}
                   </Link>
                 </li>
                 <li>
-                  <Link to={ROUTES.TECNICAS_CULINARIAS} className="hover:text-amber-400 transition-colors">
+                  <Link to={ROUTES.CULINARY_TECHNIQUES} className="hover:text-amber-400 transition-colors">
                     {t('techniques') || 'Técnicas'}
                   </Link>
                 </li>
                 <li>
-                  <Link to={ROUTES.RESTAURANTES_REFERENCIA} className="hover:text-amber-400 transition-colors">
+                  <Link to={ROUTES.REFERENCE_RESTAURANTS} className="hover:text-amber-400 transition-colors">
                     {t('restaurants') || 'Restaurantes'}
                   </Link>
                 </li>
@@ -142,22 +142,22 @@ const LandingLayout = () => {
               </h3>
               <ul className="space-y-2">
                 <li>
-                  <Link to={ROUTES.LUGARES_EMBLEMATICOS} className="hover:text-amber-400 transition-colors">
+                  <Link to={ROUTES.EMBLEMATIC_PLACES} className="hover:text-amber-400 transition-colors">
                     {t('emblematicPlaces') || 'Lugares Emblemáticos'}
                   </Link>
                 </li>
                 <li>
-                  <Link to={ROUTES.TALLERES} className="hover:text-amber-400 transition-colors">
+                  <Link to={ROUTES.WORKSHOPS} className="hover:text-amber-400 transition-colors">
                     {t('workshops') || 'Talleres'}
                   </Link>
                 </li>
                 <li>
-                  <Link to={ROUTES.RUTAS_GUIADAS} className="hover:text-amber-400 transition-colors">
+                  <Link to={ROUTES.GUIDED_ROUTES} className="hover:text-amber-400 transition-colors">
                     {t('guidedTours') || 'Rutas Guiadas'}
                   </Link>
                 </li>
                 <li>
-                  <Link to={ROUTES.CROQUIS_INTERACTIVO} className="hover:text-amber-400 transition-colors">
+                  <Link to={ROUTES.INTERACTIVE_SKETCH} className="hover:text-amber-400 transition-colors">
                     {t('interactiveMap') || 'Mapa Interactivo'}
                   </Link>
                 </li>

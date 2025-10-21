@@ -2,24 +2,24 @@ import { Suspense, lazy } from 'react';
 import LandingLayout from '../layouts/LandingLayout';
 import { ROUTES } from '../utils/constants';
 
-const HomePage = lazy(() => import('../pages/home/Home'));
-const GastronomiaPage = lazy(() => import('../pages/gastronomia/Gastronomia.jsx'));
-const RecetasPage = lazy(() => import('../pages/gastronomia/Recetas'));
-const IngredientesPage = lazy(() => import('../pages/gastronomia/Ingredientes'));
-const TecnicasPage = lazy(() => import('../pages/gastronomia/Tecnicas'));
-const HerramientasPage = lazy(() => import('../pages/gastronomia/Herramientas'));
-const RestaurantesPage = lazy(() => import('../pages/gastronomia/Restaurantes'));
-const UbicacionesPage = lazy(() => import('../pages/ubicaciones/Ubicaciones'));
-const LugaresPage = lazy(() => import('../pages/ubicaciones/Lugares'));
-const RestaurantesRutaPage = lazy(() => import('../pages/ubicaciones/RestaurantesRuta'));
-const PuntosInteresPage = lazy(() => import('../pages/ubicaciones/PuntosInteres'));
-const CroquisPage = lazy(() => import('../pages/ubicaciones/Croquis'));
-const BusquedaCategoriaPage = lazy(() => import('../pages/ubicaciones/BusquedaCategoria'));
-const MapaPage = lazy(() => import('../pages/ubicaciones/Mapa'));
-const EventosPage = lazy(() => import('../pages/eventos/Eventos'));
-const TalleresPage = lazy(() => import('../pages/eventos/Talleres'));
-const RutasPage = lazy(() => import('../pages/eventos/Rutas'));
-const NotFoundPage = lazy(() => import('../pages/NotFound'));
+const HomePage = lazy(() => import('../pages/home/Home.jsx'));
+const GastronomyPage = lazy(() => import('../pages/gastronomy/Gastronomy.jsx'));
+const RecipesPage = lazy(() => import('../pages/gastronomy/Recipes.jsx'));
+const IngredientsPage = lazy(() => import('../pages/gastronomy/Ingredients.jsx'));
+const TechniquesPage = lazy(() => import('../pages/gastronomy/Techniques.jsx'));
+const ToolsPage = lazy(() => import('../pages/gastronomy/Tools.jsx'));
+const RestaurantsPage = lazy(() => import('../pages/gastronomy/Restaurants.jsx'));
+const LocationsPage = lazy(() => import('../pages/locations/Locations.jsx'));
+const PlacesPage = lazy(() => import('../pages/locations/Places.jsx'));
+const RouteRestaurantsPage = lazy(() => import('../pages/locations/RouteRestaurants.jsx'));
+const PointsOfInterestPage = lazy(() => import('../pages/locations/PointsOfInterest.jsx'));
+const SketchPage = lazy(() => import('../pages/locations/Sketch.jsx'));
+const CategorySearchPage = lazy(() => import('../pages/locations/CategorySearch.jsx'));
+const MapPage = lazy(() => import('../pages/locations/Map.jsx'));
+const EventsPage = lazy(() => import('../pages/events/Events.jsx'));
+const WorkshopsPage = lazy(() => import('../pages/events/Workshops.jsx'));
+const RoutesPage = lazy(() => import('../pages/events/Routes.jsx'));
+const NotFoundPage = lazy(() => import('../pages/NotFound.jsx'));
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center h-screen">
@@ -40,26 +40,26 @@ export const landingRoutes = [
       { path: ROUTES.HOME, element: <Suspense fallback={<LoadingFallback />}><HomePage /></Suspense> },
 
       // Gastronomía
-      { path: ROUTES.GASTRONOMIA, element: <Suspense fallback={<LoadingFallback />}><GastronomiaPage /></Suspense> },
-      { path: ROUTES.RECETAS, element: <Suspense fallback={<LoadingFallback />}><RecetasPage /></Suspense> },
-      { path: ROUTES.INGREDIENTES, element: <Suspense fallback={<LoadingFallback />}><IngredientesPage /></Suspense> },
-      { path: ROUTES.TECNICAS_CULINARIAS, element: <Suspense fallback={<LoadingFallback />}><TecnicasPage /></Suspense> },
-      { path: ROUTES.HERRAMIENTAS, element: <Suspense fallback={<LoadingFallback />}><HerramientasPage /></Suspense> },
-      { path: ROUTES.RESTAURANTES_REFERENCIA, element: <Suspense fallback={<LoadingFallback />}><RestaurantesPage /></Suspense> },
+      { path: ROUTES.GASTRONOMY, element: <Suspense fallback={<LoadingFallback />}><GastronomyPage /></Suspense> },
+      { path: ROUTES.RECIPES, element: <Suspense fallback={<LoadingFallback />}><RecipesPage /></Suspense> },
+      { path: ROUTES.INGREDIENTS, element: <Suspense fallback={<LoadingFallback />}><IngredientsPage /></Suspense> },
+      { path: ROUTES.CULINARY_TECHNIQUES, element: <Suspense fallback={<LoadingFallback />}><TechniquesPage /></Suspense> },
+      { path: ROUTES.TOOLS, element: <Suspense fallback={<LoadingFallback />}><ToolsPage /></Suspense> },
+      { path: ROUTES.REFERENCE_RESTAURANTS, element: <Suspense fallback={<LoadingFallback />}><RestaurantsPage /></Suspense> },
 
       // Ubicaciones
-      { path: ROUTES.UBICACIONES, element: <Suspense fallback={<LoadingFallback />}><UbicacionesPage /></Suspense> },
-      { path: ROUTES.LUGARES_EMBLEMATICOS, element: <Suspense fallback={<LoadingFallback />}><LugaresPage /></Suspense> },
-      { path: ROUTES.RESTAURANTES_RUTA, element: <Suspense fallback={<LoadingFallback />}><RestaurantesRutaPage /></Suspense> },
-      { path: ROUTES.PUNTOS_INTERES, element: <Suspense fallback={<LoadingFallback />}><PuntosInteresPage /></Suspense> },
-      { path: ROUTES.CROQUIS_INTERACTIVO, element: <Suspense fallback={<LoadingFallback />}><CroquisPage /></Suspense> },
-      { path: ROUTES.BUSQUEDA_CATEGORIA, element: <Suspense fallback={<LoadingFallback />}><BusquedaCategoriaPage /></Suspense> },
-      { path: ROUTES.GOOGLE_MAPS_REDIRECT, element: <Suspense fallback={<LoadingFallback />}><MapaPage /></Suspense> },
+      { path: ROUTES.LOCATIONS, element: <Suspense fallback={<LoadingFallback />}><LocationsPage /></Suspense> },
+      { path: ROUTES.EMBLEMATIC_PLACES, element: <Suspense fallback={<LoadingFallback />}><PlacesPage /></Suspense> },
+      { path: ROUTES.ROUTE_RESTAURANTS, element: <Suspense fallback={<LoadingFallback />}><RouteRestaurantsPage /></Suspense> },
+      { path: ROUTES.POINTS_OF_INTEREST, element: <Suspense fallback={<LoadingFallback />}><PointsOfInterestPage /></Suspense> },
+      { path: ROUTES.INTERACTIVE_SKETCH, element: <Suspense fallback={<LoadingFallback />}><SketchPage /></Suspense> },
+      { path: ROUTES.CATEGORY_SEARCH, element: <Suspense fallback={<LoadingFallback />}><CategorySearchPage /></Suspense> },
+      { path: ROUTES.GOOGLE_MAPS_REDIRECT, element: <Suspense fallback={<LoadingFallback />}><MapPage /></Suspense> },
 
       // Eventos
-      { path: ROUTES.EVENTOS, element: <Suspense fallback={<LoadingFallback />}><EventosPage /></Suspense> },
-      { path: ROUTES.TALLERES, element: <Suspense fallback={<LoadingFallback />}><TalleresPage /></Suspense> },
-      { path: ROUTES.RUTAS_GUIADAS, element: <Suspense fallback={<LoadingFallback />}><RutasPage /></Suspense> },
+      { path: ROUTES.EVENTS, element: <Suspense fallback={<LoadingFallback />}><EventsPage /></Suspense> },
+      { path: ROUTES.WORKSHOPS, element: <Suspense fallback={<LoadingFallback />}><WorkshopsPage /></Suspense> },
+      { path: ROUTES.GUIDED_ROUTES, element: <Suspense fallback={<LoadingFallback />}><RoutesPage /></Suspense> },
 
       { path: '*', element: <Suspense fallback={<LoadingFallback />}><NotFoundPage /></Suspense> },
     ],

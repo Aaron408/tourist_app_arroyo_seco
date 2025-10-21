@@ -1,11 +1,11 @@
 /**
- * Constantes de la API
+ * API Constants
  */
 export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.arroyoseco-app.com';
-export const API_TIMEOUT = 10000; // 10 segundos
+export const API_TIMEOUT = 10000; // 10 seconds
 
 /**
- * Códigos de estado HTTP
+ * HTTP Status Codes
  */
 export const HTTP_STATUS = {
   OK: 200,
@@ -18,48 +18,73 @@ export const HTTP_STATUS = {
 };
 
 /**
- * Rutas de la aplicación landing
+ * Application Routes
  */
-
-
-// Rutas de administración (dashboard / subdominio)
 export const ROUTES = {
+  HOME: "/",
+
+  // Gastronomy
+  GASTRONOMY: "/gastronomia",
+  RECIPES: "/gastronomia/recetas",
+  INGREDIENTS: "/gastronomia/ingredientes",
+  SEASONAL_MONITORING: "/gastronomia/ingredientes/estacional",
+  HARVEST_CYCLES: "/gastronomia/ingredientes/cosecha",
+  CONSERVATION: "/gastronomia/ingredientes/conservacion",
+  CULINARY_TECHNIQUES: "/gastronomia/tecnicas",
+  TOOLS: "/gastronomia/herramientas",
+  REFERENCE_RESTAURANTS: "/gastronomia/restaurantes",
+
+  // Locations
+  LOCATIONS: "/ubicaciones",
+  EMBLEMATIC_PLACES: "/ubicaciones/lugares",
+  ROUTE_RESTAURANTS: "/ubicaciones/restaurantes",
+  POINTS_OF_INTEREST: "/ubicaciones/puntos",
+  INTERACTIVE_SKETCH: "/ubicaciones/croquis",
+  CATEGORY_SEARCH: "/ubicaciones/busqueda",
+  GOOGLE_MAPS_REDIRECT: "/ubicaciones/mapa",
+
+  // Events
+  EVENTS: "/eventos",
+  WORKSHOPS: "/eventos/talleres",
+  GUIDED_ROUTES: "/eventos/rutas",
+
+  // Admin Routes (dashboard / subdomain)
   DASHBOARD: "admin",
 
-  // Catálogos
-  ADMIN_CATALOGOS: "catalogos",
-  ADMIN_RECETAS: "catalogos/recetas",
-  ADMIN_INGREDIENTES: "catalogos/ingredientes",
-  ADMIN_TECNICAS: "catalogos/tecnicas",
-  ADMIN_HERRAMIENTAS: "catalogos/herramientas",
-  ADMIN_UBICACIONES: "catalogos/ubicaciones",
+  // Catalogs
+  ADMIN_CATALOGS: "catalogos",
+  ADMIN_RECIPES: "catalogos/recetas",
+  ADMIN_INGREDIENTS: "catalogos/ingredientes",
+  ADMIN_TECHNIQUES: "catalogos/tecnicas",
+  ADMIN_TOOLS: "catalogos/herramientas",
+  ADMIN_LOCATIONS: "catalogos/ubicaciones",
 
-  // Eventos
-  ADMIN_EVENTOS: "eventos",
-  ADMIN_TALLERES: "eventos/talleres",
-  ADMIN_RUTAS: "eventos/rutas",
+  // Admin Events
+  ADMIN_EVENTS: "eventos",
+  ADMIN_WORKSHOPS: "eventos/talleres",
+  ADMIN_ROUTES: "eventos/rutas",
 
-  // Otros
-  ADMIN_TRADUCCIONES: "traducciones",
+  // Others
+  ADMIN_TRANSLATIONS: "traducciones",
   ADMIN_FEEDBACK: "feedback",
-  ADMIN_USUARIOS: "usuarios",
-  ADMIN_MONITOREO: "estadisticas",
+  ADMIN_USERS: "usuarios",
+  ADMIN_MONITORING: "estadisticas",
 
-  // Sesiones y autenticación
+  // Sessions and Authentication
   LOGIN: "login",
   LOGOUT: "logout",
   RECOVERY_PASSWORD: "recuperar-contrasena",
 };
 
 /**
- * Mensajes de la aplicación
+ * Application Messages
  */
 export const MESSAGES = {
   WELCOME: 'Bienvenido a la app turística de Arroyo Seco',
 };
 
 /**
- * Opciones de paginación
+ * Pagination Options
  */
 export const PAGINATION = {
   DEFAULT_PAGE_SIZE: 10,

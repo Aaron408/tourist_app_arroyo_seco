@@ -1,9 +1,8 @@
-// src/admin/contexts/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
-// Credenciales hardcodeadas (temporal)
+// Hardcoded credentials (temporary)
 const MOCK_CREDENTIALS = {
   email: 'admin@arroyoseco.com',
   password: 'admin123'
@@ -13,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Verificar sesión al cargar
+  // Check session on load
   useEffect(() => {
     const checkAuth = () => {
       try {
@@ -39,10 +38,10 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     
     try {
-      // Simular delay de API
+      // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 800));
 
-      // Validar credenciales
+      // Validate credentials
       if (email === MOCK_CREDENTIALS.email && password === MOCK_CREDENTIALS.password) {
         const mockUser = {
           id: 1,
@@ -53,7 +52,7 @@ export const AuthProvider = ({ children }) => {
 
         const mockToken = btoa(`${email}:${Date.now()}`);
 
-        // Guardar en localStorage y sessionStorage
+        // Save to localStorage and sessionStorage
         localStorage.setItem('authUser', JSON.stringify(mockUser));
         sessionStorage.setItem('authToken', mockToken);
         
@@ -96,7 +95,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth debe ser usado dentro de AuthProvider');
+    throw new Error('useAuth must be used within AuthProvider');
   }
   return context;
 };

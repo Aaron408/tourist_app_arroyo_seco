@@ -68,6 +68,7 @@ pwa/
 │   ├── admin/              # Administration module
 │   │   ├── components/     # Admin panel components
 │   │   ├── contexts/       # Authentication contexts
+│   │   ├── hooks/          # Custom hooks for admin logic
 │   │   ├── layouts/        # Administrative layouts
 │   │   ├── pages/          # Panel pages
 │   │   ├── routes/         # Protected routes configuration
@@ -80,11 +81,12 @@ pwa/
 │   ├── landing/            # Public/tourist module
 │   │   ├── components/     # Landing components
 │   │   ├── layouts/        # Public layouts
+│   │   ├── hooks/          # Custom hooks for landing module
 │   │   ├── pages/          # Tourist pages
-│   │   │   ├── eventos/    # Workshops, guided tours
-│   │   │   ├── gastronomia/# Recipes, ingredients
+│   │   │   ├── events/     # Workshops, guided tours
+│   │   │   ├── gastronomy/ # Recipes, ingredients
 │   │   │   ├── home/       # Home page
-│   │   │   └── ubicaciones/# Maps, restaurants
+│   │   │   └── locations/  # Maps, restaurants
 │   │   ├── routes/         # Public routes
 │   │   ├── stores/         # Landing states
 │   │   └── utils/          # Landing utilities

@@ -1,13 +1,19 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguageStore } from '../stores/languageStore';
 
 const AdminLayout = () => {
   const { user, logout } = useAuth();
+  const { currentLanguage, setLanguage, t } = useLanguageStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate('/administracion/login');
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(currentLanguage === 'es-MX' ? 'en-US' : 'es-MX');
   };
 
   return (
@@ -20,21 +26,32 @@ const AdminLayout = () => {
               <span className="text-white text-xl">🍽️</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Panel de Administración</h1>
+              <h1 className="text-xl font-bold text-gray-900">
+                {t('adminPanel') || 'Panel de Administración'}
+              </h1>
               <p className="text-xs text-gray-500">Arroyo Seco Tourism</p>
             </div>
           </div>
           
           <div className="flex items-center space-x-4">
+            {/* Language Toggle */}
+            <button
+              onClick={toggleLanguage}
+              className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-amber-600 border-2 border-gray-300 rounded-lg hover:border-amber-600 transition-all"
+            >
+              {currentLanguage === 'es-MX' ? '🇺🇸 EN' : '🇲🇽 ES'}
+            </button>
+
             <div className="text-right">
               <p className="text-sm font-medium text-gray-900">{user?.name}</p>
               <p className="text-xs text-gray-500">{user?.email}</p>
             </div>
+            
             <button
               onClick={handleLogout}
               className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors shadow-sm"
             >
-              Cerrar Sesión
+              {t('logout') || 'Cerrar Sesión'}
             </button>
           </div>
         </div>
