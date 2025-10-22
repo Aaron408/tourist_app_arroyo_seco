@@ -6,7 +6,7 @@
 - Pruebas unitarias en modo sin fallar si no hay suites: `npm run test -- --passWithNoTests`
 - Pruebas E2E Playwright: `npm run test:e2e` (requiere entorno con navegadores Playwright)
 
-## Resultado de la ultima ejecucion local
+## Resultado de la última ejecución local
 - `npm run lint`
   - Estado: exitoso
   - Notas: Node.js muestra advertencia sobre `type: module` para `eslint.config.js`. Se puede eliminar agregando "type": "module" en `package.json`.
