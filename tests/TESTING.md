@@ -15,7 +15,7 @@
   - Suites ejecutadas: `src/sample.spec.ts`, `src/mobile/theme.spec.ts`, `src/pwa/sleep.spec.ts`
   - Cobertura: generada en `coverage/`
 - `npm run test:e2e`
-  - No ejecutado durante esta sesion. Requiere servicio base en `http://localhost:8081` o configurar `E2E_BASE_URL`.
+  - No ejecutado durante esta sesión. Requiere servicio base en `http://localhost:8081` o configurar `E2E_BASE_URL`.
 
 ## Requisitos previos
 - Ejecutar `npm install` en la carpeta `tests/`
