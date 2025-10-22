@@ -78,7 +78,7 @@ const Home = () => {
 
             {/* Feature 3 - Eventos */}
             <FeatureCard 
-              to={ROUTES.EVENTOS}
+              to={ROUTES.EVENTS}
               bgGradient="from-purple-50 to-pink-50"
               iconGradient="from-purple-500 to-pink-600"
               icon="🎉"
