@@ -1,7 +1,26 @@
 {
-  "name": "pwa",
+  "name": "xioi-gourmet-pwa",
+  "description": "Plataforma web progresiva de turismo gastronómico y cultural de Arroyo Seco, Querétaro. Preserva y difunde el patrimonio culinario Pame mediante contenido multilingüe, funcionalidad offline y experiencias auténticas.",
+  "version": "1.0.0",
+  "author": "Victi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/xioi-gourmet.git"
+  },
+  "homepage": "https://xioigourmet.com",
+  "keywords": [
+    "turismo",
+    "gastronomia",
+    "arroyo-seco",
+    "queretaro",
+    "pame",
+    "sierra-gorda",
+    "pwa",
+    "react",
+    "cultura-tradicional"
+  ],
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,6 +29,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.14",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.4",
@@ -20,13 +40,11 @@
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
-    "autoprefixer": "^10.4.21",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.18",
+    "tailwindcss": "^4.1.14",
     "vite": "^7.1.7"
   }
 }
