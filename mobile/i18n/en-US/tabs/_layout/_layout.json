@@ -1,0 +1,8 @@
+{
+    "tabs":{
+        "index": "Home",
+        "recipes": "Recipes",
+        "restaurants":"Restaurants",
+        "explore": "Explore"
+    }
+}

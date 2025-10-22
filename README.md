@@ -1,242 +1,419 @@
-# 🏛 Plataforma Turística Cultural de Arroyo Seco
+# Xi'oi Gourmet - Digital Gastronomic Tourism Platform 🍽️
 
-Una aplicación móvil desarrollada con React Native y Expo que preserva y comparte el conocimiento gastronómico tradicional de Arroyo Seco, Querétaro. Esta plataforma promueve la cultura local y apoya el turismo sostenible mediante la documentación de recetas, ingredientes y establecimientos tradicionales de la región.
+<div align="center">
 
-## 🎯 Características Principales
+**Preserving the Pame flavor of the Sierra Gorda**
 
-### 📱 Módulos Implementados
+[![License](https://img.shields.io/badge/license-Educational-blue.svg)](LICENSE)
+[![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)]()
+[![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
+[![Node](https://img.shields.io/badge/Node-18+-green.svg)](https://nodejs.org/)
 
-- **🏠 Inicio**: Dashboard principal con acceso rápido a todas las funcionalidades
-- **🍲 Recetas**: Catálogo interactivo con pantallas detalladas, paginación de pasos y videos instructivos
-- **🍽 Restaurantes**: Directorio de establecimientos tradicionales con información de contacto
-- **🌟 Explorar**: Contenido cultural adicional y experiencias gastronómicas
-- **🌱 Ingredientes**: Base de datos especializada con filtros avanzados y búsqueda por temporada
+</div>
 
-### 🎨 Diseño Cultural con Material Design 3
+---
 
-- **Sistema de Tokens**: Implementación completa de Material Design 3 adaptada culturalmente
-- **Paleta de Colores**: Terracota, verde bosque y oro mexicano representando la tradición local
-- **Tipografía**: Jerarquía tipográfica clara con fuentes optimizadas para legibilidad
-- **Componentes**: Cards modernas, navegación fluida y interfaces intuitivas
-- **Tema Adaptativo**: Soporte nativo para modo claro y oscuro
+## 📖 About the Project
 
-### 🚀 Funcionalidades Avanzadas
+**Xi'oi Gourmet** is the first digital platform specialized in cultural gastronomic tourism in Arroyo Seco, Querétaro, connecting travelers with authentic culinary experiences from the Sierra Gorda, preserving and disseminating the gastronomic heritage of Pame culture.
 
-- **Navegación Inteligente**: Sistema de tabs con pantallas independientes organizadas por contexto
-- **Recetas Interactivas**: Pantalla detallada con paginación de pasos, ingredientes y videos
-- **Filtros Dinámicos**: Búsqueda y filtrado por categoría y temporada en ingredientes
-- **Diseño Responsivo**: Optimizado para múltiples tamaños de pantalla
-- **Arquitectura Escalable**: Estructura modular con separación clara de responsabilidades
+**Xi'oi** (pronounced "shiói") means "Pame" in the native language, representing the union of cultural identity + gastronomy = **"The Pame flavor"**.
 
-## 🏗 Arquitectura del Proyecto
+### 🎯 Mission
 
-### Estructura de Navegación
+To rescue, preserve, and disseminate the traditional gastronomy of Arroyo Seco through accessible technology, connecting tourists, cooks, and local residents on a modern platform that guarantees cultural authenticity and direct economic benefit to communities.
 
-```
-app/
-├── (tabs)/                    # Navegación principal por pestañas
-│   ├── index.tsx             # Dashboard principal
-│   ├── recipes.tsx           # Catálogo de recetas
-│   ├── restaurants.tsx       # Directorio de restaurantes
-│   └── explore.tsx           # Contenido cultural
-├── screens/                  # Pantallas independientes
-│   ├── recipe-detail/        # Detalle de receta con pasos
-│   │   ├── index.tsx
-│   │   └── styles.ts
-│   └── ingredients/          # Pantalla de ingredientes
-│       ├── index.tsx
-│       └── styles.ts
-└── _layout.tsx              # Layout principal
-```
+### 🌟 Value Proposition
 
-### Sistema de Componentes
+- 🗺️ **Authentic discovery without intermediaries** - Direct access to family inns and traditional cooks
+- 📱 **100% offline functionality** - Access recipes and locations in areas with limited connectivity
+- 🌍 **Multilingual and inclusive** - Content in Spanish, English, and Pame
+- 🎓 **Immersive experiences** - Workshops with Pame grandmothers and cooks
+- 📊 **Tourism with social purpose** - Every visit supports local families and preserves intangible heritage
+
+---
+
+## 🏗️ Project Architecture
+
+This repository is a **monorepo** containing all components of the Xi'oi Gourmet platform:
 
 ```
-components/
-├── ui/                      # Componentes base reutilizables
-│   ├── icon-symbol.tsx      # Sistema de iconos universal
-│   └── icon-symbol.ios.tsx  # Iconos específicos para iOS
-├── themed-text.tsx          # Texto con tema adaptativo
-├── themed-view.tsx          # Vistas con tema automático
-└── haptic-tab.tsx          # Navegación con feedback háptico
+xioi-gourmet/
+├── pwa/              # Progressive web application (React + Vite)
+├── mobile/           # Native mobile application (React Native)
+├── backend/          # Backend with microservices
+├── tests/            # Project test suite
+└── README.md         # This file
 ```
 
-### Gestión de Estilos
+### 📦 Project Modules
 
-```
-constants/
-└── theme.ts                 # Sistema completo de tokens de diseño
-    ├── Colors               # Paleta de colores cultural
-    ├── Typography           # Jerarquía tipográfica
-    ├── Spacing             # Sistema de espaciado
-    ├── BorderRadius        # Bordes consistentes
-    └── Shadows             # Elevaciones Material Design
-```
+#### 🌐 PWA (Progressive Web App)
+**Status:** 🟢 Operational
 
-### Assets Optimizados
+Modern and responsive web platform that works in desktop and mobile browsers. Main features:
 
-```
-assets/images/               # Solo recursos necesarios
-├── icon.png                # Icono principal de la app
-├── favicon.png             # Favicon para web
-├── splash-icon.png         # Pantalla de carga
-├── android-icon-background.png  # Fondo del icono Android
-├── android-icon-foreground.png  # Primer plano del icono Android
-└── android-icon-monochrome.png  # Versión monocromática
-```
+- **Technologies:** React 19, Vite 7, Tailwind CSS 4, React Router 7, Zustand
+- **Complete offline functionality** via Service Workers
+- **Admin panel** with authentication and content management
+- **Tourist landing page** with recipe catalog, restaurants, and events
+- **Multilingual:** Spanish, English, and Pame
+- **Installable** as an application on devices
 
-## 🚀 Instalación y Desarrollo
+📄 [See complete PWA documentation](./pwa/README.md)
 
-### Prerrequisitos
+#### 📱 Mobile (Native Mobile Application)
+**Status:** 🟡 In development
 
-- Node.js (versión 18 o superior)
-- npm o yarn
-- Expo CLI
-- Para desarrollo móvil: Android Studio o Xcode
+Native application for Android and iOS with optimized experience for mobile devices.
 
-### Pasos de Instalación
+- **Technology:** React Native + Expo
+- **Planned features:**
+  - Native and fluid experience
+  - Push notifications
+  - Camera access to scan restaurant QR codes
+  - Advanced geolocation
+  - Robust offline mode
+- **Distribution:** Google Play Store (Android) and App Store (iOS)
 
-1. **Clonar el repositorio**
-   ```bash
-   git clone https://github.com/Aaron408/tourist_app_arroyo_seco.git
-   cd tourist_app_arroyo_seco
-   ```
+📄 [See Mobile documentation](./mobile/README.md)
 
-2. **Instalar dependencias**
-   ```bash
-   npm install
-   ```
+#### ⚙️ Backend (Microservices)
+**Status:** 🔴 In planning
 
-3. **Iniciar el servidor de desarrollo**
-   ```bash
-   npm start
-   ```
+Backend based on microservices architecture for scalability and maintainability.
 
-### Opciones de Ejecución
+- **Architecture:** Independent microservices
+- **Planned technologies:**
+  - Node.js + Express/NestJS
+  - PostgreSQL for structured data
+  - Redis for cache
+  - Docker for containerization
+  - API Gateway for routing
+- **Main services:**
+  - Authentication service (Auth)
+  - Recipes and gastronomy service
+  - Locations and maps service
+  - Events and workshops service
+  - Translations service
+  - Notifications service
 
-- **📱 Dispositivo móvil**: Escanea el código QR con Expo Go
-- **🌐 Navegador web**: Presiona `w` para abrir en localhost
-- **📱 Emulador Android**: Presiona `a` (requiere Android Studio)
-- **📱 Simulador iOS**: Presiona `i` (requiere Xcode - solo macOS)
+📄 [See Backend documentation](./backend/README.md)
 
-## 🎨 Sistema de Diseño
+#### 🧪 Tests (Test Suite)
+**Status:** 🔴 In planning
 
-### Paleta de Colores Cultural
+Centralized folder for all automated project tests.
 
-```typescript
-// Colores principales inspirados en la tradición mexicana
-const Colors = {
-  light: {
-    primary: '#8B4513',        // Terracota tradicional
-    secondary: '#228B22',      // Verde bosque queretano
-    tertiary: '#DAA520',       // Oro mexicano
-    surface: '#FFF8E7',        // Crema cálido
-    background: '#FFFEF7',     // Beige natural
-  },
-  dark: {
-    primary: '#CD853F',        // Terracota claro
-    secondary: '#32CD32',      // Verde lima
-    tertiary: '#FFD700',       // Oro brillante
-    surface: '#2C1810',        // Marrón oscuro
-    background: '#1A1A0A',     // Negro cálido
-  }
-}
-```
+- **Planned test types:**
+  - Unit tests (Jest)
+  - Integration (Jest + Supertest)
+  - End-to-End (Cypress/Playwright)
+  - Performance (Lighthouse CI)
+- **Target coverage:** >80% of code
+- **CI/CD:** Integration with GitHub Actions
 
-### Componentes Clave
+📄 [See Tests documentation](./tests/README.md)
 
-- **RecipeCard**: Tarjetas modernas con imágenes, tiempo de preparación y navegación
-- **RestaurantCard**: Cards con información de contacto, ubicación y horarios
-- **IngredientCard**: Componentes especializados con temporada y categorización
-- **FilterChips**: Sistema de filtros interactivos con estados visuales
-- **StepPagination**: Navegación por pasos con indicadores de progreso
+---
 
-## 📚 Contenido Cultural Implementado
+## 🚀 Quick Start
 
-### Recetas Tradicionales
-- **Mole Queretano**: 8 pasos detallados con video tutorial
-- **Gorditas de Frijol**: Proceso tradicional paso a paso  
-- **Atole de Pinole**: Preparación ancestral documentada
-- **Nopalitos en Escabeche**: Técnica de conservación regional
+### Global Prerequisites
 
-### Ingredientes Regionales
-- **Chiles**: Variedad local con temporadas específicas
-- **Vegetales**: Quelites y nopales con propiedades nutricionales
-- **Granos**: Maíz criollo y frijoles nativos
-- **Hierbas**: Aromáticas tradicionales y medicinales
+- **Node.js** 18.x or higher
+- **npm** or **yarn**
+- **PostgreSQL** 14+ (for backend)
+- **Git**
 
-### Establecimientos Documentados
-- **La Cocina de la Abuela**: Tradición familiar desde 1950
-- **Restaurante El Portal**: Especialidad en platillos regionales
-- **Fonda Doña María**: Antojitos y comida casera
-- **El Rincón del Sabor**: Experiencia gastronómica auténtica
+### Complete Installation
 
-## 🛠 Tecnologías Utilizadas
+```bash
+# Clone the repository
+git clone https://github.com/your-username/xioi-gourmet.git
+cd xioi-gourmet
 
-### Core Framework
-- **React Native**: Framework principal para desarrollo móvil
-- **Expo**: Plataforma de desarrollo y deploy
-- **TypeScript**: Tipado estático para mayor robustez
+# Install dependencies for available modules
+cd pwa && npm install && cd ..
+cd mobile && npm install && cd ..
 
-### Navegación y Estado
-- **Expo Router**: Sistema de navegación basado en archivos
-- **React Hooks**: Gestión de estado local (useState, useEffect)
-
-### UI y Diseño
-- **Material Design 3**: Sistema de diseño base
-- **Custom Theme System**: Tokens personalizados culturalmente apropiados
-- **Responsive Design**: Adaptación automática a diferentes pantallas
-
-### Herramientas de Desarrollo
-- **ESLint**: Linting y calidad de código
-- **TypeScript Config**: Configuración estricta de tipos
-- **Expo Development Build**: Testing en dispositivos reales
-
-## 🔄 Funcionalidades Específicas
-
-### Sistema de Recetas
-- Navegación fluida desde el catálogo al detalle
-- Paginación intuitiva de pasos con indicadores visuales
-- Sección de ingredientes organizada por categorías
-- Placeholder para integración de videos futura
-- Notas culturales y contexto histórico
-
-### Pantalla de Ingredientes
-- **Búsqueda Avanzada**: Filtrado por texto en tiempo real
-- **Filtros por Categoría**: Chiles, vegetales, granos, hierbas
-- **Filtros Estacionales**: Selección por meses de temporada
-- **Formato de Fechas**: Abreviaciones culturalmente apropiadas (Ene, Feb, Mar)
-- **Navegación Independiente**: Accesible solo desde la pantalla principal
-
-### Sistema de Filtrado
-```typescript
-// Ejemplo de implementación de filtros
-const filteredIngredients = ingredients.filter(ingredient => {
-  const matchesSearch = ingredient.name.toLowerCase().includes(searchQuery.toLowerCase());
-  const matchesCategory = selectedCategory === 'all' || ingredient.category === selectedCategory;
-  const matchesSeason = selectedSeason === 'all' || ingredient.season.includes(selectedSeason);
-  
-  return matchesSearch && matchesCategory && matchesSeason;
-});
+# Backend and tests still in development
 ```
 
-## 🚦 Estado del Proyecto
+### Execution by Module
 
-### ✅ Completado
-- Navegación por tabs con diseño Material Design 3
-- Pantallas de recetas con detalle completo y paginación
-- Sistema de ingredientes con filtros avanzados
-- Arquitectura escalable con separación de screens y tabs
-- Paleta de colores cultural y sistema de temas
+#### 🌐 PWA (Web Application) - ✅ Available
+```bash
+cd pwa
+npm run dev
+# Access at: http://localhost:5173
+```
 
-### 🔄 En Progreso
-- Integración de videos en recetas
-- Contenido adicional para la sección Explorar
-- Optimizaciones de rendimiento
+#### 📱 Mobile (Mobile Application) - ⚠️ In development
+```bash
+cd mobile
+npm start
+# Use Expo Go to view on your device
+```
 
-### 📋 Planificado
-- Funcionalidad offline
-- Sistema de favoritos
-- Compartir recetas en redes sociales
-- Mapa interactivo de restaurantes
-- Notificaciones de temporada de ingredientes
+#### ⚙️ Backend - 🚧 Coming soon
+```bash
+# In development - documentation pending
+```
+
+---
+
+## 🛠️ Tech Stack
+
+### 🌐 PWA (Web Frontend)
+- **React 19.1.1** - Latest generation UI library
+- **Vite 7.1.7** - Ultra-fast build tool
+- **Tailwind CSS 4.1.14** - Utility-first CSS framework
+- **React Router 7.9.4** - SPA navigation
+- **Zustand 5.0.8** - Minimalist state management
+- **Service Workers** - Offline functionality
+
+### 📱 Mobile (Native Application)
+- **React Native** - Cross-platform framework
+- **Expo** - Development toolchain
+- *(Complete stack in definition)*
+
+### ⚙️ Backend (Microservices)
+- **Node.js 18+** - JavaScript runtime
+- **Express/NestJS** - Frameworks (to be defined)
+- **PostgreSQL 14+** - Main database
+- **Redis** - Cache and sessions
+- **Docker** - Containerization
+- **JWT** - Authentication
+- *(Architecture in design)*
+
+### 🧪 Testing
+- **Jest** - Testing framework (planned)
+- **Cypress/Playwright** - E2E testing (planned)
+- **Supertest** - API testing (planned)
+
+### 🚀 DevOps & Hosting
+- **IONOS VPS** - Main hosting
+- **Vercel** - PWA/Landing hosting
+- **Google Play Store** - Android distribution
+- **App Store** - iOS distribution (planned)
+- **Don Dominio** - Domain registration
+
+---
+
+## 📚 Documentation by Module
+
+Each module has its own detailed documentation:
+
+- **[📱 PWA - Documentation](./pwa/README.md)** ✅ *Available*
+  - Installation and configuration
+  - Project structure
+  - Development guide
+  - Authentication and protected routes
+
+- **[📱 Mobile - Documentation](./mobile/README.md)** 🟡 *In development*
+  - Expo configuration
+  - Native components
+  - *(Documentation in progress)*
+
+- **[⚙️ Backend - Documentation](./backend/README.md)** 🔴 *Coming soon*
+  - Microservices architecture
+  - API endpoints
+  - *(In planning)*
+
+- **[🧪 Tests - Documentation](./tests/README.md)** 🔴 *Coming soon*
+  - Testing strategy
+  - Testing guide
+  - *(In planning)*
+
+---
+
+## 🎨 Main Features
+
+### For Tourists
+- ✅ Traditional Pame recipe catalog with cultural history
+- ✅ Local restaurant and inn directory (Flavor Route)
+- ✅ Interactive map with offline geolocation
+- ✅ Native ingredients database with properties
+- ✅ Documented ancestral culinary techniques
+- ✅ Booking of experiential gastronomic workshops
+- ✅ Multilingual content (ES/EN/Pame)
+
+### For Administrators
+- 🔐 Protected control panel with authentication
+- 📊 Dashboard with usage and popularity metrics
+- 📝 Complete CRUD for recipes, ingredients, and locations
+- 🗓️ Cultural events and workshops management
+- 🌐 Centralized translation system
+- 💬 Feedback and reviews module
+- 👥 User and permissions administration
+
+---
+
+## 📊 Business Model
+
+### Revenue Sources
+
+| Source | Type | Estimated % | Purpose |
+|--------|------|------------|---------|
+| Municipal Government | Public | 70-80% | Base operation |
+| Workshop Donations | Community | 5-10% | Local reinvestment |
+| Paid Mentions | Regulated commercial | 10-15% | Tech improvements |
+| Sponsorships | Extraordinary | 5-10% | Special projects |
+
+### User Segments
+
+1. **National Tourists** (60%) - Main consumers
+2. **International Tourists** (25%) - Need English content
+3. **Researchers/Students** (15%) - Rigorous documentation
+
+---
+
+## 👥 Development Team
+
+**Technological University of Querétaro - IDGS10**
+
+| Name | Role |
+|------|------|
+| Angel Eduardo Anaya Becerril | Full-stack Developer |
+| Timoteo Cruz Hernández | Backend Developer |
+| Carlos Flores Carranza | Frontend Developer |
+| Victor Manuel Rangel Mejía | Mobile Developer |
+| Aaron Reyes Ruiz | UI/UX Designer |
+| Eduardo Daniel Rodríguez | QA Engineer |
+| Mauricio Martínez Rodríguez | DevOps Engineer |
+
+**Academic Advisor:** Josue Francisco Lopez Lopez  
+**Institution:** Technological University of Querétaro (UTEQ)
+
+---
+
+## 🤝 Key Partners
+
+- 🏛️ **Municipal Government of Arroyo Seco** - Main client and funding
+- 🏛️ **Secretary of Tourism of Querétaro** - Regional promotion
+- 🎓 **Technological University of Querétaro** - Technological development
+- 🏔️ **Pame Indigenous Communities** - Cultural validation and authentic content
+- 🍴 **Local Restaurant Association** - Business directory
+
+---
+
+## 📈 Roadmap
+
+### ✅ Phase 1 - MVP (Current - Q1 2025)
+- [x] **Operational PWA** with complete offline functionality
+- [x] Basic traditional recipe catalog
+- [x] Restaurant and location directory
+- [x] Admin panel with authentication
+- [x] Multilingual content (ES/EN)
+- [x] Complete tourist landing page
+- [ ] Mobile: Base structure and initial components
+
+### 🔄 Phase 2 - Expansion (Q2 2025)
+- [ ] **Backend:** Microservices architecture design
+- [ ] **Backend:** Implementation of core services (Auth, Recipes, Locations)
+- [ ] **Mobile:** Functional app in Expo with main features
+- [ ] **PWA:** Cultural workshop booking system
+- [ ] **Tests:** Basic suite of unit and integration tests
+- [ ] Integration between PWA, Mobile, and Backend
+
+### 📋 Phase 3 - Optimization (Q3 2025)
+- [ ] **Backend:** All microservices operational and documented
+- [ ] **Mobile:** Publication on Google Play Store
+- [ ] **PWA:** Recommendation system with ML
+- [ ] **Tests:** >80% coverage and complete E2E tests
+- [ ] Push notifications on both platforms
+- [ ] Analytics dashboard and advanced metrics
+
+### 🚀 Phase 4 - Scale (Q4 2025)
+- [ ] Mobile publication on App Store (iOS)
+- [ ] Payment and monetization system
+- [ ] Public API for third parties
+- [ ] Expansion to other Sierra Gorda municipalities
+
+---
+
+## 🧪 Testing
+
+```bash
+# PWA - Available tests
+cd pwa && npm run test
+
+# Mobile - In development
+cd mobile && npm run test
+
+# Backend - Coming soon
+# cd backend && npm run test
+
+# E2E Tests - Coming soon
+# cd tests && npm run test:e2e
+```
+
+**Current status:**
+- ✅ PWA: Linter configured, unit tests in planning
+- 🟡 Mobile: Testing strategy in definition
+- 🔴 Backend: Tests pending (architecture first)
+- 🔴 E2E: Complete suite planned for Phase 3
+
+---
+
+## 🌍 Deployment
+
+### Deployment Status
+
+| Platform | URL/Store | Status |
+|----------|-----------|--------|
+| **PWA Production** | [xioigourmet.com](https://xioigourmet.com) | 🟡 In development |
+| **PWA Staging** | Vercel Preview | ✅ Active |
+| **Backend API** | IONOS VPS | 🔴 Pending |
+| **Mobile Android** | Google Play Store | 🔴 Pending |
+| **Mobile iOS** | App Store | 🔴 Pending |
+
+### Deployment Configuration
+
+#### PWA
+- **Production:** Vercel (custom domain)
+- **Build:** `npm run build` in `/pwa` directory
+- **Environment variables:** Configured in Vercel Dashboard
+
+#### Mobile
+- **Android:** Google Play Console (in preparation)
+- **iOS:** App Store Connect (planned for Q3 2025)
+
+#### Backend
+- **Hosting:** IONOS VPS with Docker
+- **API Documentation:** Swagger UI (when available)
+
+*Detailed deployment instructions available in each module's README.*
+
+---
+
+## 📄 License
+
+This project is developed for educational purposes and public service for the Municipal Government of Arroyo Seco, Querétaro. All rights reserved.
+
+---
+
+## 📞 Contact and Support
+
+- 🌐 **Website:** [xioigourmet.com](https://xioigourmet.com)
+- 📧 **Email:** info@arroyoseco.com
+- 📱 **WhatsApp:** +52 442 123 4567
+- 📍 **Location:** Arroyo Seco, Querétaro, Mexico
+- 🏛️ **Municipal Government:** [arroyoseco.gob.mx](https://arroyoseco.gob.mx)
+
+---
+
+## 🙏 Acknowledgments
+
+We thank the Pame indigenous communities, traditional cooks, municipal government of Arroyo Seco, UTEQ, and all who contribute to preserving the gastronomic heritage of the Sierra Gorda.
+
+---
+
+<div align="center">
+
+**Made with ❤️ to preserve Pame flavor**
+
+*"Xi'oi Gourmet - Where every dish tells a story"*
+
+</div>
