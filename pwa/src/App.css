@@ -1,1 +1,30 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* Estilos personalizados para los marcadores del mapa */
+.leaflet-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.custom-map-marker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+}
+
+.leaflet-popup-content {
+  margin: 0.75rem;
+  min-width: 200px;
+}
+
+/* Asegurarse de que el mapa tenga altura completa dentro de su contenedor */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+}

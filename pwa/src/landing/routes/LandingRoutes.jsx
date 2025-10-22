@@ -10,12 +10,12 @@ const TechniquesPage = lazy(() => import('../pages/gastronomy/Techniques.jsx'));
 const ToolsPage = lazy(() => import('../pages/gastronomy/Tools.jsx'));
 const RestaurantsPage = lazy(() => import('../pages/gastronomy/Restaurants.jsx'));
 const LocationsPage = lazy(() => import('../pages/locations/Locations.jsx'));
-const PlacesPage = lazy(() => import('../pages/locations/Places.jsx'));
-const RouteRestaurantsPage = lazy(() => import('../pages/locations/RouteRestaurants.jsx'));
-const PointsOfInterestPage = lazy(() => import('../pages/locations/PointsOfInterest.jsx'));
-const SketchPage = lazy(() => import('../pages/locations/Sketch.jsx'));
-const CategorySearchPage = lazy(() => import('../pages/locations/CategorySearch.jsx'));
-const MapPage = lazy(() => import('../pages/locations/Map.jsx'));
+// const PlacesPage = lazy(() => import('../pages/locations/Places.jsx'));
+// const RouteRestaurantsPage = lazy(() => import('../pages/locations/RouteRestaurants.jsx'));
+// const PointsOfInterestPage = lazy(() => import('../pages/locations/PointsOfInterest.jsx'));
+// const SketchPage = lazy(() => import('../pages/locations/Sketch.jsx'));
+// const CategorySearchPage = lazy(() => import('../pages/locations/CategorySearch.jsx'));
+// const MapPage = lazy(() => import('../pages/locations/Map.jsx'));
 const EventsPage = lazy(() => import('../pages/events/Events.jsx'));
 const WorkshopsPage = lazy(() => import('../pages/events/Workshops.jsx'));
 const RoutesPage = lazy(() => import('../pages/events/Routes.jsx'));
@@ -49,12 +49,12 @@ export const landingRoutes = [
 
       // Ubicaciones
       { path: ROUTES.LOCATIONS, element: <Suspense fallback={<LoadingFallback />}><LocationsPage /></Suspense> },
-      { path: ROUTES.EMBLEMATIC_PLACES, element: <Suspense fallback={<LoadingFallback />}><PlacesPage /></Suspense> },
-      { path: ROUTES.ROUTE_RESTAURANTS, element: <Suspense fallback={<LoadingFallback />}><RouteRestaurantsPage /></Suspense> },
-      { path: ROUTES.POINTS_OF_INTEREST, element: <Suspense fallback={<LoadingFallback />}><PointsOfInterestPage /></Suspense> },
-      { path: ROUTES.INTERACTIVE_SKETCH, element: <Suspense fallback={<LoadingFallback />}><SketchPage /></Suspense> },
-      { path: ROUTES.CATEGORY_SEARCH, element: <Suspense fallback={<LoadingFallback />}><CategorySearchPage /></Suspense> },
-      { path: ROUTES.GOOGLE_MAPS_REDIRECT, element: <Suspense fallback={<LoadingFallback />}><MapPage /></Suspense> },
+      // { path: ROUTES.EMBLEMATIC_PLACES, element: <Suspense fallback={<LoadingFallback />}><PlacesPage /></Suspense> },
+      // { path: ROUTES.ROUTE_RESTAURANTS, element: <Suspense fallback={<LoadingFallback />}><RouteRestaurantsPage /></Suspense> },
+      // { path: ROUTES.POINTS_OF_INTEREST, element: <Suspense fallback={<LoadingFallback />}><PointsOfInterestPage /></Suspense> },
+      // { path: ROUTES.INTERACTIVE_SKETCH, element: <Suspense fallback={<LoadingFallback />}><SketchPage /></Suspense> },
+      // { path: ROUTES.CATEGORY_SEARCH, element: <Suspense fallback={<LoadingFallback />}><CategorySearchPage /></Suspense> },
+      // { path: ROUTES.GOOGLE_MAPS_REDIRECT, element: <Suspense fallback={<LoadingFallback />}><MapPage /></Suspense> },
 
       // Eventos
       { path: ROUTES.EVENTS, element: <Suspense fallback={<LoadingFallback />}><EventsPage /></Suspense> },
