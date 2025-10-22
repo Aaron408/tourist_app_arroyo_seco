@@ -1,1 +1,135 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* Estilos personalizados para los marcadores del mapa */
+.leaflet-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.custom-map-marker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Animación para los marcadores */
+.marker-container {
+  transition: all 0.3s ease-out;
+  position: relative;
+}
+
+.marker-container:hover {
+  transform: translateY(-3px);
+  filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.2));
+}
+
+/* Estilos para el marcador seleccionado */
+.marker-selected {
+  transform: translateY(-5px) scale(1.1);
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3));
+  z-index: 1000 !important;
+}
+
+.selected-marker {
+  z-index: 1000 !important;
+}
+
+/* Pequeña animación de pulso para el marcador seleccionado */
+@keyframes pulse {
+  0% {
+    transform: scale(1) translateY(-5px);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    transform: scale(1.05) translateY(-6px);
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    transform: scale(1) translateY(-5px);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.marker-selected {
+  animation: pulse 2s infinite ease-in-out;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* Estilos mejorados para los popups */
+.leaflet-popup-content-wrapper {
+  border-radius: 0.75rem;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  min-width: 250px;
+  max-width: 300px;
+}
+
+.popup-content {
+  padding: 0.75rem;
+}
+
+.leaflet-popup-tip {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+/* Botón de cerrar el popup */
+.leaflet-popup-close-button {
+  padding: 8px !important;
+  color: #6B7280 !important;
+}
+
+/* Asegurarse de que el mapa tenga altura completa dentro de su contenedor */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Mejorar la animación durante el movimiento del mapa */
+.leaflet-fade-anim .leaflet-tile,
+.leaflet-fade-anim .leaflet-popup {
+  will-change: opacity;
+  transition: opacity 0.2s linear;
+}
+
+/* Efecto de transición suave para el vuelo del mapa */
+.leaflet-zoom-anim .leaflet-zoom-animated {
+  will-change: transform;
+  transition-property: transform;
+  transition-duration: 0.5s;
+}
+
+/* Estilos para los controles del mapa */
+.leaflet-control-layers,
+.leaflet-control-zoom {
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+}
+
+.leaflet-control-layers-toggle {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Clase para ocultar la barra de desplazamiento pero mantener la funcionalidad */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
