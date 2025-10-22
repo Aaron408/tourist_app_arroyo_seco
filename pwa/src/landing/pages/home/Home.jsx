@@ -141,7 +141,7 @@ const Home = () => {
             {t('ctaDescription') || 'Comienza tu viaje gastronómico por Arroyo Seco hoy mismo'}
           </p>
           <Link 
-            to={ROUTES.CROQUIS_INTERACTIVO}
+            to={ROUTES.INTERACTIVE_SKETCH}
             className="inline-block bg-white text-amber-700 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             {t('viewInteractiveMap') || 'Ver Mapa Interactivo'}
