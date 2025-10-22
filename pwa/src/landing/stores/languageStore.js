@@ -17,6 +17,19 @@ export const useLanguageStore = create((set) => ({
       events: 'Eventos',
       explore: 'Explorar',
       
+      // Locations Map
+      mapTitle: 'Mapa Interactivo de Arroyo Seco',
+      mapDescription: 'Explora restaurantes, lugares emblemáticos y eventos en nuestro pueblo',
+      searchLocations: 'Buscar ubicaciones...',
+      showAll: 'Mostrar todo',
+      restaurants: 'Restaurantes',
+      landmarks: 'Lugares emblemáticos',
+      markets: 'Mercados',
+      workshops: 'Talleres',
+      events: 'Eventos',
+      noResults: 'No se encontraron resultados',
+      viewDetails: 'Ver detalles',
+      
       // Home Hero Section
       welcomeMessage: 'Descubre los Sabores de Arroyo Seco',
       heroSubtitle: 'Explora la riqueza gastronómica de la Sierra Gorda. Recetas tradicionales, ingredientes locales y experiencias únicas.',
@@ -68,6 +81,19 @@ export const useLanguageStore = create((set) => ({
       locations: 'Locations',
       events: 'Events',
       explore: 'Explore',
+      
+      // Locations Map
+      mapTitle: 'Interactive Map of Arroyo Seco',
+      mapDescription: 'Explore restaurants, landmarks and events in our town',
+      searchLocations: 'Search locations...',
+      showAll: 'Show all',
+      restaurants: 'Restaurants',
+      landmarks: 'Landmarks',
+      markets: 'Markets',
+      workshops: 'Workshops',
+      events: 'Events',
+      noResults: 'No results found',
+      viewDetails: 'View details',
       
       // Home Hero Section
       welcomeMessage: 'Discover the Flavors of Arroyo Seco',

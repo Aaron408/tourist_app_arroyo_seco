@@ -18,6 +18,27 @@ export const HTTP_STATUS = {
 };
 
 /**
+ * Configuración del mapa
+ */
+export const MAP_CONFIG = {
+  CENTER: [21.5470145, -99.6907782], // Centro en la Presidencia Municipal de Arroyo Seco
+  ZOOM: 13,
+  MAX_ZOOM: 18,
+  MIN_ZOOM: 10
+};
+
+/**
+ * Tipos de ubicaciones
+ */
+export const LOCATION_TYPES = {
+  RESTAURANT: 'restaurant',
+  EVENT: 'event',
+  LANDMARK: 'landmark',
+  MARKET: 'market',
+  WORKSHOP: 'workshop'
+};
+
+/**
  * Rutas de la aplicación landing
  */
 export const ROUTES = {
