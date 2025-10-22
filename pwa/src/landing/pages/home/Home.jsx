@@ -54,7 +54,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Feature 1 - Gastronomía */}
             <FeatureCard 
-              to={ROUTES.GASTRONOMIA}
+              to={ROUTES.GASTRONOMY}
               bgGradient="from-orange-50 to-amber-50"
               iconGradient="from-amber-500 to-orange-600"
               icon="🍽️"
