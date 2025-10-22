@@ -66,7 +66,7 @@ const Home = () => {
 
             {/* Feature 2 - Ubicaciones */}
             <FeatureCard 
-              to={ROUTES.UBICACIONES}
+              to={ROUTES.LOCATIONS}
               bgGradient="from-blue-50 to-cyan-50"
               iconGradient="from-blue-500 to-cyan-600"
               icon="📍"
