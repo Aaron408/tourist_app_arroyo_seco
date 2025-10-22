@@ -46,8 +46,73 @@ const LocationCard = ({
   rating,
   onClick,
   isSelected,
+  compact = false
 }) => {
   const { currentLanguage, t } = useLanguageStore();
+
+  if (compact) {
+    return (
+      <div
+        onClick={onClick}
+        className={`bg-white rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden h-full ${
+          isSelected ? "ring-2 ring-amber-500" : ""
+        }`}
+      >
+        <div className="flex h-full">
+          <div className="relative w-1/3 overflow-hidden">
+            <img
+              src={
+                image_url ||
+                "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800"
+              }
+              alt={name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://via.placeholder.com/150?text=No+disponible";
+              }}
+            />
+            {rating && (
+              <div className="absolute bottom-1 left-1 bg-white/80 px-1.5 py-0.5 rounded-full flex items-center text-xs">
+                <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+                <span className="font-semibold text-gray-900 ml-0.5">
+                  {rating.toFixed(1)}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="w-2/3 p-3 flex flex-col justify-between">
+            <div>
+              <div className="flex justify-between items-start mb-1">
+                <h3 className="text-base font-bold text-gray-900 line-clamp-1">{name}</h3>
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs font-medium ${getTypeColor(
+                    type
+                  )}`}
+                >
+                  {getTypeLabel(type, currentLanguage)}
+                </span>
+              </div>
+              <p className="text-gray-600 text-xs line-clamp-2 mb-1">{description}</p>
+            </div>
+            
+            <div>
+              {address && (
+                <div className="flex items-start text-xs text-gray-600 mb-1">
+                  <MapPin className="w-3 h-3 mr-1 mt-0.5 shrink-0 text-amber-600" />
+                  <span className="line-clamp-1">{address}</span>
+                </div>
+              )}
+              
+              <button className="w-full bg-linear-to-r from-amber-500 to-orange-600 text-white py-1 rounded text-xs font-medium hover:from-amber-600 hover:to-orange-700 transition-all">
+                {t("viewDetails") || "Ver detalles"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -64,6 +129,10 @@ const LocationCard = ({
           }
           alt={name}
           className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://via.placeholder.com/400x200?text=Imagen+no+disponible";
+          }}
         />
         <div className="absolute top-3 left-3">
           <span
@@ -91,14 +160,14 @@ const LocationCard = ({
         <div className="space-y-2">
           {address && (
             <div className="flex items-start text-sm text-gray-600">
-              <MapPin className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0 text-amber-600" />
+              <MapPin className="w-4 h-4 mr-2 mt-0.5 shrink-0 text-amber-600" />
               <span className="line-clamp-1">{address}</span>
             </div>
           )}
 
           {phone && (
             <div className="flex items-center text-sm text-gray-600">
-              <Phone className="w-4 h-4 mr-2 flex-shrink-0 text-amber-600" />
+              <Phone className="w-4 h-4 mr-2 shrink-0 text-amber-600" />
               <span>{phone}</span>
             </div>
           )}

@@ -123,3 +123,13 @@
   border: none !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
+
+/* Clase para ocultar la barra de desplazamiento pero mantener la funcionalidad */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}

@@ -283,7 +283,7 @@ const LocationMap = ({
   };
 
   return (
-    <div className="relative w-full h-[60vh] bg-gray-100 rounded-lg overflow-hidden">
+    <div className="relative w-full h-[75vh] bg-gray-100 rounded-lg overflow-hidden">
       {locations.length === 0 ? (
         <div className="w-full h-full flex items-center justify-center text-gray-500 text-center p-4">
           <div>
