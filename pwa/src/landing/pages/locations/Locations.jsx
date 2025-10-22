@@ -4,6 +4,7 @@ import LocationCard from "./components/LocationCard";
 import FilterBar from "./components/FilterBar";
 import { useLanguageStore } from "../../stores/languageStore";
 import { MAP_CONFIG, API_BASE_URL } from "../../utils/constants";
+import L from "leaflet";
 
 const Locations = () => {
   const { t } = useLanguageStore();
@@ -13,6 +14,7 @@ const Locations = () => {
   const [selectedType, setSelectedType] = useState(null);
   const [selectedLocationId, setSelectedLocationId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
   useEffect(() => {
     console.log("Fetching locations...");
@@ -28,56 +30,65 @@ const Locations = () => {
     filterLocations();
   }, [locations, searchQuery, selectedType]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const fetchLocations = async () => {
     try {
       setLoading(true);
-      // Usando fetch en lugar de supabase
       const response = await fetch(`${API_BASE_URL}/api/locations`);
 
-      // En caso de que la API no esté disponible, usamos datos de prueba
       if (!response.ok) {
         console.log("Using mock data for locations");
-        // Datos de ejemplo para pruebas
         const mockData = [
           {
             id: "1",
-            name: "Restaurante El Sabor de la Sierra",
+            name: "Presidencia Municipal de Arroyo Seco",
             description:
-              "Restaurante tradicional con platillos típicos de la región de Arroyo Seco.",
-            type: "restaurant",
-            address: "Calle Principal #123, Centro, Arroyo Seco",
-            latitude: 21.1342,
-            longitude: -99.6825,
-            phone: "442-123-4567",
+              "Edificio principal del gobierno local de Arroyo Seco donde se ofrecen servicios municipales y atención ciudadana.",
+            type: "landmark",
+            address: "Plaza Principal s/n, Centro, Arroyo Seco, Qro.",
+            latitude: 21.5470145,
+            longitude: -99.6907782,
+            phone: "487-874-2120",
             image_url:
-              "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
-            rating: 4.8,
+              "https://lh3.googleusercontent.com/gps-cs-s/AC9h4npo5NEODoS7bHXl11cWx99tfE36Rw052-ZEYNaQIVaEhR3bjwBm-C-tK1HEmpPNljzZ48Tm_5v7wH_OIkkVORa5O527TuVJqgKDuN1z9k-2OWlCJESxVMSZ8d_3bfIh9G8zGHuYgA=w243-h406-n-k-no-nu",
+            rating: 4.3,
             is_featured: true,
           },
           {
             id: "2",
-            name: "Mirador La Peña",
+            name: "Misión de Concá",
             description:
-              "Impresionante mirador con vistas panorámicas a la Sierra Gorda y el pueblo.",
+              "Joya arquitectónica del siglo XVIII y Patrimonio Mundial de la UNESCO. Forma parte de las Misiones Franciscanas de la Sierra Gorda.",
             type: "landmark",
-            address: "Cerro La Peña, 2km al norte de Arroyo Seco",
-            latitude: 21.1412,
-            longitude: -99.6756,
+            address: "Concá, Arroyo Seco, Qro.",
+            latitude: 21.4366247,
+            longitude: -99.6444866,
             image_url:
-              "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800",
+              "https://images.unsplash.com/photo-1579667341973-fc947278057c?w=800",
             rating: 4.9,
             is_featured: true,
           },
           {
             id: "3",
-            name: "Mercado Municipal",
+            name: "Mercado Municipal de Arroyo Seco",
             description:
-              "Mercado tradicional con productos locales, artesanías y comida típica.",
+              "Mercado tradicional con productos locales, artesanías y comida típica de la región.",
             type: "market",
-            address: "Av. Constitución #45, Centro, Arroyo Seco",
-            latitude: 21.1335,
-            longitude: -99.683,
-            phone: "442-987-6543",
+            address: "Calle Juárez, Centro, Arroyo Seco, Qro.",
+            latitude: 21.5469807,
+            longitude: -99.6907222,
+            phone: "487-874-1234",
             image_url:
               "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=800",
             rating: 4.5,
@@ -85,31 +96,76 @@ const Locations = () => {
           },
           {
             id: "4",
-            name: "Taller de Cocina Tradicional",
+            name: "Restaurante Las Truchas El Arroyo",
             description:
-              "Aprende las técnicas de la gastronomía tradicional de la Sierra Gorda.",
-            type: "workshop",
-            address: "Calle Hidalgo #78, Centro, Arroyo Seco",
-            latitude: 21.1356,
-            longitude: -99.684,
-            phone: "442-555-1234",
+              "Restaurante junto al río especializado en truchas frescas y platillos tradicionales de la región serrana.",
+            type: "restaurant",
+            address:
+              "Carretera Jalpan - Río Verde km 50, Purísima de Arista, Arroyo Seco, Qro.",
+            latitude: 21.4870118,
+            longitude: -99.6556459,
+            phone: "487-874-2215",
             image_url:
-              "https://images.unsplash.com/photo-1577106263724-2c8e03bfe9cf?w=800",
+              "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
             rating: 4.7,
             is_featured: true,
           },
           {
             id: "5",
-            name: "Festival Gastronómico Anual",
+            name: "Cascada de Ayutla",
             description:
-              "El evento gastronómico más importante del año, con muestras de platillos locales.",
-            type: "event",
-            address: "Plaza Principal, Centro, Arroyo Seco",
-            latitude: 21.1339,
-            longitude: -99.6821,
+              "Hermosa cascada en medio de la vegetación de la Sierra Gorda, ideal para visitar y refrescarse en temporada de lluvias.",
+            type: "landmark",
+            address: "Ayutla, Arroyo Seco, Qro.",
+            latitude: 21.5824624,
+            longitude: -99.7264178,
             image_url:
-              "https://images.unsplash.com/photo-1555244162-803834f25e6d?w=800",
+              "https://images.unsplash.com/photo-1546587348-d12660c30c50?w=800",
+            rating: 4.8,
+            is_featured: true,
+          },
+          {
+            id: "6",
+            name: "Panadería Tradicional La Serrana",
+            description:
+              "Panadería artesanal que ofrece el tradicional pan de pulque, gorditas de horno y otros productos típicos de la región.",
+            type: "market",
+            address: "Calle Hidalgo #45, Centro, Arroyo Seco, Qro.",
+            latitude: 21.5471505,
+            longitude: -99.6904932,
+            phone: "487-874-1122",
+            image_url:
+              "https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=800",
+            rating: 4.6,
+            is_featured: false,
+          },
+          {
+            id: "7",
+            name: "Mirador Sótano del Barro",
+            description:
+              "Impresionante mirador natural desde donde se aprecia una de las simas más profundas del mundo, con 455 metros de profundidad.",
+            type: "landmark",
+            address: "Carretera a Ayutla, Arroyo Seco, Qro.",
+            latitude: 21.5518688,
+            longitude: -99.6778795,
+            image_url:
+              "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800",
             rating: 4.9,
+            is_featured: true,
+          },
+          {
+            id: "8",
+            name: "Taller de Artesanía Xioi",
+            description:
+              "Taller donde artesanos locales enseñan técnicas tradicionales para elaborar artesanías con materiales de la región.",
+            type: "workshop",
+            address: "Calle Benito Juárez #23, Centro, Arroyo Seco, Qro.",
+            latitude: 21.5468764,
+            longitude: -99.6905246,
+            phone: "487-874-3388",
+            image_url:
+              "https://images.unsplash.com/photo-1604782206219-3b9d245b7b95?w=800",
+            rating: 4.7,
             is_featured: true,
           },
         ];
@@ -121,51 +177,125 @@ const Locations = () => {
       setLocations(data || []);
     } catch (error) {
       console.error("Error fetching locations:", error);
-      // En caso de error, utilizamos datos de prueba
+      //En caso de error, utilizamos datos de prueba
       const mockData = [
         {
           id: "1",
-          name: "Restaurante El Sabor de la Sierra",
+          name: "Presidencia Municipal de Arroyo Seco",
           description:
-            "Restaurante tradicional con platillos típicos de la región de Arroyo Seco.",
-          type: "restaurant",
-          address: "Calle Principal #123, Centro, Arroyo Seco",
-          latitude: 21.1342,
-          longitude: -99.6825,
-          phone: "442-123-4567",
+            "Edificio principal del gobierno local de Arroyo Seco donde se ofrecen servicios municipales y atención ciudadana.",
+          type: "landmark",
+          address: "Plaza Principal s/n, Centro, Arroyo Seco, Qro.",
+          latitude: 21.5470145,
+          longitude: -99.6907782,
+          phone: "487-874-2120",
           image_url:
-            "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
-          rating: 4.8,
+            "https://lh3.googleusercontent.com/gps-cs-s/AC9h4npo5NEODoS7bHXl11cWx99tfE36Rw052-ZEYNaQIVaEhR3bjwBm-C-tK1HEmpPNljzZ48Tm_5v7wH_OIkkVORa5O527TuVJqgKDuN1z9k-2OWlCJESxVMSZ8d_3bfIh9G8zGHuYgA=w243-h406-n-k-no-nu",
+          rating: 4.3,
           is_featured: true,
         },
         {
           id: "2",
-          name: "Mirador La Peña",
+          name: "Misión de Concá",
           description:
-            "Impresionante mirador con vistas panorámicas a la Sierra Gorda y el pueblo.",
+            "Joya arquitectónica del siglo XVIII y Patrimonio Mundial de la UNESCO. Forma parte de las Misiones Franciscanas de la Sierra Gorda.",
           type: "landmark",
-          address: "Cerro La Peña, 2km al norte de Arroyo Seco",
-          latitude: 21.1412,
-          longitude: -99.6756,
+          address: "Concá, Arroyo Seco, Qro.",
+          latitude: 21.4366247,
+          longitude: -99.6444866,
           image_url:
-            "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800",
+            "https://www.eluniversalqueretaro.mx/resizer/v2/625C7HHEWVHWBKJB3D4ULD7VQQ.jpg?auth=1ef782935d49b341ac17b376997d0f9938a3d5f12ba8f949ce8448b42ff85c07",
           rating: 4.9,
           is_featured: true,
         },
         {
           id: "3",
-          name: "Mercado Municipal",
+          name: "Mercado Municipal de Arroyo Seco",
           description:
-            "Mercado tradicional con productos locales, artesanías y comida típica.",
+            "Mercado tradicional con productos locales, artesanías y comida típica de la región.",
           type: "market",
-          address: "Av. Constitución #45, Centro, Arroyo Seco",
-          latitude: 21.1335,
-          longitude: -99.683,
-          phone: "442-987-6543",
+          address: "Calle Juárez, Centro, Arroyo Seco, Qro.",
+          latitude: 21.5469807,
+          longitude: -99.6907222,
+          phone: "487-874-1234",
           image_url:
             "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=800",
           rating: 4.5,
           is_featured: false,
+        },
+        {
+          id: "4",
+          name: "Restaurante Las Truchas El Arroyo",
+          description:
+            "Restaurante junto al río especializado en truchas frescas y platillos tradicionales de la región serrana.",
+          type: "restaurant",
+          address:
+            "Carretera Jalpan - Río Verde km 50, Purísima de Arista, Arroyo Seco, Qro.",
+          latitude: 21.4870118,
+          longitude: -99.6556459,
+          phone: "487-874-2215",
+          image_url:
+            "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
+          rating: 4.7,
+          is_featured: true,
+        },
+        {
+          id: "5",
+          name: "Cascada de Ayutla",
+          description:
+            "Hermosa cascada en medio de la vegetación de la Sierra Gorda, ideal para visitar y refrescarse en temporada de lluvias.",
+          type: "landmark",
+          address: "Ayutla, Arroyo Seco, Qro.",
+          latitude: 21.5824624,
+          longitude: -99.7264178,
+          image_url:
+            "https://images.unsplash.com/photo-1546587348-d12660c30c50?w=800",
+          rating: 4.8,
+          is_featured: true,
+        },
+        {
+          id: "6",
+          name: "Panadería Tradicional La Serrana",
+          description:
+            "Panadería artesanal que ofrece el tradicional pan de pulque, gorditas de horno y otros productos típicos de la región.",
+          type: "market",
+          address: "Calle Hidalgo #45, Centro, Arroyo Seco, Qro.",
+          latitude: 21.5471505,
+          longitude: -99.6904932,
+          phone: "487-874-1122",
+          image_url:
+            "https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=800",
+          rating: 4.6,
+          is_featured: false,
+        },
+        {
+          id: "7",
+          name: "Mirador Sótano del Barro",
+          description:
+            "Impresionante mirador natural desde donde se aprecia una de las simas más profundas del mundo, con 455 metros de profundidad.",
+          type: "landmark",
+          address: "Carretera a Ayutla, Arroyo Seco, Qro.",
+          latitude: 21.5518688,
+          longitude: -99.6778795,
+          image_url:
+            "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800",
+          rating: 4.9,
+          is_featured: true,
+        },
+        {
+          id: "8",
+          name: "Taller de Artesanía Xioi",
+          description:
+            "Taller donde artesanos locales enseñan técnicas tradicionales para elaborar artesanías con materiales de la región.",
+          type: "workshop",
+          address: "Calle Benito Juárez #23, Centro, Arroyo Seco, Qro.",
+          latitude: 21.5468764,
+          longitude: -99.6905246,
+          phone: "487-874-3388",
+          image_url:
+            "https://images.unsplash.com/photo-1604782206219-3b9d245b7b95?w=800",
+          rating: 4.7,
+          is_featured: true,
         },
       ];
       setLocations(mockData);
@@ -204,14 +334,60 @@ const Locations = () => {
 
   const handleLocationClick = (location) => {
     setSelectedLocationId(location.id);
-    const element = document.getElementById(`location-${location.id}`);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    if (!isMobile) {
+      const element = document.getElementById(`location-${location.id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     }
   };
 
   const handleCardClick = (location) => {
     setSelectedLocationId(location.id);
+
+    if (!isMobile) {
+      const element = document.getElementById(`location-${location.id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    }
+
+    if (window.map) {
+      const locationLatLng = L.latLng(location.latitude, location.longitude);
+      const isLocationVisible = window.map.getBounds().contains(locationLatLng);
+      const currentDistance = window.map.getCenter().distanceTo(locationLatLng);
+
+      if (!isLocationVisible) {
+        window.map.flyTo(
+          [location.latitude, location.longitude],
+          MAP_CONFIG.ZOOM,
+          {
+            duration: 1.5,
+            easeLinearity: 0.25,
+          }
+        );
+
+        setTimeout(() => {
+          window.map.panBy([0, -75], {
+            animate: true,
+            duration: 0.3,
+          });
+        }, 1600);
+      } else {
+        window.map.panTo([location.latitude, location.longitude], {
+          animate: true,
+          duration: 0.5,
+        });
+
+        setTimeout(() => {
+          window.map.panBy([0, -75], {
+            animate: true,
+            duration: 0.3,
+          });
+        }, 600);
+      }
+    }
   };
 
   return (

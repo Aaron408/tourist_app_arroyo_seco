@@ -21,10 +21,10 @@ export const HTTP_STATUS = {
  * Configuración del mapa
  */
 export const MAP_CONFIG = {
-  CENTER: [21.1339, -99.6821],
-  ZOOM: 14,
+  CENTER: [21.5470145, -99.6907782], // Centro en la Presidencia Municipal de Arroyo Seco
+  ZOOM: 13,
   MAX_ZOOM: 18,
-  MIN_ZOOM: 12
+  MIN_ZOOM: 10
 };
 
 /**
