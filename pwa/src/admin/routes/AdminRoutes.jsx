@@ -16,7 +16,7 @@ const RoutesPage = lazy(() => import('../pages/events/Routes'));
 const TranslationsPage = lazy(() => import('../pages/Translations'));
 const FeedbackPage = lazy(() => import('../pages/Feedback'));
 const UsersPage = lazy(() => import('../pages/Users'));
-const StatisticsPage = lazy(() => import('../pages/Stadistics'));
+const StatisticsPage = lazy(() => import('../pages/Statistics'));
 const LoginPage = lazy(() => import('../pages/login/Login'));
 const NotFoundPage = lazy(() => import('../pages/NotFound'));
 
