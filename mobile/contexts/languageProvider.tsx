@@ -5,7 +5,7 @@
  * Language provider improved to load each translation dynamically increasing 
  * the performance based on ISO-639 and mirror file-structure strategy
  * we aim to load translations as fast as possible avoiding 
- * overload with enourmus JSON objects and thrid-party libraries.
+ * overload with enormous JSON objects and third-party libraries.
  * 
  * Date Creation: 9/29/2025
  * 

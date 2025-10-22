@@ -23,13 +23,13 @@ const Home = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link 
-                to={ROUTES.GASTRONOMIA}
+                to={ROUTES.GASTRONOMY}
                 className="bg-white text-amber-700 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               >
                 {t('exploreGastronomy') || 'Explorar Gastronomía'}
               </Link>
               <Link 
-                to={ROUTES.EVENTOS}
+                to={ROUTES.EVENTS}
                 className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-amber-700 transition-all"
               >
                 {t('viewEvents') || 'Ver Eventos'}
@@ -54,7 +54,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Feature 1 - Gastronomía */}
             <FeatureCard 
-              to={ROUTES.GASTRONOMIA}
+              to={ROUTES.GASTRONOMY}
               bgGradient="from-orange-50 to-amber-50"
               iconGradient="from-amber-500 to-orange-600"
               icon="🍽️"
@@ -66,7 +66,7 @@ const Home = () => {
 
             {/* Feature 2 - Ubicaciones */}
             <FeatureCard 
-              to={ROUTES.UBICACIONES}
+              to={ROUTES.LOCATIONS}
               bgGradient="from-blue-50 to-cyan-50"
               iconGradient="from-blue-500 to-cyan-600"
               icon="📍"
@@ -78,7 +78,7 @@ const Home = () => {
 
             {/* Feature 3 - Eventos */}
             <FeatureCard 
-              to={ROUTES.EVENTOS}
+              to={ROUTES.EVENTS}
               bgGradient="from-purple-50 to-pink-50"
               iconGradient="from-purple-500 to-pink-600"
               icon="🎉"
@@ -117,7 +117,7 @@ const Home = () => {
                 </li>
               </ul>
               <Link 
-                to={ROUTES.RECETAS}
+                to={ROUTES.RECIPES}
                 className="inline-block bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors"
               >
                 {t('viewRecipes') || 'Ver Recetas'}
@@ -141,7 +141,7 @@ const Home = () => {
             {t('ctaDescription') || 'Comienza tu viaje gastronómico por Arroyo Seco hoy mismo'}
           </p>
           <Link 
-            to={ROUTES.CROQUIS_INTERACTIVO}
+            to={ROUTES.INTERACTIVE_SKETCH}
             className="inline-block bg-white text-amber-700 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             {t('viewInteractiveMap') || 'Ver Mapa Interactivo'}
