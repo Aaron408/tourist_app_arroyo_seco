@@ -23,7 +23,7 @@ const Home = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link 
-                to={ROUTES.GASTRONOMIA}
+                to={ROUTES.GASTRONOMY}
                 className="bg-white text-amber-700 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               >
                 {t('exploreGastronomy') || 'Explorar Gastronomía'}
