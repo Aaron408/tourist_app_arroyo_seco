@@ -1,7 +1,6 @@
 import './App.css';
 import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useLanguageStore as useCommonLanguageStore } from './common/stores/languageStore';
 import { useLanguageStore as useLandingLanguageStore } from './landing/stores/languageStore';
 import { useLanguageStore as useAdminLanguageStore } from './admin/stores/languageStore';
 import { AuthProvider } from './admin/contexts/AuthContext';
@@ -16,13 +15,11 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  const { initializeLanguage: initCommon } = useCommonLanguageStore();
   const { initializeLanguage: initLanding, setLanguage: setLandingLanguage } = useLandingLanguageStore();
   const { initializeLanguage: initAdmin, setLanguage: setAdminLanguage } = useAdminLanguageStore();
 
   useEffect(() => {
     // Initialize all language stores
-    initCommon();
     initLanding();
     initAdmin();
 
@@ -44,7 +41,7 @@ export default function App() {
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, []);
+  }, [initLanding, initAdmin, setLandingLanguage, setAdminLanguage]);
 
   return (
     <AuthProvider>

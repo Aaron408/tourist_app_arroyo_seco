@@ -16,23 +16,23 @@ const Home = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <div className="text-white max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              {t('welcomeMessage') || 'Descubre los Sabores de Arroyo Seco'}
+              {t('home.welcomeMessage') || 'Descubre los Sabores de Arroyo Seco'}
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-100">
-              {t('heroSubtitle') || 'Explora la riqueza gastronómica de la Sierra Gorda. Recetas tradicionales, ingredientes locales y experiencias únicas.'}
+              {t('home.heroSubtitle') || 'Explora la riqueza gastronómica de la Sierra Gorda. Recetas tradicionales, ingredientes locales y experiencias únicas.'}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link 
                 to={ROUTES.GASTRONOMY}
                 className="bg-white text-amber-700 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               >
-                {t('exploreGastronomy') || 'Explorar Gastronomía'}
+                {t('home.exploreGastronomy') || 'Explorar Gastronomía'}
               </Link>
               <Link 
                 to={ROUTES.EVENTS}
                 className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-amber-700 transition-all"
               >
-                {t('viewEvents') || 'Ver Eventos'}
+                {t('home.viewEvents') || 'Ver Eventos'}
               </Link>
             </div>
           </div>
@@ -44,10 +44,10 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              {t('whatWeOffer') || '¿Qué Ofrecemos?'}
+              {t('home.whatWeOffer') || '¿Qué Ofrecemos?'}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              {t('offerDescription') || 'Todo lo que necesitas para explorar y disfrutar la cultura gastronómica de Arroyo Seco'}
+              {t('home.offerDescription') || 'Todo lo que necesitas para explorar y disfrutar la cultura gastronómica de Arroyo Seco'}
             </p>
           </div>
 
@@ -58,9 +58,9 @@ const Home = () => {
               bgGradient="from-orange-50 to-amber-50"
               iconGradient="from-amber-500 to-orange-600"
               icon="🍽️"
-              title={t('gastronomy') || 'Gastronomía'}
-              description={t('gastronomyDesc') || 'Descubre recetas tradicionales, ingredientes locales y técnicas culinarias ancestrales de la región.'}
-              linkText={t('learnMore') || 'Conocer más →'}
+              title={t('navigation.gastronomy.title') || 'Gastronomía'}
+              description={t('gastronomy.gastronomyDesc') || 'Descubre recetas tradicionales, ingredientes locales y técnicas culinarias ancestrales de la región.'}
+              linkText={t('common.learnMore') || 'Conocer más →'}
               linkColor="text-amber-600"
             />
 
@@ -70,9 +70,9 @@ const Home = () => {
               bgGradient="from-blue-50 to-cyan-50"
               iconGradient="from-blue-500 to-cyan-600"
               icon="📍"
-              title={t('locations') || 'Ubicaciones'}
-              description={t('locationsDesc') || 'Explora lugares emblemáticos, restaurantes y puntos de interés en un mapa interactivo.'}
-              linkText={t('explore') || 'Explorar →'}
+              title={t('navigation.locations.title') || 'Ubicaciones'}
+              description={t('locations.locationsDesc') || 'Explora lugares emblemáticos, restaurantes y puntos de interés en un mapa interactivo.'}
+              linkText={t('navigation.explore') || 'Explorar →'}
               linkColor="text-blue-600"
             />
 
@@ -82,9 +82,9 @@ const Home = () => {
               bgGradient="from-purple-50 to-pink-50"
               iconGradient="from-purple-500 to-pink-600"
               icon="🎉"
-              title={t('events') || 'Eventos'}
-              description={t('eventsDesc') || 'Participa en talleres gastronómicos, rutas guiadas y eventos culturales especiales.'}
-              linkText={t('viewEvents') || 'Ver eventos →'}
+              title={t('navigation.events.title') || 'Eventos'}
+              description={t('events.eventsDesc') || 'Participa en talleres gastronómicos, rutas guiadas y eventos culturales especiales.'}
+              linkText={t('home.viewEvents') || 'Ver eventos →'}
               linkColor="text-purple-600"
             />
           </div>
@@ -97,30 +97,30 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                {t('traditionalRecipes') || 'Recetas Tradicionales'}
+                {t('gastronomy.traditionalRecipes') || 'Recetas Tradicionales'}
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                {t('recipesDescription') || 'Aprende a preparar platillos auténticos de Arroyo Seco con ingredientes locales y técnicas transmitidas de generación en generación.'}
+                {t('gastronomy.recipesDescription') || 'Aprende a preparar platillos auténticos de Arroyo Seco con ingredientes locales y técnicas transmitidas de generación en generación.'}
               </p>
               <ul className="space-y-4 mb-8">
                 <li className="flex items-start">
                   <span className="text-2xl mr-3">✓</span>
-                  <span className="text-gray-700">{t('step1') || 'Recetas paso a paso con imágenes detalladas'}</span>
+                  <span className="text-gray-700">{t('gastronomy.step1') || 'Recetas paso a paso con imágenes detalladas'}</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-2xl mr-3">✓</span>
-                  <span className="text-gray-700">{t('step2') || 'Información sobre ingredientes de temporada'}</span>
+                  <span className="text-gray-700">{t('gastronomy.step2') || 'Información sobre ingredientes de temporada'}</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-2xl mr-3">✓</span>
-                  <span className="text-gray-700">{t('step3') || 'Técnicas culinarias tradicionales'}</span>
+                  <span className="text-gray-700">{t('gastronomy.step3') || 'Técnicas culinarias tradicionales'}</span>
                 </li>
               </ul>
               <Link 
                 to={ROUTES.RECIPES}
                 className="inline-block bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors"
               >
-                {t('viewRecipes') || 'Ver Recetas'}
+                {t('gastronomy.viewRecipes') || 'Ver Recetas'}
               </Link>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-2xl">
@@ -135,16 +135,16 @@ const Home = () => {
       <section className="py-20 bg-gradient-to-r from-amber-600 to-orange-700">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
-            {t('ctaTitle') || '¿Listo para Explorar?'}
+            {t('home.ctaTitle') || '¿Listo para Explorar?'}
           </h2>
           <p className="text-xl text-amber-50 mb-8">
-            {t('ctaDescription') || 'Comienza tu viaje gastronómico por Arroyo Seco hoy mismo'}
+            {t('home.ctaDescription') || 'Comienza tu viaje gastronómico por Arroyo Seco hoy mismo'}
           </p>
           <Link 
             to={ROUTES.INTERACTIVE_SKETCH}
             className="inline-block bg-white text-amber-700 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
-            {t('viewInteractiveMap') || 'Ver Mapa Interactivo'}
+            {t('common.viewInteractiveMap') || 'Ver Mapa Interactivo'}
           </Link>
         </div>
       </section>
@@ -155,19 +155,19 @@ const Home = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-4xl font-bold text-amber-600 mb-2">50+</div>
-              <div className="text-gray-600">{t('recipes') || 'Recetas'}</div>
+              <div className="text-gray-600">{t('common.recipes') || 'Recetas'}</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-amber-600 mb-2">100+</div>
-              <div className="text-gray-600">{t('ingredients') || 'Ingredientes'}</div>
+              <div className="text-gray-600">{t('common.ingredients') || 'Ingredientes'}</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-amber-600 mb-2">25+</div>
-              <div className="text-gray-600">{t('places') || 'Lugares'}</div>
+              <div className="text-gray-600">{t('common.places') || 'Lugares'}</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-amber-600 mb-2">15+</div>
-              <div className="text-gray-600">{t('events') || 'Eventos'}</div>
+              <div className="text-gray-600">{t('navigation.events.title') || 'Eventos'}</div>
             </div>
           </div>
         </div>
