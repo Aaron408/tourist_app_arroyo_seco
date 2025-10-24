@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { Search, Wrench, Star, History, Info } from 'lucide-react';
+import { useState } from 'react';
+import { Wrench, Star, History, Info } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
+import Header from './components/Header';
+import Filters from './components/Filters';
 
 const Tools = () => {
-  const { t } = useLanguageStore();
+  const { getTranslations } = useLanguageStore();
+  const t = getTranslations();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState(null);
 
@@ -101,74 +104,38 @@ const Tools = () => {
     return matchesSearch && matchesType;
   });
 
+  const typeLabels = {};
+  types.forEach(type => {
+    typeLabels[type] = t.gastronomyPage.tools.types[type];
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 via-yellow-50 to-white">
-      {/* Header */}
-      <section className="bg-gradient-to-r from-amber-600 to-yellow-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex justify-center mb-4">
-              <Wrench className="w-16 h-16" />
-            </div>
-            <h1 className="text-5xl font-bold mb-4">{t('gastronomy.toolsTitle')}</h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              {t('gastronomy.toolsSubtitle')}
-            </p>
-          </div>
-        </div>
-      </section>
+      <Header
+        Icon={Wrench}
+        title={t.gastronomyPage.tools.title}
+        subtitle={t.gastronomyPage.tools.subtitle}
+        gradientFrom="from-amber-600"
+        gradientTo="to-yellow-600"
+      />
 
-      {/* Filters */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
-        <div className="bg-white rounded-2xl shadow-xl p-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search Bar */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder={t('gastronomy.searchTools')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none transition-colors"
-              />
-            </div>
-
-            {/* Type Filters */}
-            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-              <button
-                onClick={() => setSelectedType(null)}
-                className={`px-4 py-3 rounded-xl font-medium transition-all whitespace-nowrap ${
-                  selectedType === null
-                    ? 'bg-amber-500 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {t('gastronomy.allTools')}
-              </button>
-              {types.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setSelectedType(type)}
-                  className={`px-4 py-3 rounded-xl font-medium transition-all whitespace-nowrap ${
-                    selectedType === type
-                      ? 'bg-amber-500 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {t(`gastronomy.toolTypes.${type}`)}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <Filters
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchPlaceholder={t.gastronomyPage.tools.search}
+        selectedFilter={selectedType}
+        setSelectedFilter={setSelectedType}
+        filters={types}
+        filterLabels={typeLabels}
+        allLabel={t.gastronomyPage.tools.all}
+        primaryColor="amber"
+      />
 
       {/* Tools Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-900">
-            {filteredTools.length} {filteredTools.length === 1 ? t('gastronomy.toolFound') : t('gastronomy.toolsFound')}
+            {filteredTools.length} {filteredTools.length === 1 ? t.gastronomyPage.tools.toolFound : t.gastronomyPage.tools.toolsFound}
           </h2>
         </div>
 
@@ -190,7 +157,7 @@ const Tools = () => {
                 {/* Type Badge */}
                 <div className="absolute top-4 left-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold border-2 ${getTypeColor(tool.type)}`}>
-                    {t(`gastronomy.toolTypes.${tool.type}`)}
+                    {t.gastronomyPage.tools.types[tool.type]}
                   </span>
                 </div>
 
@@ -221,7 +188,7 @@ const Tools = () => {
                 <div className="mb-4">
                   <p className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-1">
                     <Star className="w-3 h-3" />
-                    {t('gastronomy.mainUses')}
+                    {t.gastronomyPage.tools.mainUses}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {tool.uses.map((use, index) => (
@@ -239,7 +206,7 @@ const Tools = () => {
                 <div className="mb-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
                   <p className="text-xs font-semibold text-yellow-900 uppercase mb-1 flex items-center gap-1">
                     <Info className="w-3 h-3" />
-                    {t('gastronomy.care')}
+                    {t.gastronomyPage.tools.care}
                   </p>
                   <p className="text-xs text-yellow-800">{tool.care}</p>
                 </div>
@@ -248,13 +215,13 @@ const Tools = () => {
                 <div className="mb-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
                   <p className="text-xs font-semibold text-amber-900 uppercase mb-1 flex items-center gap-1">
                     <History className="w-3 h-3" />
-                    {t('gastronomy.history')}
+                    {t.gastronomyPage.tools.history}
                   </p>
                   <p className="text-xs text-amber-800">{tool.history}</p>
                 </div>
 
                 <button className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white py-3 rounded-lg font-medium hover:from-amber-600 hover:to-yellow-600 transition-all shadow-md hover:shadow-lg">
-                  {t('gastronomy.seeMoreDetails')}
+                  {t.gastronomyPage.ingredients.seeMoreDetails}
                 </button>
               </div>
             </div>
@@ -264,8 +231,8 @@ const Tools = () => {
         {filteredTools.length === 0 && (
           <div className="text-center py-20">
             <Wrench className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('gastronomy.noToolsFound')}</h3>
-            <p className="text-gray-600">{t('gastronomy.tryOtherTerms')}</p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.gastronomyPage.tools.noToolsFound}</h3>
+            <p className="text-gray-600">{t.gastronomyPage.recipes.tryOtherTerms}</p>
           </div>
         )}
       </section>
@@ -276,10 +243,10 @@ const Tools = () => {
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                {t('gastronomy.culturalHeritage')}
+                {t.gastronomyPage.tools.culturalHeritage}
               </h2>
               <p className="text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                {t('gastronomy.culturalHeritageDesc')}
+                {t.gastronomyPage.tools.culturalHeritageDesc}
               </p>
             </div>
 
@@ -288,27 +255,27 @@ const Tools = () => {
                 <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <History className="w-8 h-8 text-amber-600" />
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">{t('gastronomy.millennialTradition')}</h3>
+                <h3 className="font-bold text-gray-900 mb-2">{t.gastronomyPage.tools.millennialTradition}</h3>
                 <p className="text-gray-600 text-sm">
-                  {t('gastronomy.millennialTraditionDesc')}
+                  {t.gastronomyPage.tools.millennialTraditionDesc}
                 </p>
               </div>
               <div className="text-center">
                 <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Star className="w-8 h-8 text-amber-600" />
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">{t('gastronomy.superiorQuality')}</h3>
+                <h3 className="font-bold text-gray-900 mb-2">{t.gastronomyPage.tools.superiorQuality}</h3>
                 <p className="text-gray-600 text-sm">
-                  {t('gastronomy.superiorQualityDesc')}
+                  {t.gastronomyPage.tools.superiorQualityDesc}
                 </p>
               </div>
               <div className="text-center">
                 <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Wrench className="w-8 h-8 text-amber-600" />
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">{t('gastronomy.localCrafts')}</h3>
+                <h3 className="font-bold text-gray-900 mb-2">{t.gastronomyPage.tools.localCrafts}</h3>
                 <p className="text-gray-600 text-sm">
-                  {t('gastronomy.localCraftsDesc')}
+                  {t.gastronomyPage.tools.localCraftsDesc}
                 </p>
               </div>
             </div>

@@ -17,8 +17,8 @@ const LocationsPage = lazy(() => import('../pages/locations/Locations.jsx'));
 // const CategorySearchPage = lazy(() => import('../pages/locations/CategorySearch.jsx'));
 // const MapPage = lazy(() => import('../pages/locations/Map.jsx'));
 const EventsPage = lazy(() => import('../pages/events/Events.jsx'));
+const FlavorRoutePage = lazy(() => import('../pages/events/FlavorRoute.jsx'));
 const WorkshopsPage = lazy(() => import('../pages/events/Workshops.jsx'));
-const RoutesPage = lazy(() => import('../pages/events/Routes.jsx'));
 const NotFoundPage = lazy(() => import('../pages/NotFound.jsx'));
 
 const LoadingFallback = () => (
@@ -59,7 +59,7 @@ export const landingRoutes = [
       // Eventos
       { path: ROUTES.EVENTS, element: <Suspense fallback={<LoadingFallback />}><EventsPage /></Suspense> },
       { path: ROUTES.WORKSHOPS, element: <Suspense fallback={<LoadingFallback />}><WorkshopsPage /></Suspense> },
-      { path: ROUTES.GUIDED_ROUTES, element: <Suspense fallback={<LoadingFallback />}><RoutesPage /></Suspense> },
+      { path: ROUTES.FLAVOR_ROUTE, element: <Suspense fallback={<LoadingFallback />}><FlavorRoutePage /></Suspense> },
 
       { path: '*', element: <Suspense fallback={<LoadingFallback />}><NotFoundPage /></Suspense> },
     ],

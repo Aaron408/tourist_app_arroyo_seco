@@ -1,0 +1,241 @@
+{
+  "navigation": {
+    "home": {
+      "title": "Inicio"
+    },
+    "gastronomy": {
+      "title": "Gastronomía",
+      "recipes": "Recetas",
+      "ingredients": "Ingredientes",
+      "techniques": "Técnicas",
+      "tools": "Herramientas"
+    },
+    "locations": {
+      "title": "Lugares",
+      "restaurants": "Restaurantes",
+      "landmarks": "Lugares emblemáticos",
+      "markets": "Mercados",
+      "workshops": "Talleres",
+      "interactiveMap": "Mapa Interactivo"
+    },
+    "events": {
+      "title": "Eventos",
+      "workshops": "Talleres",
+      "flavorRoute": "Ruta del Sabor"
+    }
+  },
+  "homePage": {
+    "title": "Inicio",
+    "description": "Descubre la riqueza gastronómica de Arroyo Seco, Querétaro. Explora recetas tradicionales, ingredientes locales y eventos culturales de la Sierra Gorda.",
+    "welcomeMessage": "Descubre los Sabores de Arroyo Seco",
+    "heroSubtitle": "Explora la riqueza gastronómica de la Sierra Gorda. Recetas tradicionales, ingredientes locales y experiencias únicas.",
+    "exploreGastronomy": "Explorar Gastronomía",
+    "viewEvents": "Ver Eventos",
+    "whatWeOffer": "¿Qué Ofrecemos?",
+    "offerDescription": "Todo lo que necesitas para explorar y disfrutar la cultura gastronómica de Arroyo Seco",
+    "ctaTitle": "¿Listo para Explorar?",
+    "ctaDescription": "Comienza tu viaje gastronómico por Arroyo Seco hoy mismo"
+  },
+  "locationsPage": {
+    "main": {
+      "title": "Lugares de Arroyo Seco",
+      "description": "Explora restaurantes, lugares emblemáticos, mercados y talleres en nuestro pueblo mágico de la Sierra Gorda."
+    },
+    "mapTitle": "Mapa Interactivo de Arroyo Seco",
+    "mapDescription": "Explora restaurantes, lugares emblemáticos y eventos en nuestro pueblo",
+    "searchLocations": "Buscar ubicaciones...",
+    "showAll": "Mostrar todo",
+    "restaurants": "Restaurantes",
+    "landmarks": "Lugares emblemáticos",
+    "markets": "Mercados",
+    "workshops": "Talleres",
+    "noResults": "No se encontraron resultados",
+    "viewDetails": "Ver detalles"
+  },
+  "gastronomyPage": {
+    "main": {
+      "title": "Gastronomía",
+      "description": "Descubre recetas tradicionales, ingredientes locales y técnicas culinarias ancestrales de la región.",
+      "traditionalRecipes": "Recetas Tradicionales",
+      "recipesDescription": "Aprende a preparar platillos auténticos de Arroyo Seco con ingredientes locales y técnicas transmitidas de generación en generación.",
+      "exploreOurGastronomy": "Explora Nuestra Gastronomía",
+      "exploreSubtitle": "Sumérgete en el mundo culinario de Arroyo Seco y descubre todos sus secretos",
+      "learnFromMasters": "Aprende de los Maestros",
+      "learnFromMastersDesc": "Nuestras técnicas culinarias han sido perfeccionadas durante generaciones. Cada método cuenta una historia y preserva la esencia de nuestra cultura gastronómica.",
+      "readyToStart": "¿Listo para Comenzar tu Viaje Gastronómico?",
+      "readyToStartDesc": "Explora nuestras recetas, ingredientes locales y técnicas tradicionales. Descubre los sabores auténticos de Arroyo Seco.",
+      "viewRecipes": "Ver Recetas",
+      "viewAllRecipes": "Ver Todas las Recetas",
+      "exploreMap": "Explorar el Mapa",
+      "step1": "Recetas paso a paso con imágenes detalladas",
+      "step2": "Información sobre ingredientes de temporada",
+      "step3": "Técnicas culinarias tradicionales"
+    },
+    "recipes": {
+      "title": "Recetas Tradicionales",
+      "subtitle": "Descubre los sabores auténticos de Arroyo Seco con nuestras recetas tradicionales",
+      "search": "Buscar recetas...",
+      "all": "Todas",
+      "found": "Encontradas",
+      "recipeFound": "Receta",
+      "recipesFound": "Recetas",
+      "noRecipesFound": "No se encontraron recetas",
+      "tryOtherTerms": "Intenta con otros términos de búsqueda",
+      "seeRecipe": "Ver receta",
+      "difficulty": {
+        "easy": "Fácil",
+        "medium": "Media",
+        "hard": "Difícil"
+      }
+    },
+    "ingredients": {
+      "title": "Ingredientes Locales",
+      "subtitle": "Conoce los ingredientes frescos y de temporada que hacen única nuestra cocina",
+      "search": "Buscar ingredientes...",
+      "all": "Todos",
+      "ingredientFound": "Ingrediente",
+      "ingredientsFound": "Ingredientes",
+      "noIngredientsFound": "No se encontraron ingredientes",
+      "commonUses": "Usos comunes",
+      "seeMoreDetails": "Ver más detalles",
+      "seasons": {
+        "spring": "Primavera",
+        "summer": "Verano",
+        "fall": "Otoño",
+        "winter": "Invierno",
+        "yearRound": "Todo el año"
+      }
+    },
+    "techniques": {
+      "title": "Técnicas Culinarias",
+      "subtitle": "Aprende los métodos tradicionales transmitidos de generación en generación",
+      "search": "Buscar técnicas...",
+      "all": "Todas",
+      "techniqueFound": "Técnica",
+      "techniquesFound": "Técnicas",
+      "noTechniquesFound": "No se encontraron técnicas",
+      "seeTutorial": "Ver tutorial",
+      "time": "Tiempo",
+      "steps": "pasos",
+      "toolsNeeded": "Herramientas necesarias",
+      "videoTutorials": "Videos tutoriales paso a paso",
+      "expertTips": "Consejos de expertos locales",
+      "culturalContext": "Historia y contexto cultural",
+      "categories": {
+        "preparation": "Preparación",
+        "grinding": "Molienda",
+        "cooking": "Cocción",
+        "fermentation": "Fermentación",
+        "preservation": "Conservación"
+      }
+    },
+    "tools": {
+      "title": "Herramientas Tradicionales",
+      "subtitle": "Descubre los utensilios que han dado forma a nuestra cocina por generaciones",
+      "search": "Buscar herramientas...",
+      "all": "Todas",
+      "toolFound": "Herramienta",
+      "toolsFound": "Herramientas",
+      "noToolsFound": "No se encontraron herramientas",
+      "mainUses": "Usos principales",
+      "care": "Cuidados",
+      "history": "Historia",
+      "culturalHeritage": "Patrimonio Cultural Vivo",
+      "culturalHeritageDesc": "Estas herramientas no son solo utensilios de cocina, son portadoras de historia, tradición y conocimiento ancestral. Cada una representa siglos de perfeccionamiento y adaptación a las necesidades de nuestra cocina.",
+      "millennialTradition": "Tradición Milenaria",
+      "millennialTraditionDesc": "Herramientas usadas por generaciones que mantienen viva nuestra cultura",
+      "superiorQuality": "Calidad Superior",
+      "superiorQualityDesc": "Materiales naturales que mejoran el sabor y la textura de los alimentos",
+      "localCrafts": "Artesanía Local",
+      "localCraftsDesc": "Elaboradas por artesanos que preservan técnicas ancestrales",
+      "types": {
+        "grinding": "Molienda",
+        "cooking": "Cocción",
+        "mixing": "Mezclado",
+        "preservation": "Conservación"
+      }
+    }
+  },
+  "eventsPage": {
+    "main": {
+      "title": "Eventos en Arroyo Seco",
+      "subtitle": "Descubre las festividades y eventos que hacen de nuestro pueblo un lugar vibrante y lleno de tradición",
+      "description": "Participa en talleres gastronómicos, rutas guiadas y eventos culturales especiales.",
+      "search": "Buscar eventos...",
+      "all": "Todos los Eventos",
+      "featured": "Destacado",
+      "noEventsFound": "No se encontraron eventos con los filtros seleccionados",
+      "date": "Fecha",
+      "schedule": "Horario",
+      "location": "Ubicación",
+      "price": "Precio",
+      "categories": {
+        "gastronomy": "Gastronomía",
+        "cultural": "Cultural",
+        "sports": "Deportivo"
+      }
+    },
+    "flavorRoute": {
+      "title": "La Ruta del Sabor",
+      "subtitle": "Un viaje culinario por las tradiciones de Arroyo Seco",
+      "description": "La Ruta del Sabor es el evento gastronómico más importante de Arroyo Seco, donde los visitantes pueden degustar los platillos más representativos de nuestra región mientras recorren las calles del centro histórico. Un evento que celebra nuestra identidad culinaria y cultural.",
+      "aboutEvent": "Sobre el Evento",
+      "highlights": "Lo Más Destacado",
+      "routeTitle": "Recorrido de la Ruta",
+      "practicalInfo": "Información Práctica",
+      "dontMissIt": "¡No te lo pierdas!",
+      "uniqueEvent": "Un evento único que celebra lo mejor de nuestra tradición culinaria",
+      "shareEvent": "Comparte este evento con tus amigos y familiares",
+      "freeEntry": "Entrada libre"
+    },
+    "workshops": {
+      "title": "Talleres y Workshops",
+      "subtitle": "Aprende nuevas habilidades y sumérgete en las tradiciones de Arroyo Seco con nuestros talleres especializados",
+      "filterByCategory": "Filtrar por Categoría",
+      "all": "Todos los Talleres",
+      "noWorkshopsFound": "No se encontraron talleres en esta categoría",
+      "instructor": "Instructor",
+      "duration": "Duración",
+      "capacity": "Cupo",
+      "materials": "Materiales",
+      "requirements": "Requisitos",
+      "level": {
+        "beginner": "Principiante",
+        "intermediate": "Intermedio",
+        "advanced": "Avanzado",
+        "allLevels": "Todos los niveles"
+      },
+      "categories": {
+        "gastronomy": "Gastronomía",
+        "crafts": "Artesanías",
+        "photography": "Fotografía",
+        "cultural": "Cultural"
+      },
+      "generalInfo": "Información General",
+      "registrations": "Inscripciones",
+      "registrationsDesc": "Los talleres son gratuitos y de cupo limitado. Consulta disponibilidad en la Casa de la Cultura.",
+      "certificates": "Certificados",
+      "certificatesDesc": "Se entregan constancias de participación a quienes completen el taller.",
+      "contact": "Contacto",
+      "contactDesc": "Para más información, visita la Casa de la Cultura o llama al (414) 123-4567"
+    }
+  },
+  "common": {
+    "learnMore": "Conocer más →",
+    "viewInteractiveMap": "Ver Mapa Interactivo",
+    "recipes": "Recetas",
+    "tools": "Herramientas",
+    "ingredients": "Ingredientes",
+    "places": "Lugares",
+    "techniques": "Técnicas",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "all": "Todo"
+  },
+  "footer": {
+    "description": "Descubre la riqueza gastronómica de Arroyo Seco, Querétaro. Explora recetas tradicionales, ingredientes locales y eventos culturales de la Sierra Gorda.",
+    "emblematicPlaces": "Lugares Emblemáticos",
+    "interactiveMap": "Mapa Interactivo",
+    "allRightsReserved": "Todos los derechos reservados."
+  }
+}

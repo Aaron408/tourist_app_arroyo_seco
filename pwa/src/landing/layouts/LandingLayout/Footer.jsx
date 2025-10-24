@@ -16,12 +16,12 @@ const Footer = ({ footerSections, t }) => {
                   Arroyo Seco
                 </span>
                 <span className="text-sm text-amber-400">
-                  {t('navigation.gastronomy.title')}
+                  {t.navigation.gastronomy.title}
                 </span>
               </div>
             </div>
             <p className="text-gray-400 max-w-md leading-relaxed">
-              {t('footer.footerDescription')}
+              {t.footer.footerDescription}
             </p>
           </div>
 
@@ -50,7 +50,7 @@ const Footer = ({ footerSections, t }) => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
           <p className="mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Arroyo Seco. {t('footer.allRightsReserved')}
+            &copy; {new Date().getFullYear()} Arroyo Seco. {t.footer.allRightsReserved}
           </p>
           <div className="flex items-center space-x-4">
             <span>📍 Arroyo Seco, Querétaro</span>

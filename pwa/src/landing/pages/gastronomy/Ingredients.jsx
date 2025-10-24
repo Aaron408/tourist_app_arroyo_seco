@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
-import { Search, Leaf, Calendar, MapPin, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { Leaf, Calendar, MapPin, TrendingUp } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
+import Header from './components/Header';
+import Filters from './components/Filters';
 
 const Ingredients = () => {
-  const { t } = useLanguageStore();
+  const { getTranslations } = useLanguageStore();
+  const t = getTranslations();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSeason, setSelectedSeason] = useState(null);
-
+  
   const ingredients = [
     {
       id: 1,
@@ -90,74 +93,38 @@ const Ingredients = () => {
     return matchesSearch && matchesSeason;
   });
 
+  const seasonLabels = {};
+  seasons.forEach(season => {
+    seasonLabels[season] = t.gastronomyPage.ingredients.seasons[season];
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 via-emerald-50 to-white">
-      {/* Header */}
-      <section className="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex justify-center mb-4">
-              <Leaf className="w-16 h-16" />
-            </div>
-            <h1 className="text-5xl font-bold mb-4">{t('gastronomy.ingredientsTitle')}</h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              {t('gastronomy.ingredientsSubtitle')}
-            </p>
-          </div>
-        </div>
-      </section>
+      <Header
+        Icon={Leaf}
+        title={t.gastronomyPage.ingredients.title}
+        subtitle={t.gastronomyPage.ingredients.subtitle}
+        gradientFrom="from-green-600"
+        gradientTo="to-emerald-600"
+      />
 
-      {/* Filters */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
-        <div className="bg-white rounded-2xl shadow-xl p-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search Bar */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder={t('gastronomy.searchIngredients')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
-              />
-            </div>
-
-            {/* Season Filters */}
-            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-              <button
-                onClick={() => setSelectedSeason(null)}
-                className={`px-4 py-3 rounded-xl font-medium transition-all whitespace-nowrap ${
-                  selectedSeason === null
-                    ? 'bg-green-500 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {t('gastronomy.allIngredients')}
-              </button>
-              {seasons.map((season) => (
-                <button
-                  key={season}
-                  onClick={() => setSelectedSeason(season)}
-                  className={`px-4 py-3 rounded-xl font-medium transition-all whitespace-nowrap ${
-                    selectedSeason === season
-                      ? 'bg-green-500 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {t(`gastronomy.seasons.${season}`)}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <Filters
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchPlaceholder={t.gastronomyPage.ingredients.search}
+        selectedFilter={selectedSeason}
+        setSelectedFilter={setSelectedSeason}
+        filters={seasons}
+        filterLabels={seasonLabels}
+        allLabel={t.gastronomyPage.ingredients.all}
+        primaryColor="green"
+      />
 
       {/* Ingredients Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-900">
-            {filteredIngredients.length} {filteredIngredients.length === 1 ? t('gastronomy.ingredientFound') : t('gastronomy.ingredientsFound')}
+            {filteredIngredients.length} {filteredIngredients.length === 1 ? t.gastronomyPage.ingredients.ingredientFound : t.gastronomyPage.ingredients.ingredientsFound}
           </h2>
         </div>
 
@@ -180,7 +147,7 @@ const Ingredients = () => {
                 <div className="absolute top-4 right-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getSeasonColor(ingredient.season)}`}>
                     <Calendar className="w-3 h-3 inline mr-1" />
-                    {t(`gastronomy.seasons.${ingredient.season}`)}
+                    {t.gastronomyPage.ingredients.seasons[ingredient.season]}
                   </span>
                 </div>
 
@@ -212,7 +179,7 @@ const Ingredients = () => {
 
                 {/* Uses */}
                 <div className="mb-4">
-                  <p className="text-xs font-semibold text-gray-500 uppercase mb-2">{t('gastronomy.commonUses')}</p>
+                  <p className="text-xs font-semibold text-gray-500 uppercase mb-2">{t.gastronomyPage.ingredients.commonUses}</p>
                   <div className="flex flex-wrap gap-2">
                     {ingredient.uses.map((use, index) => (
                       <span
@@ -226,7 +193,7 @@ const Ingredients = () => {
                 </div>
 
                 <button className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-2 rounded-lg font-medium hover:from-green-600 hover:to-emerald-600 transition-all">
-                  {t('gastronomy.seeMoreDetails')}
+                  {t.gastronomyPage.ingredients.seeMoreDetails}
                 </button>
               </div>
             </div>
@@ -236,8 +203,8 @@ const Ingredients = () => {
         {filteredIngredients.length === 0 && (
           <div className="text-center py-20">
             <Leaf className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('gastronomy.noIngredientsFound')}</h3>
-            <p className="text-gray-600">{t('gastronomy.tryOtherTerms')}</p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.gastronomyPage.ingredients.noIngredientsFound}</h3>
+            <p className="text-gray-600">{t.gastronomyPage.ingredients.tryOtherTerms}</p>
           </div>
         )}
       </section>

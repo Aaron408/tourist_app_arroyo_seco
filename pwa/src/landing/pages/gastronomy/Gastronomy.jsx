@@ -1,18 +1,18 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChefHat, BookOpen, Leaf, Wrench, ArrowRight, Sparkles } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
 import { ROUTES } from '../../utils/constants';
 
 const Gastronomy = () => {
-  const { t } = useLanguageStore();
+  const { getTranslations } = useLanguageStore();
+  const t = getTranslations();
 
   const gastronomyCards = [
     {
       id: 1,
       icon: <BookOpen className="w-12 h-12" />,
-      title: t('navigation.gastronomy.recipes'),
-      description: t('gastronomy.recipesDescription'),
+      title: t.navigation.gastronomy.recipes,
+      description: t.gastronomyPage.recipes.subtitle,
       route: ROUTES.RECIPES,
       color: 'from-orange-500 to-red-500',
       bgColor: 'bg-orange-50',
@@ -21,8 +21,8 @@ const Gastronomy = () => {
     {
       id: 2,
       icon: <Leaf className="w-12 h-12" />,
-      title: t('navigation.gastronomy.ingredients'),
-      description: t('gastronomy.ingredientsSubtitle'),
+      title: t.navigation.gastronomy.ingredients,
+      description: t.gastronomyPage.ingredients.subtitle,
       route: ROUTES.INGREDIENTS,
       color: 'from-green-500 to-emerald-500',
       bgColor: 'bg-green-50',
@@ -31,8 +31,8 @@ const Gastronomy = () => {
     {
       id: 3,
       icon: <ChefHat className="w-12 h-12" />,
-      title: t('navigation.gastronomy.techniques'),
-      description: t('gastronomy.techniquesSubtitle'),
+      title: t.navigation.gastronomy.techniques,
+      description: t.gastronomyPage.techniques.subtitle,
       route: ROUTES.CULINARY_TECHNIQUES,
       color: 'from-purple-500 to-pink-500',
       bgColor: 'bg-purple-50',
@@ -41,8 +41,8 @@ const Gastronomy = () => {
     {
       id: 4,
       icon: <Wrench className="w-12 h-12" />,
-      title: t('navigation.gastronomy.tools'),
-      description: t('gastronomy.toolsSubtitle'),
+      title: t.navigation.gastronomy.tools,
+      description: t.gastronomyPage.tools.subtitle,
       route: ROUTES.TOOLS,
       color: 'from-amber-500 to-yellow-500',
       bgColor: 'bg-amber-50',
@@ -65,23 +65,23 @@ const Gastronomy = () => {
               </div>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
-              {t('navigation.gastronomy.title')}
+              {t.navigation.gastronomy.title}
             </h1>
             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
-              {t('gastronomy.gastronomyDesc')}
+              {t.gastronomyPage.main.description}
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link
                 to={ROUTES.RECIPES}
                 className="bg-white text-orange-600 px-8 py-3 rounded-full font-semibold hover:bg-orange-50 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               >
-                {t('gastronomy.viewRecipes')}
+                {t.gastronomyPage.main.viewRecipes}
               </Link>
               <Link
                 to={ROUTES.INTERACTIVE_SKETCH}
                 className="bg-white/10 backdrop-blur-sm text-white border-2 border-white px-8 py-3 rounded-full font-semibold hover:bg-white/20 transition-all shadow-lg"
               >
-                {t('common.viewInteractiveMap')}
+                {t.common.viewInteractiveMap}
               </Link>
             </div>
           </div>
@@ -101,12 +101,12 @@ const Gastronomy = () => {
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles className="w-6 h-6 text-amber-600" />
             <h2 className="text-4xl font-bold text-gray-900">
-              {t('gastronomy.exploreOurGastronomy')}
+              {t.gastronomyPage.main.exploreOurGastronomy}
             </h2>
             <Sparkles className="w-6 h-6 text-amber-600" />
           </div>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            {t('gastronomy.exploreSubtitle')}
+            {t.gastronomyPage.main.exploreSubtitle}
           </p>
         </div>
 
@@ -138,7 +138,7 @@ const Gastronomy = () => {
 
                 {/* Arrow */}
                 <div className="flex items-center text-amber-600 font-semibold group-hover:gap-3 gap-2 transition-all">
-                  <span>{t('common.learnMore')}</span>
+                  <span>{t.common.learnMore}</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                 </div>
               </div>
@@ -156,10 +156,10 @@ const Gastronomy = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                {t('gastronomy.traditionalRecipes')}
+                {t.gastronomyPage.main.traditionalRecipes}
               </h2>
               <p className="text-gray-700 text-lg leading-relaxed mb-8">
-                {t('gastronomy.recipesDescription')}
+                {t.gastronomyPage.main.recipesDescription}
               </p>
               <ul className="space-y-4 mb-8">
                 <li className="flex items-start gap-3">
@@ -168,7 +168,7 @@ const Gastronomy = () => {
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                     </svg>
                   </div>
-                  <span className="text-gray-700">{t('gastronomy.step1')}</span>
+                  <span className="text-gray-700">{t.gastronomyPage.main.step1}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="bg-orange-500 text-white rounded-full p-1 mt-1">
@@ -176,7 +176,7 @@ const Gastronomy = () => {
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                     </svg>
                   </div>
-                  <span className="text-gray-700">{t('gastronomy.step2')}</span>
+                  <span className="text-gray-700">{t.gastronomyPage.main.step2}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="bg-orange-500 text-white rounded-full p-1 mt-1">
@@ -184,14 +184,14 @@ const Gastronomy = () => {
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                     </svg>
                   </div>
-                  <span className="text-gray-700">{t('gastronomy.step3')}</span>
+                  <span className="text-gray-700">{t.gastronomyPage.main.step3}</span>
                 </li>
               </ul>
               <Link
                 to={ROUTES.RECIPES}
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-full font-semibold hover:from-orange-600 hover:to-red-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               >
-                {t('gastronomy.viewRecipes')}
+                {t.gastronomyPage.main.viewRecipes}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
@@ -213,10 +213,10 @@ const Gastronomy = () => {
           <div className="grid md:grid-cols-2 gap-8 items-center p-12">
             <div className="text-white">
               <h2 className="text-4xl font-bold mb-4">
-                {t('gastronomy.readyToStart')}
+                {t.gastronomyPage.main.readyToStart}
               </h2>
               <p className="text-white/90 text-lg leading-relaxed">
-                {t('gastronomy.readyToStartDesc')}
+                {t.gastronomyPage.main.readyToStartDesc}
               </p>
             </div>
             <div className="flex flex-col gap-4">
@@ -224,13 +224,13 @@ const Gastronomy = () => {
                 to={ROUTES.RECIPES}
                 className="bg-white text-orange-600 px-8 py-4 rounded-full font-semibold hover:bg-orange-50 transition-all text-center shadow-lg"
               >
-                {t('gastronomy.viewAllRecipes')}
+                {t.gastronomyPage.main.viewAllRecipes}
               </Link>
               <Link
                 to={ROUTES.INTERACTIVE_SKETCH}
                 className="bg-white/10 backdrop-blur-sm text-white border-2 border-white px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition-all text-center"
               >
-                {t('gastronomy.exploreMap')}
+                {t.gastronomyPage.main.exploreMap}
               </Link>
             </div>
           </div>

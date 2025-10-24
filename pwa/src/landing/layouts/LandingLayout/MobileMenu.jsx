@@ -55,7 +55,7 @@ const MobileMenu = ({
               onClick={onClose}
               className="block px-4 py-3 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg font-medium transition-colors"
             >
-              {t('navigation.home.title')}
+              {t.navigation.home.title}
             </Link>
 
             {navigationMenus.map((menu, index) => (

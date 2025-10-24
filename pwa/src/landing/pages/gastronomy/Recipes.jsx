@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { Search, Clock, Users, ChefHat, Flame, Heart } from 'lucide-react';
+import { useState } from 'react';
+import { ChefHat, Clock, Users, Flame, Heart } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
+import Header from './components/Header';
+import Filters from './components/Filters';
 
 const Recipes = () => {
-  const { t } = useLanguageStore();
+  const { getTranslations } = useLanguageStore();
+  const t = getTranslations();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
 
-  // Datos de ejemplo de recetas
   const recipes = [
     {
       id: 1,
@@ -95,74 +97,39 @@ const Recipes = () => {
     return matchesSearch && matchesDifficulty;
   });
 
+  const difficultyLabels = {
+    easy: t.gastronomyPage.recipes.difficulty.easy,
+    medium: t.gastronomyPage.recipes.difficulty.medium,
+    hard: t.gastronomyPage.recipes.difficulty.hard,
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-amber-50 to-white">
-      {/* Header */}
-      <section className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex justify-center mb-4">
-              <ChefHat className="w-16 h-16" />
-            </div>
-            <h1 className="text-5xl font-bold mb-4">{t('gastronomy.recipesTitle')}</h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              {t('gastronomy.recipesSubtitle')}
-            </p>
-          </div>
-        </div>
-      </section>
+      <Header
+        Icon={ChefHat}
+        title={t.gastronomyPage.recipes.title}
+        subtitle={t.gastronomyPage.recipes.subtitle}
+        gradientFrom="from-orange-600"
+        gradientTo="to-red-600"
+      />
 
-      {/* Filters */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
-        <div className="bg-white rounded-2xl shadow-xl p-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search Bar */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder={t('gastronomy.searchRecipes')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
-              />
-            </div>
-
-            {/* Difficulty Filters */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setSelectedDifficulty(null)}
-                className={`px-4 py-3 rounded-xl font-medium transition-all ${
-                  selectedDifficulty === null
-                    ? 'bg-orange-500 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {t('gastronomy.allRecipes')}
-              </button>
-              {difficulties.map((difficulty) => (
-                <button
-                  key={difficulty}
-                  onClick={() => setSelectedDifficulty(difficulty)}
-                  className={`px-4 py-3 rounded-xl font-medium transition-all ${
-                    selectedDifficulty === difficulty
-                      ? 'bg-orange-500 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {t(`gastronomy.difficulty.${difficulty}`)}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <Filters
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchPlaceholder={t.gastronomyPage.recipes.search}
+        selectedFilter={selectedDifficulty}
+        setSelectedFilter={setSelectedDifficulty}
+        filters={difficulties}
+        filterLabels={difficultyLabels}
+        allLabel={t.gastronomyPage.recipes.all}
+        primaryColor="orange"
+      />
 
       {/* Recipes Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-900">
-            {filteredRecipes.length} {filteredRecipes.length === 1 ? t('gastronomy.recipeFound') : t('gastronomy.recipesFound')} {t('gastronomy.found')}
+            {filteredRecipes.length} {filteredRecipes.length === 1 ? t.gastronomyPage.recipes.recipeFound : t.gastronomyPage.recipes.recipesFound} {t.gastronomyPage.recipes.found}
           </h2>
         </div>
 
@@ -219,10 +186,10 @@ const Recipes = () => {
                 <div className="flex items-center justify-between">
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getDifficultyColor(recipe.difficulty)}`}>
                     <Flame className="w-3 h-3 inline mr-1" />
-                    {t(`gastronomy.difficulty.${recipe.difficulty}`)}
+                    {t.gastronomyPage.recipes.difficulty[recipe.difficulty]}
                   </span>
                   <button className="text-orange-600 font-semibold hover:text-orange-700 transition-colors">
-                    {t('gastronomy.seeRecipe')} →
+                    {t.gastronomyPage.recipes.seeRecipe} →
                   </button>
                 </div>
               </div>
@@ -233,8 +200,8 @@ const Recipes = () => {
         {filteredRecipes.length === 0 && (
           <div className="text-center py-20">
             <ChefHat className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('gastronomy.noRecipesFound')}</h3>
-            <p className="text-gray-600">{t('gastronomy.tryOtherTerms')}</p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.gastronomyPage.recipes.noRecipesFound}</h3>
+            <p className="text-gray-600">{t.gastronomyPage.recipes.tryOtherTerms}</p>
           </div>
         )}
       </section>

@@ -66,8 +66,8 @@ export const ROUTES = {
 
   // Eventos
   EVENTS: "/eventos",
+  FLAVOR_ROUTE: "/eventos/ruta-del-sabor",
   WORKSHOPS: "/eventos/talleres",
-  GUIDED_ROUTES: "/eventos/rutas",
 };
 
 /**

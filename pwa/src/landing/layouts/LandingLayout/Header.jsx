@@ -42,7 +42,7 @@ const Header = ({
                 Arroyo Seco
               </span>
               <span className="text-xs text-amber-600 font-medium hidden sm:block">
-                {t('navigation.gastronomy.title')}
+                {t.navigation.gastronomy.title}
               </span>
             </div>
           </Link>
@@ -53,7 +53,7 @@ const Header = ({
               to={ROUTES.HOME} 
               className="text-gray-700 hover:text-amber-600 transition-colors font-medium"
             >
-              {t('navigation.home.title')}
+              {t.navigation.home.title}
             </Link>
             
             {/* Dynamic Navigation Menus */}

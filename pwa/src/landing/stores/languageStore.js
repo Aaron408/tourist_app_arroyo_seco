@@ -10,6 +10,7 @@ export const useLanguageStore = create((set, get) => ({
     localStorage.setItem('preferredLanguage', languageCode);
   },
   
+  // Función t() original (si la necesitas para casos específicos)
   t: (key) => {
     const { currentLanguage } = get();
     const keys = key.split('.');
@@ -20,6 +21,12 @@ export const useLanguageStore = create((set, get) => ({
     }
     
     return value || key;
+  },
+
+  // 🎉 NUEVO: Devuelve el objeto completo de traducciones
+  getTranslations: () => {
+    const { currentLanguage } = get();
+    return translations[currentLanguage];
   },
   
   initializeLanguage: () => {
