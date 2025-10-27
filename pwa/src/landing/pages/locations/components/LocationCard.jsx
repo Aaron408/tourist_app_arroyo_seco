@@ -27,21 +27,20 @@ const LocationCard = ({
   isSelected,
   compact = false
 }) => {
-  const { t } = useLanguageStore();
+  const { getTranslations } = useLanguageStore();
+  const t = getTranslations();
 
   // Función para obtener la etiqueta del tipo usando el store
   const getTypeLabel = (type) => {
-    const typeKeys = {
-      [LOCATION_TYPES.RESTAURANT]: "locations.restaurants",
-      [LOCATION_TYPES.EVENT]: "events.workshops", // O agrega "locations.events"
-      [LOCATION_TYPES.LANDMARK]: "locations.landmarks",
-      [LOCATION_TYPES.MARKET]: "locations.markets",
-      [LOCATION_TYPES.WORKSHOP]: "locations.workshops",
+    const typeLabels = {
+      [LOCATION_TYPES.RESTAURANT]: t.locationsPage.restaurants,
+      [LOCATION_TYPES.EVENT]: t.locationsPage.events,
+      [LOCATION_TYPES.LANDMARK]: t.locationsPage.landmarks,
+      [LOCATION_TYPES.MARKET]: t.locationsPage.markets,
+      [LOCATION_TYPES.WORKSHOP]: t.locationsPage.workshops,
     };
 
-    const key = typeKeys[type];
-    // Retorna la traducción sin la 's' final (singular)
-    const label = key ? t(key) : type;
+    const label = typeLabels[type] || type;
     // Convertir a singular eliminando la última 's' si existe
     return label.endsWith('s') ? label.slice(0, -1) : label;
   };
@@ -101,7 +100,7 @@ const LocationCard = ({
               )}
               
               <button className="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white py-1 rounded text-xs font-medium hover:from-amber-600 hover:to-orange-700 transition-all">
-                {t("locations.viewDetails")}
+                {t.locationsPage.viewDetails}
               </button>
             </div>
           </div>
@@ -170,7 +169,7 @@ const LocationCard = ({
         </div>
 
         <button className="mt-4 w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white py-2 rounded-lg font-medium hover:from-amber-600 hover:to-orange-700 transition-all">
-          {t("locations.viewDetails")}
+          {t.locationsPage.viewDetails}
         </button>
       </div>
     </div>

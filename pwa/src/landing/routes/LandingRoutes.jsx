@@ -8,7 +8,6 @@ const RecipesPage = lazy(() => import('../pages/gastronomy/Recipes.jsx'));
 const IngredientsPage = lazy(() => import('../pages/gastronomy/Ingredients.jsx'));
 const TechniquesPage = lazy(() => import('../pages/gastronomy/Techniques.jsx'));
 const ToolsPage = lazy(() => import('../pages/gastronomy/Tools.jsx'));
-const RestaurantsPage = lazy(() => import('../pages/gastronomy/Restaurants.jsx'));
 const LocationsPage = lazy(() => import('../pages/locations/Locations.jsx'));
 // const PlacesPage = lazy(() => import('../pages/locations/Places.jsx'));
 // const RouteRestaurantsPage = lazy(() => import('../pages/locations/RouteRestaurants.jsx'));
@@ -45,7 +44,6 @@ export const landingRoutes = [
       { path: ROUTES.INGREDIENTS, element: <Suspense fallback={<LoadingFallback />}><IngredientsPage /></Suspense> },
       { path: ROUTES.CULINARY_TECHNIQUES, element: <Suspense fallback={<LoadingFallback />}><TechniquesPage /></Suspense> },
       { path: ROUTES.TOOLS, element: <Suspense fallback={<LoadingFallback />}><ToolsPage /></Suspense> },
-      { path: ROUTES.REFERENCE_RESTAURANTS, element: <Suspense fallback={<LoadingFallback />}><RestaurantsPage /></Suspense> },
 
       // Ubicaciones
       { path: ROUTES.LOCATIONS, element: <Suspense fallback={<LoadingFallback />}><LocationsPage /></Suspense> },

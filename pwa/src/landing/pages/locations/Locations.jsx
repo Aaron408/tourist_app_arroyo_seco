@@ -7,7 +7,8 @@ import { MAP_CONFIG, API_BASE_URL } from "../../utils/constants";
 import L from "leaflet";
 
 const Locations = () => {
-  const { t } = useLanguageStore();
+  const { getTranslations } = useLanguageStore();
+  const t = getTranslations();
   const [locations, setLocations] = useState([]);
   const [filteredLocations, setFilteredLocations] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -50,7 +51,7 @@ const Locations = () => {
       if (!response.ok) {
         console.log("Using mock data for locations");
         const mockData = [
-          {
+           {
             id: "1",
             name: "Presidencia Municipal de Arroyo Seco",
             description:
@@ -399,11 +400,10 @@ const Locations = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center md:text-left">
               <h1 className="text-3xl md:text-4xl font-bold">
-                {t("mapTitle") || "Mapa Interactivo de Arroyo Seco"}
+                {t.locationsPage.mapTitle}
               </h1>
               <p className="text-lg text-amber-50/90 mt-1 max-w-3xl">
-                {t("mapDescription") ||
-                  "Explora lugares emblemáticos, restaurantes y eventos"}
+                {t.locationsPage.mapDescription}
               </p>
             </div>
           </div>
@@ -446,10 +446,10 @@ const Locations = () => {
                 <div className="bg-white rounded-xl shadow-md p-12 text-center">
                   <div className="text-6xl mb-4">🔍</div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                    {t("noResults") || "No se encontraron resultados"}
+                    {t.locationsPage.noResults}
                   </h3>
                   <p className="text-gray-600">
-                    Intenta con otros términos de búsqueda o filtros
+                    {t.locationsPage.tryOtherTerms}
                   </p>
                 </div>
               ) : (
