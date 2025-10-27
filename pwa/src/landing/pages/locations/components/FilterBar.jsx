@@ -9,31 +9,36 @@ const FilterBar = ({
   selectedType,
   onTypeChange,
 }) => {
-  const { currentLanguage, t } = useLanguageStore();
+  const { getTranslations } = useLanguageStore();
+  const t = getTranslations();
 
   const filterOptions = [
-    { type: null, label: t("showAll") || "Mostrar todo", icon: "🗺️" },
+    { type: null, label: t.locationsPage.showAll, icon: "🗺️" },
     {
       type: LOCATION_TYPES.RESTAURANT,
-      label: t("restaurants") || "Restaurantes",
+      label: t.locationsPage.restaurants,
       icon: "🍴",
     },
     {
       type: LOCATION_TYPES.LANDMARK,
-      label: t("landmarks") || "Lugares emblemáticos",
+      label: t.locationsPage.landmarks,
       icon: "🏛️",
     },
     {
       type: LOCATION_TYPES.MARKET,
-      label: t("markets") || "Mercados",
+      label: t.locationsPage.markets,
       icon: "🛒",
     },
     {
       type: LOCATION_TYPES.WORKSHOP,
-      label: t("workshops") || "Talleres",
+      label: t.locationsPage.workshops,
       icon: "👨‍🍳",
     },
-    { type: LOCATION_TYPES.EVENT, label: t("events") || "Eventos", icon: "🎉" },
+    { 
+      type: LOCATION_TYPES.EVENT, 
+      label: t.locationsPage.events,
+      icon: "🎉" 
+    },
   ];
 
   return (
@@ -45,11 +50,11 @@ const FilterBar = ({
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-amber-200 w-5 h-5" />
             <input
               type="text"
-              placeholder={t("searchLocations") || "Buscar ubicaciones..."}
+              placeholder={t.locationsPage.searchLocations}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-white/20 border border-amber-300/30 text-white rounded-lg focus:bg-white/25 focus:outline-none focus:border-amber-300/60 focus:ring-2 focus:ring-amber-300/20 transition-all placeholder-white/80"
-              aria-label="Buscar ubicaciones"
+              aria-label={t.locationsPage.searchLocations}
             />
           </div>
         </div>
