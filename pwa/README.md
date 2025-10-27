@@ -1,25 +1,25 @@
-# Xi'oi Gourmet - PWA 🍽️
+# Xi'oi Gourmet - PWA
 
 > Progressive web platform for gastronomic and cultural tourism in Arroyo Seco, Querétaro
 
-## 📖 Description
+## Description
 
 Xi'oi Gourmet is a progressive web application (PWA) that connects travelers with authentic culinary experiences from the Sierra Gorda, preserving and disseminating the gastronomic heritage of the Pame culture. The platform offers access to traditional recipes, local restaurant directory, native ingredients, ancestral culinary techniques, and cultural events.
 
 **Xi'oi** means "Pame" in the native language - uniting identity + food = "The Pame flavor".
 
-## ✨ Key Features
+## Key Features
 
-- 🌐 **Complete Offline Functionality** - Access recipes, locations, and cultural information without connection
-- 🗺️ **Interactive Flavor Route** - Geolocated maps of restaurants and traditional inns
-- 🌍 **Multilingual** - Content in Spanish, English, and Pame
-- 👨‍🍳 **Traditional Recipe Catalog** - Documented with cultural rigor and validated by local communities
-- 📚 **Native Ingredients Database** - With properties, history, and traditional uses
-- 🎓 **Cultural Workshops** - Book and participate in immersive culinary experiences
-- 🔍 **Smart Search** - Find dishes by ingredients, techniques, or region
-- 📱 **Responsive Design** - Adapted for mobile, tablets, and desktop
+- **Offline Functionality** - Access recipes, locations, and cultural information without connection
+- **Interactive Flavor Route** - Geolocated maps of restaurants and traditional inns
+- **Multilingual** - Content in Spanish, English, and Pame
+- **Traditional Recipe Catalog** - Documented with cultural rigor and validated by local communities
+- **Native Ingredients Database** - With properties, history, and traditional uses
+- **Cultural Workshops** - Book and participate in immersive culinary experiences
+- **Smart Search** - Find dishes by ingredients, techniques, or region
+- **Responsive Design** - Adapted for mobile, tablets, and desktop
 
-## 🛠️ Technologies
+## Technologies
 
 - **React 19.1.1** - User interface library
 - **Vite 7.1.7** - Fast build tool
@@ -28,7 +28,7 @@ Xi'oi Gourmet is a progressive web application (PWA) that connects travelers wit
 - **Zustand 5.0.8** - Lightweight state management
 - **PWA** - Service Workers for offline functionality
 
-## 🚀 Installation and Setup
+## Installation and Setup
 
 ### Prerequisites
 
@@ -60,7 +60,7 @@ npm run preview  # Preview production build
 npm run lint     # Run linter to check code
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 pwa/
@@ -98,13 +98,13 @@ pwa/
 └── vite.config.js          # Vite configuration
 ```
 
-## 🎨 Color Palette
+## Color Palette
 
 - **Primary**: Amber/Orange (#D97706, #EA580C) - Evokes gastronomic warmth
 - **Secondary**: Gray (#6B7280, #1F2937) - Elegance and readability
 - **Accents**: Green/Blue for interactive elements
 
-## 🔐 Authentication (Admin Panel)
+## Authentication (Admin Panel)
 
 The administration panel is protected with authentication via Context API:
 
@@ -112,25 +112,25 @@ The administration panel is protected with authentication via Context API:
 - Email: `admin@arroyoseco.com`
 - Password: `admin123`
 
-## 🌍 Internationalization
+## Internationalization
 
 The application supports three languages via `languageStore`:
 - 🇲🇽 Spanish (es)
 - 🇺🇸 English (en)  
-- 🏔️ Pame (pame) - Native language
+- Pame (pame) - Native language
 
-## 📱 PWA Features
+## PWA Features
 
-- ✅ Installable on devices
-- ✅ Works offline via Service Workers
-- ✅ Automatic background updates
-- ✅ Push notifications (planned)
+- Installable on devices
+- Works offline via Service Workers
+- Automatic background updates
+- Push notifications (planned)
 
-## 🤝 Contribution
+## Contribution
 
 This project is part of a government initiative of the Municipality of Arroyo Seco and the Technological University of Querétaro (UTEQ).
 
-## 👥 Development Team
+## Development Team
 
 - Angel Eduardo Anaya Becerril
 - Timoteo Cruz Hernández
@@ -143,11 +143,11 @@ This project is part of a government initiative of the Municipality of Arroyo Se
 **Group:** IDGS10  
 **Institution:** Technological University of Querétaro
 
-## 📄 License
+## License
 
 This project is developed for educational purposes and public service for the Municipal Government of Arroyo Seco, Querétaro.
 
-## 📞 Contact
+## Contact
 
 - **Website:** xioigourmet.com
 - **Email:** info@arroyoseco.com

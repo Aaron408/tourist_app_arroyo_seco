@@ -53,7 +53,6 @@ export const ROUTES = {
   CONSERVATION: "/gastronomia/ingredientes/conservacion",
   CULINARY_TECHNIQUES: "/gastronomia/tecnicas",
   TOOLS: "/gastronomia/herramientas",
-  REFERENCE_RESTAURANTS: "/gastronomia/restaurantes",
 
   // Ubicaciones
   LOCATIONS: "/ubicaciones",
@@ -66,8 +65,8 @@ export const ROUTES = {
 
   // Eventos
   EVENTS: "/eventos",
+  FLAVOR_ROUTE: "/eventos/ruta-del-sabor",
   WORKSHOPS: "/eventos/talleres",
-  GUIDED_ROUTES: "/eventos/rutas",
 };
 
 /**
