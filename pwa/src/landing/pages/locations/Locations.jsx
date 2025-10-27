@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { MapPin } from "lucide-react";
 import LocationMap from "./components/LocationMap";
 import LocationCard from "./components/LocationCard";
-import FilterBar from "./components/FilterBar";
+import Header from "../gastronomy/components/Header";
+import Filters from "../gastronomy/components/Filters";
 import { useLanguageStore } from "../../stores/languageStore";
-import { MAP_CONFIG, API_BASE_URL } from "../../utils/constants";
+import { MAP_CONFIG, API_BASE_URL, LOCATION_TYPES } from "../../utils/constants";
 import L from "leaflet";
 
 const Locations = () => {
@@ -392,35 +394,34 @@ const Locations = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-amber-50 to-white">
-      {/* Encabezado con dos niveles */}
-      <div className="relative z-10">
-        {/* Primer nivel: título y descripción */}
-        <div className="bg-linear-to-b from-amber-800 to-amber-700 text-white py-6 shadow-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center md:text-left">
-              <h1 className="text-3xl md:text-4xl font-bold">
-                {t.locationsPage.mapTitle}
-              </h1>
-              <p className="text-lg text-amber-50/90 mt-1 max-w-3xl">
-                {t.locationsPage.mapDescription}
-              </p>
-            </div>
-          </div>
-        </div>
-        
-        {/* Segundo nivel: filtros */}
-        <div className="bg-linear-to-b from-amber-700/95 to-amber-600/95 backdrop-blur-sm shadow-lg py-3 sticky top-0">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <FilterBar
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              selectedType={selectedType}
-              onTypeChange={setSelectedType}
-            />
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
+      {/* Header Section */}
+      <Header
+        icon={MapPin}
+        title={t.locationsPage.mapTitle}
+        subtitle={t.locationsPage.mapDescription}
+        gradientFrom="from-amber-600"
+        gradientTo="to-orange-600"
+      />
+
+      {/* Filters Section */}
+      <Filters
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchPlaceholder={t.locationsPage.searchLocations}
+        selectedFilter={selectedType}
+        setSelectedFilter={setSelectedType}
+        filters={Object.values(LOCATION_TYPES)}
+        filterLabels={{
+          [LOCATION_TYPES.RESTAURANT]: t.locationsPage.restaurants,
+          [LOCATION_TYPES.LANDMARK]: t.locationsPage.landmarks,
+          [LOCATION_TYPES.MARKET]: t.locationsPage.markets,
+          [LOCATION_TYPES.WORKSHOP]: t.locationsPage.workshops,
+          [LOCATION_TYPES.EVENT]: t.locationsPage.events,
+        }}
+        allLabel={t.locationsPage.showAll}
+        primaryColor="amber"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {loading ? (
@@ -429,8 +430,8 @@ const Locations = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="lg:sticky lg:top-16 h-fit">
-              <div className="bg-white rounded-xl shadow-lg p-4" style={{ height: '80vh' }}>
+            <div className="lg:sticky lg:top-32 h-fit">
+              <div className="bg-white rounded-xl shadow-lg p-4" style={{ height: '75vh' }}>
                 <LocationMap
                   locations={filteredLocations}
                   center={MAP_CONFIG.CENTER}
