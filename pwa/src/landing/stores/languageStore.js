@@ -23,7 +23,7 @@ export const useLanguageStore = create((set, get) => ({
     return value || key;
   },
 
-  // 🎉 NUEVO: Devuelve el objeto completo de traducciones
+  // Devuelve el objeto completo de traducciones
   getTranslations: () => {
     const { currentLanguage } = get();
     return translations[currentLanguage];
