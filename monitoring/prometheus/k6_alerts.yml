@@ -1,0 +1,109 @@
+# Reglas de Alertas para Métricas de K6
+# Copiar este archivo a /etc/prometheus/rules/
+
+groups:
+  - name: k6_load_testing_alerts
+    interval: 30s
+    rules:
+      # Alerta: Tasa de error alta
+      - alert: K6HighErrorRate
+        expr: k6_http_req_failed_rate > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          component: load_testing
+        annotations:
+          summary: "Alta tasa de errores en pruebas K6"
+          description: "La tasa de errores es {{ $value | humanizePercentage }} en {{ $labels.instance }}"
+      
+      # Alerta: Latencia P95 alta
+      - alert: K6HighLatencyP95
+        expr: k6_http_req_duration{quantile="0.95"} > 3000
+        for: 3m
+        labels:
+          severity: warning
+          component: load_testing
+        annotations:
+          summary: "Latencia P95 alta detectada"
+          description: "El percentil 95 de latencia es {{ $value }}ms en {{ $labels.instance }}"
+      
+      # Alerta: Latencia P99 muy alta
+      - alert: K6VeryHighLatencyP99
+        expr: k6_http_req_duration{quantile="0.99"} > 5000
+        for: 2m
+        labels:
+          severity: critical
+          component: load_testing
+        annotations:
+          summary: "Latencia P99 crítica"
+          description: "El percentil 99 de latencia es {{ $value }}ms - rendimiento degradado"
+      
+      # Alerta: Bajo throughput
+      - alert: K6LowThroughput
+        expr: rate(k6_http_reqs_total[5m]) < 10
+        for: 5m
+        labels:
+          severity: info
+          component: load_testing
+        annotations:
+          summary: "Throughput bajo en pruebas K6"
+          description: "El throughput es {{ $value }} req/s, esperado >10 req/s"
+      
+      # Alerta: Fallo en checks de K6
+      - alert: K6ChecksFailing
+        expr: k6_checks_rate < 0.95
+        for: 2m
+        labels:
+          severity: warning
+          component: load_testing
+        annotations:
+          summary: "Checks de K6 fallando"
+          description: "Solo {{ $value | humanizePercentage }} de checks pasando"
+
+  - name: pwa_performance_alerts
+    interval: 30s
+    rules:
+      # Alerta: Servidor PWA caído
+      - alert: PWADown
+        expr: up{job="arroyo_seco_pwa"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: pwa
+        annotations:
+          summary: "PWA de Arroyo Seco no disponible"
+          description: "La aplicación PWA no responde en {{ $labels.instance }}"
+      
+      # Alerta: Nginx con problemas
+      - alert: NginxDown
+        expr: up{job="arroyo_seco_nginx"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: nginx
+        annotations:
+          summary: "Nginx no disponible"
+          description: "El servidor web Nginx no responde"
+      
+      # Alerta: Alto uso de CPU en servidor
+      - alert: HighCPUUsage
+        expr: node_cpu_seconds_total{mode="idle"} < 20
+        for: 5m
+        labels:
+          severity: warning
+          component: server
+        annotations:
+          summary: "Alto uso de CPU detectado"
+          description: "CPU usage alto en el servidor"
+      
+      # Alerta: Memoria baja
+      - alert: LowMemory
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.1
+        for: 3m
+        labels:
+          severity: warning
+          component: server
+        annotations:
+          summary: "Memoria disponible baja"
+          description: "Menos del 10% de memoria disponible"
+

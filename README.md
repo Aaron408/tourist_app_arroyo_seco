@@ -1,409 +1,506 @@
-# Xi'oi Gourmet - Digital Gastronomic Tourism Platform
+# 🌮 Tourist App Arroyo Seco
 
-<div align="center">
+Aplicación turística y gastronómica para promover la riqueza cultural de Arroyo Seco, Querétaro.
 
-**Preserving the Pame flavor of the Sierra Gorda**
-
-[![License](https://img.shields.io/badge/license-Educational-blue.svg)](LICENSE)
-[![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)]()
-[![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
-[![Node](https://img.shields.io/badge/Node-18+-green.svg)](https://nodejs.org/)
-
-</div>
+[![CI/CD](https://github.com/Aaron408/tourist_app_arroyo_seco/workflows/K6%20Load%20Testing%20Pipeline/badge.svg)](https://github.com/Aaron408/tourist_app_arroyo_seco/actions)
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen)]()
+[![Coverage](https://img.shields.io/badge/coverage-70%25-yellow)]()
 
 ---
 
-## About the Project
+## 📋 Tabla de Contenidos
 
-**Xi'oi Gourmet** is the first digital platform specialized in cultural gastronomic tourism in Arroyo Seco, Querétaro, connecting travelers with authentic culinary experiences from the Sierra Gorda, preserving and disseminating the gastronomic heritage of Pame culture.
-
-**Xi'oi** (pronounced "shiói") means "Pame" in the native language, representing the union of cultural identity + gastronomy = **"The Pame flavor"**.
-
-### Mission
-
-To rescue, preserve, and disseminate the traditional gastronomy of Arroyo Seco through accessible technology, connecting tourists, cooks, and local residents on a modern platform that guarantees cultural authenticity and direct economic benefit to communities.
-
-### Value Proposition
-
-- **Authentic discovery without intermediaries** - Direct access to family inns and traditional cooks
-- **100% offline functionality** - Access recipes and locations in areas with limited connectivity
-- **Multilingual and inclusive** - Content in Spanish, English, and Pame
-- **Immersive experiences** - Workshops with Pame grandmothers and cooks
-- **Tourism with social purpose** - Every visit supports local families and preserves intangible heritage
+- [Descripción](#descripción)
+- [Arquitectura](#arquitectura)
+- [Tecnologías](#tecnologías)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Instalación](#instalación)
+- [Testing](#testing)
+- [CI/CD y Monitoreo](#cicd-y-monitoreo)
+- [Deployment](#deployment)
+- [Documentación](#documentación)
 
 ---
 
-## Project Architecture
+## 📖 Descripción
 
-This repository is a **monorepo** containing all components of the Xi'oi Gourmet platform:
+Sistema multiplataforma que incluye:
 
-```
-xioi-gourmet/
-├── pwa/              # Progressive web application (React + Vite)
-├── mobile/           # Native mobile application (React Native)
-├── backend/          # Backend with microservices
-├── tests/            # Project test suite
-└── README.md         # This file
-```
-
-### Project Modules
-
-#### PWA (Progressive Web App)
-**Status:** Operational
-
-Modern and responsive web platform that works in desktop and mobile browsers. Main features:
-
-- **Technologies:** React 19, Vite 7, Tailwind CSS 4, React Router 7, Zustand
-- **Complete offline functionality** via Service Workers
-- **Admin panel** with authentication and content management
-- **Tourist landing page** with recipe catalog, restaurants, and events
-- **Multilingual:** Spanish, English, and Pame
-- **Installable** as an application on devices
-
-[See complete PWA documentation](./pwa/README.md)
-
-#### Mobile (Native Mobile Application)
-**Status:** In development
-
-Native application for Android and iOS with optimized experience for mobile devices.
-
-- **Technology:** React Native + Expo
-- **Planned features:**
-  - Native and fluid experience
-  - Push notifications
-  - Camera access to scan restaurant QR codes
-  - Advanced geolocation
-  - Robust offline mode
-- **Distribution:** Google Play Store (Android) and App Store (iOS)
-
-[See Mobile documentation](./mobile/README.md)
-
-#### Backend (Microservices)
-**Status:** In planning
-
-Backend based on microservices architecture for scalability and maintainability.
-
-- **Architecture:** Independent microservices
-- **Planned technologies:**
-  - Node.js + Express/NestJS
-  - PostgreSQL for structured data
-  - Redis for cache
-  - Docker for containerization
-  - API Gateway for routing
-- **Main services:**
-  - Authentication service (Auth)
-  - Recipes and gastronomy service
-  - Locations and maps service
-  - Events and workshops service
-  - Translations service
-  - Notifications service
-
-[See Backend documentation](./backend/README.md)
-
-#### Tests (Test Suite)
-**Status:** In planning
-
-Centralized folder for all automated project tests.
-
-- **Planned test types:**
-  - Unit tests (Jest)
-  - Integration (Jest + Supertest)
-  - End-to-End (Cypress/Playwright)
-  - Performance (Lighthouse CI)
-- **Target coverage:** >80% of code
-- **CI/CD:** Integration with GitHub Actions
-
-[See Tests documentation](./tests/README.md)
+- 🌐 **PWA** - Aplicación web progresiva
+  - Sitio público con información turística y gastronómica
+  - Panel de administración para gestión de contenido
+  
+- 📱 **Mobile** - Aplicación móvil nativa (React Native/Expo)
+  - Explorar recetas, ingredientes y ubicaciones
+  - Información offline
+  - Navegación por tabs
 
 ---
 
-## Quick Start
+## 🏗️ Arquitectura
 
-### Global Prerequisites
-
-- **Node.js** 18.x or higher
-- **npm** or **yarn**
-- **PostgreSQL** 14+ (for backend)
-- **Git**
-
-### Complete Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/your-username/xioi-gourmet.git
-cd xioi-gourmet
-
-# Install dependencies for available modules
-cd pwa && npm install && cd ..
-cd mobile && npm install && cd ..
-
-# Backend and tests still in development
 ```
-
-### Execution by Module
-
-#### PWA (Web Application) - Available
-```bash
-cd pwa
-npm run dev
-# Access at: http://localhost:5173
-```
-
-#### Mobile (Mobile Application) - In development
-```bash
-cd mobile
-npm start
-# Use Expo Go to view on your device
-```
-
-#### Backend - 🚧 Coming soon
-```bash
-# In development - documentation pending
+┌─────────────────────────────────────────────────────────────┐
+│                     Frontend                                 │
+├──────────────────────┬──────────────────────────────────────┤
+│   PWA (React+Vite)   │   Mobile (React Native/Expo)        │
+│   - Landing Pages    │   - Tab Navigation                   │
+│   - Admin Panel      │   - Offline Support                  │
+└──────────────────────┴──────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                     Backend (API)                            │
+│                   (Por implementar)                          │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│              Testing & Monitoring Stack                      │
+├────────────┬────────────┬─────────────┬────────────────────┤
+│   Jest     │ Playwright │     K6      │  Prometheus+Grafana│
+│  Unit Tests│  E2E Tests │ Load Tests  │    Monitoring      │
+└────────────┴────────────┴─────────────┴────────────────────┘
 ```
 
 ---
 
-## Tech Stack
+## 🛠️ Tecnologías
 
-### PWA (Web Frontend)
-- **React 19.1.1** - Latest generation UI library
-- **Vite 7.1.7** - Ultra-fast build tool
-- **Tailwind CSS 4.1.14** - Utility-first CSS framework
-- **React Router 7.9.4** - SPA navigation
-- **Zustand 5.0.8** - Minimalist state management
-- **Service Workers** - Offline functionality
+### Frontend
 
-### Mobile (Native Application)
-- **React Native** - Cross-platform framework
-- **Expo** - Development toolchain
-- *(Complete stack in definition)*
-
-### Backend (Microservices)
-- **Node.js 18+** - JavaScript runtime
-- **Express/NestJS** - Frameworks (to be defined)
-- **PostgreSQL 14+** - Main database
-- **Redis** - Cache and sessions
-- **Docker** - Containerization
-- **JWT** - Authentication
-- *(Architecture in design)*
+- **PWA:** React 18, Vite, React Router, TailwindCSS
+- **Mobile:** React Native, Expo, TypeScript
+- **State Management:** Zustand
+- **Internationalization:** Custom i18n (es-MX, en-US)
 
 ### Testing
-- **Jest** - Testing framework (planned)
-- **Cypress/Playwright** - E2E testing (planned)
-- **Supertest** - API testing (planned)
 
-### DevOps & Hosting
-- **IONOS VPS** - Main hosting
-- **Vercel** - PWA/Landing hosting
-- **Google Play Store** - Android distribution
-- **App Store** - iOS distribution (planned)
-- **Don Dominio** - Domain registration
+- **Unit/Integration:** Jest, ts-jest
+- **E2E:** Playwright
+- **Load Testing:** K6
+- **Coverage:** Istanbul
 
----
+### DevOps & Monitoring
 
-## Documentation by Module
-
-Each module has its own detailed documentation:
-
-- **[PWA - Documentation](./pwa/README.md)** *Available*
-  - Installation and configuration
-  - Project structure
-  - Development guide
-  - Authentication and protected routes
-
-- **[Mobile - Documentation](./mobile/README.md)** *In development*
-  - Expo configuration
-  - Native components
-  - *(Documentation in progress)*
-
-- **[Backend - Documentation](./backend/README.md)** *Coming soon*
-  - Microservices architecture
-  - API endpoints
-  - *(In planning)*
-
-- **[Tests - Documentation](./tests/README.md)** *Coming soon*
-  - Testing strategy
-  - Testing guide
-  - *(In planning)*
+- **CI/CD:** GitHub Actions
+- **Metrics:** Prometheus
+- **Visualization:** Grafana
+- **Web Server:** Nginx
 
 ---
 
-## Main Features
+## 📁 Estructura del Proyecto
 
-### For Tourists
-- Traditional Pame recipe catalog with cultural history
-- Local restaurant and inn directory (Flavor Route)
-- Interactive map with offline geolocation
-- Native ingredients database with properties
-- Documented ancestral culinary techniques
-- Booking of experiential gastronomic workshops
-- Multilingual content (ES/EN/Pame)
-
-### For Administrators
-- Protected control panel with authentication
-- Dashboard with usage and popularity metrics
-- Complete CRUD for recipes, ingredients, and locations
-- Cultural events and workshops management
-- Centralized translation system
-- Feedback and reviews module
-- User and permissions administration
-
----
-
-## Business Model
-
-### Revenue Sources
-
-| Source | Type | Estimated % | Purpose |
-|--------|------|------------|---------|
-| Municipal Government | Public | 70-80% | Base operation |
-| Workshop Donations | Community | 5-10% | Local reinvestment |
-| Paid Mentions | Regulated commercial | 10-15% | Tech improvements |
-| Sponsorships | Extraordinary | 5-10% | Special projects |
-
-### User Segments
-
-1. **National Tourists** (60%) - Main consumers
-2. **International Tourists** (25%) - Need English content
-3. **Researchers/Students** (15%) - Rigorous documentation
-
----
-
-## Development Team
-
-**Technological University of Querétaro - IDGS10**
-
-| Name | Role |
-|------|------|
-| Angel Eduardo Anaya Becerril | Full-stack Developer |
-| Timoteo Cruz Hernández | Backend Developer |
-| Carlos Flores Carranza | Frontend Developer |
-| Victor Manuel Rangel Mejía | Mobile Developer |
-| Aaron Reyes Ruiz | UI/UX Designer |
-| Eduardo Daniel Rodríguez | QA Engineer |
-| Mauricio Martínez Rodríguez | DevOps Engineer |
-
-**Academic Advisor:** Josue Francisco Lopez Lopez  
-**Institution:** Technological University of Querétaro (UTEQ)
-
----
-
-## Key Partners
-
-- **Municipal Government of Arroyo Seco** - Main client and funding
-- **Secretary of Tourism of Querétaro** - Regional promotion
-- **Technological University of Querétaro** - Technological development
-- **Pame Indigenous Communities** - Cultural validation and authentic content
-- **Local Restaurant Association** - Business directory
-
----
-
-## Roadmap
-
-### Phase 1 - MVP (Current - Q1 2025)
-- [x] **Operational PWA** with complete offline functionality
-- [x] Basic traditional recipe catalog
-- [x] Restaurant and location directory
-- [x] Admin panel with authentication
-- [x] Multilingual content (ES/EN)
-- [x] Complete tourist landing page
-- [ ] Mobile: Base structure and initial components
-
-### Phase 2 - Expansion (Q2 2025)
-- [ ] **Backend:** Microservices architecture design
-- [ ] **Backend:** Implementation of core services (Auth, Recipes, Locations)
-- [ ] **Mobile:** Functional app in Expo with main features
-- [ ] **PWA:** Cultural workshop booking system
-- [ ] **Tests:** Basic suite of unit and integration tests
-- [ ] Integration between PWA, Mobile, and Backend
-
-### Phase 3 - Optimization (Q3 2025)
-- [ ] **Backend:** All microservices operational and documented
-- [ ] **Mobile:** Publication on Google Play Store
-- [ ] **PWA:** Recommendation system with ML
-- [ ] **Tests:** >80% coverage and complete E2E tests
-- [ ] Push notifications on both platforms
-- [ ] Analytics dashboard and advanced metrics
-
-### Phase 4 - Scale (Q4 2025)
-- [ ] Mobile publication on App Store (iOS)
-- [ ] Payment and monetization system
-- [ ] Public API for third parties
-- [ ] Expansion to other Sierra Gorda municipalities
-
----
-
-## Testing
-
-```bash
-# PWA - Available tests
-cd pwa && npm run test
-
-# Mobile - In development
-cd mobile && npm run test
-
-# Backend - Coming soon
-# cd backend && npm run test
-
-# E2E Tests - Coming soon
-# cd tests && npm run test:e2e
+```
+tourist_app_arroyo_seco/
+├── pwa/                        # Aplicación web progresiva
+│   ├── src/
+│   │   ├── landing/           # Sitio público
+│   │   │   ├── pages/         # Páginas (Home, Gastronomy, Locations, Events)
+│   │   │   ├── components/    # Componentes reutilizables
+│   │   │   ├── i18n/          # Traducciones
+│   │   │   └── stores/        # State management
+│   │   └── admin/             # Panel de administración
+│   │       ├── pages/         # Dashboard, Catalogs, Users, etc.
+│   │       ├── contexts/      # Auth context
+│   │       └── i18n/          # Traducciones admin
+│   ├── public/                # Assets estáticos
+│   └── package.json
+│
+├── mobile/                     # Aplicación móvil
+│   ├── app/
+│   │   ├── (tabs)/            # Navegación por tabs
+│   │   │   ├── index.tsx      # Home
+│   │   │   ├── explore.tsx    # Explorar
+│   │   │   ├── recipes.tsx    # Recetas
+│   │   │   └── restaurants.tsx
+│   │   └── screens/           # Pantallas adicionales
+│   ├── components/            # Componentes UI
+│   ├── contexts/              # Language provider
+│   └── i18n/                  # Traducciones
+│
+├── tests/                      # Suite completa de pruebas
+│   ├── unit/                  # Tests unitarios
+│   │   ├── pwa/              # Tests de PWA
+│   │   │   ├── auth.spec.ts
+│   │   │   ├── language.spec.ts
+│   │   │   └── routing.spec.ts
+│   │   └── mobile/           # Tests de Mobile
+│   │       ├── navigation.spec.ts
+│   │       ├── components.spec.ts
+│   │       └── screens.spec.ts
+│   ├── integration/           # Tests de integración
+│   ├── e2e/                   # Tests end-to-end
+│   │   ├── landing.spec.ts
+│   │   └── admin.spec.ts
+│   └── performance/           # Tests de rendimiento
+│
+├── monitoring/                 # Stack de monitoreo
+│   ├── k6/                    # Scripts de pruebas de carga
+│   │   ├── load-test-landing.js
+│   │   └── load-test-admin.js
+│   ├── prometheus/            # Configuración de Prometheus
+│   │   ├── k6-prometheus-config.yml
+│   │   └── k6_alerts.yml
+│   └── grafana/               # Dashboards de Grafana
+│       └── k6-dashboard.json
+│
+├── docs/                       # Documentación
+│   ├── setup/                 # Guías de configuración
+│   │   ├── SERVER_SETUP.md
+│   │   └── GITHUB_GRAFANA_INTEGRATION.md
+│   ├── testing/               # Documentación de testing
+│   │   └── README.md
+│   └── api/                   # Documentación de API
+│
+├── .github/
+│   └── workflows/
+│       └── k6-load-testing.yml  # CI/CD Pipeline
+│
+└── README.md                   # Este archivo
 ```
 
-**Current status:**
-- PWA: Linter configured, unit tests in planning
-- Mobile: Testing strategy in definition
-- Backend: Tests pending (architecture first)
-- E2E: Complete suite planned for Phase 3
+---
+
+## 🚀 Instalación
+
+### Prerrequisitos
+
+- Node.js >= 18.0.0
+- npm >= 9.0.0
+- Git
+
+### PWA
+
+```bash
+# Clonar repositorio
+git clone https://github.com/Aaron408/tourist_app_arroyo_seco.git
+cd tourist_app_arroyo_seco/pwa
+
+# Instalar dependencias
+npm install
+
+# Desarrollo
+npm run dev
+
+# Build de producción
+npm run build
+
+# Preview de producción
+npm run preview
+```
+
+**URLs:**
+- Desarrollo: http://localhost:5173
+- Landing: http://localhost:5173/
+- Admin: http://localhost:5173/administracion/login
+
+**Credenciales de prueba:**
+- Email: `admin@arroyoseco.com`
+- Password: `admin123`
+
+### Mobile
+
+```bash
+cd mobile
+
+# Instalar dependencias
+npm install
+
+# Iniciar Expo
+npx expo start
+
+# iOS
+npx expo start --ios
+
+# Android
+npx expo start --android
+
+# Web
+npx expo start --web
+```
 
 ---
 
-## Deployment
+## 🧪 Testing
 
-### Deployment Status
+### Setup
 
-| Platform | URL/Store | Status |
-|----------|-----------|--------|
-| **PWA Production** | [xioigourmet.com](https://xioigourmet.com) | In development |
-| **PWA Staging** | Vercel Preview | Active |
-| **Backend API** | IONOS VPS | Pending |
-| **Mobile Android** | Google Play Store | Pending |
-| **Mobile iOS** | App Store | Pending |
+```bash
+cd tests
+npm install
 
-### Deployment Configuration
+# Instalar navegadores de Playwright
+npm run playwright:install
+```
 
-#### PWA
-- **Production:** Vercel (custom domain)
-- **Build:** `npm run build` in `/pwa` directory
-- **Environment variables:** Configured in Vercel Dashboard
+### Ejecutar Tests
 
-#### Mobile
-- **Android:** Google Play Console (in preparation)
-- **iOS:** App Store Connect (planned for Q3 2025)
+```bash
+# Tests unitarios
+npm run test:unit
 
-#### Backend
-- **Hosting:** IONOS VPS with Docker
-- **API Documentation:** Swagger UI (when available)
+# Tests con cobertura
+npm run test:coverage
 
-*Detailed deployment instructions available in each module's README.*
+# Tests E2E
+npm run test:e2e
+
+# Tests E2E con UI interactiva
+npm run test:e2e:ui
+
+# Todos los tests
+npm run test:all
+```
+
+### Pruebas de Carga (K6)
+
+```bash
+# Instalar K6 (Linux)
+sudo apt-get install k6
+
+# Test de Landing
+cd tests
+npm run test:load
+
+# Test de Admin
+npm run test:load:admin
+
+# Desde la raíz
+k6 run monitoring/k6/load-test-landing.js
+k6 run monitoring/k6/load-test-admin.js
+```
+
+### Cobertura
+
+Los reportes de cobertura se generan en `tests/coverage/`
+
+**Objetivos:**
+- Branches: 70%
+- Functions: 70%
+- Lines: 70%
+- Statements: 70%
 
 ---
 
-## License
+## 🔄 CI/CD y Monitoreo
 
-This project is developed for educational purposes and public service for the Municipal Government of Arroyo Seco, Querétaro. All rights reserved.
+### GitHub Actions
+
+**Workflow:** `.github/workflows/k6-load-testing.yml`
+
+**Triggers:**
+- ✅ Push a main (archivos PWA o K6)
+- ✅ Pull Requests
+- ✅ Manual (workflow_dispatch)
+- ✅ Schedule (diario 2 AM)
+
+**Jobs:**
+1. Setup y validación
+2. Pruebas de carga - Landing
+3. Pruebas de carga - Admin
+4. Reporte consolidado
+5. Cleanup
+
+**Ver resultados:**
+- GitHub Actions: https://github.com/Aaron408/tourist_app_arroyo_seco/actions
+
+### Prometheus
+
+**URL:** http://74.208.45.131:9090
+
+**Métricas monitoreadas:**
+- HTTP requests de K6
+- Latencia (P95, P99)
+- Error rate
+- Virtual users
+- Throughput
+
+**Queries útiles:**
+```promql
+# Total requests
+sum(k6_http_reqs_total)
+
+# Request rate
+rate(k6_http_reqs_total[1m])
+
+# P95 latency
+histogram_quantile(0.95, rate(k6_http_req_duration_bucket[5m]))
+```
+
+### Grafana
+
+**URL:** http://vps-master.duckdns.org:3000/grafana
+
+**Dashboard:** "K6 Load Testing - Arroyo Seco Tourism App"
+
+**Paneles:**
+- Resumen de pruebas
+- HTTP Request Duration (P95, P99)
+- Request Rate & Error Rate
+- Virtual Users
+- HTTP Status Codes
+- Check Success Rate
+- Duration por página
+- Data Transfer
 
 ---
 
-## Acknowledgments
+## 🌐 Deployment
 
-We thank the Pame indigenous communities, traditional cooks, municipal government of Arroyo Seco, UTEQ, and all who contribute to preserving the gastronomic heritage of the Sierra Gorda.
+### Servidor de Producción
+
+**URL:** http://vps-master.duckdns.org:3000  
+**IP:** 74.208.45.131  
+**Ubicación:** `/home/github/tourist_app_arroyo_seco`
+
+### Deploy de PWA
+
+```bash
+# Conectar al servidor
+ssh root@74.208.45.131
+
+# Actualizar código
+cd /home/github/tourist_app_arroyo_seco
+git pull origin main
+
+# Build
+cd pwa
+npm install
+npm run build
+
+# Recargar Nginx
+sudo systemctl reload nginx
+```
+
+### Configuración de Nginx
+
+```nginx
+server {
+    listen 3000;
+    server_name vps-master.duckdns.org;
+    root /home/github/tourist_app_arroyo_seco/pwa/dist;
+    
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
 
 ---
 
-<div align="center">
+## 📚 Documentación
 
-**Made with ❤️ to preserve Pame flavor**
+### Guías Disponibles
 
-*"Xi'oi Gourmet - Where every dish tells a story"*
+- **[Testing Documentation](docs/testing/README.md)**
+  - Suite completa de pruebas
+  - Guías de Jest, Playwright y K6
+  - Configuración de CI/CD
+  - Métricas y monitoreo
 
-</div>
+- **[Server Setup](docs/setup/SERVER_SETUP.md)**
+  - Configuración del servidor
+  - Deployment de PWA
+  - Configuración de Prometheus
+  - Configuración de Grafana
+
+- **[GitHub + Grafana Integration](docs/setup/GITHUB_GRAFANA_INTEGRATION.md)**
+  - Pipeline completo K6 + GitHub Actions
+  - Integración con Prometheus/Grafana
+  - Guía de captura de evidencias
+  - Estructura del entregable
+
+---
+
+## 🎯 Roadmap
+
+### Completado ✅
+
+- [x] PWA con Landing y Admin
+- [x] Mobile app con Expo
+- [x] Internacionalización (es-MX, en-US)
+- [x] Tests unitarios completos
+- [x] Tests E2E con Playwright
+- [x] Tests de carga con K6
+- [x] CI/CD con GitHub Actions
+- [x] Monitoreo con Prometheus
+- [x] Dashboards en Grafana
+- [x] Deployment en servidor
+
+### En Progreso 🚧
+
+- [ ] Backend API (en desarrollo)
+- [ ] Autenticación real
+- [ ] Base de datos
+
+### Futuro 🔮
+
+- [ ] Push notifications (PWA)
+- [ ] Modo offline completo (Mobile)
+- [ ] Integración con mapas
+- [ ] Sistema de reviews
+- [ ] Reservaciones
+
+---
+
+## 👥 Equipo
+
+- **Desarrollo:** Equipo Tourist App Arroyo Seco
+- **QA & Testing:** Sistema automatizado con K6, Jest, Playwright
+- **DevOps:** GitHub Actions + Prometheus + Grafana
+
+---
+
+## 📄 Licencia
+
+Este proyecto es privado y de uso académico.
+
+---
+
+## 🆘 Soporte
+
+### Problemas Comunes
+
+**Error en tests unitarios:**
+```bash
+cd tests
+npm install
+npm run test:unit
+```
+
+**Playwright no encuentra navegadores:**
+```bash
+npm run playwright:install
+```
+
+**K6 no instalado:**
+```bash
+# Linux
+sudo apt-get install k6
+
+# Windows
+choco install k6
+
+# macOS
+brew install k6
+```
+
+### Contacto
+
+- **GitHub Issues:** https://github.com/Aaron408/tourist_app_arroyo_seco/issues
+- **Email:** (contacto del equipo)
+
+---
+
+## 📊 Badges de Status
+
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-70%25-yellow)
+![K6](https://img.shields.io/badge/K6-load%20testing-blue)
+![Prometheus](https://img.shields.io/badge/monitoring-prometheus-orange)
+![Grafana](https://img.shields.io/badge/visualization-grafana-yellow)
+
+---
+
+**🌮 Descubre los Sabores de Arroyo Seco 🌮**
