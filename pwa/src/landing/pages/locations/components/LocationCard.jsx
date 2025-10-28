@@ -49,12 +49,12 @@ const LocationCard = ({
     return (
       <div
         onClick={onClick}
-        className={`bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer overflow-hidden h-full ${
+        className={`bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer overflow-hidden h-full flex ${
           isSelected ? "ring-2 ring-amber-500" : ""
         }`}
       >
-        <div className="flex h-full">
-          <div className="relative w-1/3 overflow-hidden">
+        <div className="flex h-full w-full">
+          <div className="relative w-1/3 overflow-hidden shrink-0">
             <img
               src={
                 image_url ||
@@ -76,29 +76,29 @@ const LocationCard = ({
               </div>
             )}
           </div>
-          <div className="w-2/3 p-4 flex flex-col justify-between">
-            <div>
+          <div className="w-2/3 p-4 flex flex-col">
+            <div className="flex-grow">
               <div className="flex justify-between items-start mb-2">
-                <h3 className="text-base font-bold text-gray-900 line-clamp-1">{name}</h3>
+                <h3 className="text-base font-bold text-gray-900 line-clamp-1 flex-1 mr-2">{name}</h3>
                 <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium border ${getTypeColor(
+                  className={`px-2 py-1 rounded-full text-xs font-medium border shrink-0 ${getTypeColor(
                     type
                   )}`}
                 >
                   {getTypeLabel(type)}
                 </span>
               </div>
-              <p className="text-gray-600 text-sm line-clamp-2 mb-2">{description}</p>
-            </div>
-            
-            <div>
+              <p className="text-gray-600 text-sm line-clamp-2 mb-3">{description}</p>
+              
               {address && (
-                <div className="flex items-start text-xs text-gray-600 mb-2">
+                <div className="flex items-start text-xs text-gray-600 mb-3">
                   <MapPin className="w-4 h-4 mr-1 mt-0.5 shrink-0 text-amber-600" />
                   <span className="line-clamp-1">{address}</span>
                 </div>
               )}
-              
+            </div>
+            
+            <div className="mt-auto">
               <button className="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white py-2 rounded-lg text-sm font-medium hover:from-amber-600 hover:to-orange-700 transition-all shadow-md hover:shadow-lg">
                 {t.locationsPage.viewDetails}
               </button>
@@ -112,11 +112,11 @@ const LocationCard = ({
   return (
     <div
       onClick={onClick}
-      className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all cursor-pointer overflow-hidden transform hover:-translate-y-1 ${
+      className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all cursor-pointer overflow-hidden transform hover:-translate-y-1 h-full flex flex-col ${
         isSelected ? "ring-4 ring-amber-500 shadow-amber-200" : ""
       }`}
     >
-      <div className="relative h-56 overflow-hidden">
+      <div className="relative h-56 overflow-hidden flex-shrink-0">
         <img
           src={
             image_url ||
@@ -150,19 +150,19 @@ const LocationCard = ({
         )}
       </div>
 
-      <div className="p-6">
+      <div className="p-6 flex flex-col flex-grow">
         <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">
           {name}
         </h3>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
           {description}
         </p>
 
-        <div className="space-y-2">
+        <div className="space-y-2 mb-4">
           {address && (
             <div className="flex items-start text-sm text-gray-600">
               <MapPin className="w-4 h-4 mr-2 mt-0.5 shrink-0 text-amber-600" />
-              <span className="line-clamp-1">{address}</span>
+              <span className="line-clamp-2">{address}</span>
             </div>
           )}
 
@@ -174,7 +174,10 @@ const LocationCard = ({
           )}
         </div>
 
-        <button className="mt-6 w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white py-3 rounded-xl font-semibold hover:from-amber-600 hover:to-orange-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+        {/* Spacer que empuja el botón hacia abajo */}
+        <div className="flex-grow"></div>
+
+        <button className="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white py-3 rounded-xl font-semibold hover:from-amber-600 hover:to-orange-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
           {t.locationsPage.viewDetails}
         </button>
       </div>
