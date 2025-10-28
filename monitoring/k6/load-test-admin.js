@@ -41,7 +41,7 @@ export const options = {
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(90)', 'p(95)', 'p(99)'],
 };
 
-const BASE_URL = __ENV.BASE_URL || 'http://vps-master.duckdns.org:3000';
+const BASE_URL = __ENV.BASE_URL || 'https://vps-master.duckdns.org';
 
 // Credenciales de prueba
 const ADMIN_CREDENTIALS = {
@@ -277,6 +277,15 @@ export function handleSummary(data) {
 }
 
 function textSummary(data) {
+  // Función helper para obtener valores seguros
+  function getAvg(metricName) {
+    const metric = data.metrics[metricName];
+    if (metric && metric.values && metric.values.avg) {
+      return metric.values.avg.toFixed(2);
+    }
+    return 'N/A';
+  }
+  
   return `
 ╔════════════════════════════════════════════════════════════════════╗
 ║          RESUMEN DE PRUEBAS DE CARGA - ADMIN PANEL                ║
@@ -290,11 +299,11 @@ function textSummary(data) {
 
 🔐 MÉTRICAS DE LOGIN:
   • Tasa de Éxito: ${(data.metrics.login_success_rate.values.rate * 100).toFixed(2)}%
-  • Duración Promedio: ${data.metrics.login_duration?.values.avg?.toFixed(2) || 'N/A'}ms
+  • Duración Promedio: ${getAvg('login_duration')}ms
 
 ⏱️  TIEMPOS POR SECCIÓN:
-  • Dashboard: ${data.metrics.dashboard_duration?.values.avg?.toFixed(2) || 'N/A'}ms
-  • Catálogos: ${data.metrics.catalogs_duration?.values.avg?.toFixed(2) || 'N/A'}ms
+  • Dashboard: ${getAvg('dashboard_duration')}ms
+  • Catálogos: ${getAvg('catalogs_duration')}ms
 
 ${checkThresholds(data) ? '✅ TODAS LAS PRUEBAS PASARON' : '❌ ALGUNAS PRUEBAS FALLARON'}
 `;

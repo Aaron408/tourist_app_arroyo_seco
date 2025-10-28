@@ -48,7 +48,7 @@ export const options = {
 };
 
 // URL base - puede configurarse via variable de entorno
-const BASE_URL = __ENV.BASE_URL || 'http://vps-master.duckdns.org:3000';
+const BASE_URL = __ENV.BASE_URL || 'https://vps-master.duckdns.org';
 
 /**
  * Setup - Ejecuta una vez antes de iniciar el test
