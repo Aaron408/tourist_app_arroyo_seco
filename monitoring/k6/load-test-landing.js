@@ -51,6 +51,22 @@ export const options = {
 const BASE_URL = __ENV.BASE_URL || 'https://vps-master.duckdns.org';
 
 /**
+ * Setup - Ejecuta una vez antes de iniciar el test
+ */
+export function setup() {
+  console.log(`🚀 Iniciando pruebas de carga contra: ${BASE_URL}`);
+  console.log(`📊 Configuración: ${JSON.stringify(options.stages)}`);
+  
+  // Verificar que el sitio está disponible
+  const res = http.get(BASE_URL);
+  check(res, {
+    'sitio disponible en setup': (r) => r.status === 200,
+  });
+  
+  return { startTime: new Date().toISOString() };
+}
+
+/**
  * Función principal - Ejecuta por cada usuario virtual
  */
 export default function(data) {
