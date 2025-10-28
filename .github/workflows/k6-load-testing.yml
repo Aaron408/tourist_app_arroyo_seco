@@ -1,5 +1,12 @@
 name: K6 Load Testing Pipeline
 
+# Permisos necesarios para el workflow
+permissions:
+  contents: read        # Leer el código del repositorio
+  actions: read         # Leer workflows y artefactos
+  issues: write         # Comentar en issues
+  pull-requests: write  # Comentar en PRs
+
 on:
   # Ejecutar en push a main
   push:
@@ -257,19 +264,25 @@ jobs:
       
       - name: 🔔 Comentar en PR (si aplica)
         if: github.event_name == 'pull_request'
+        continue-on-error: true  # No fallar si no tiene permisos
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '## 🚀 Pruebas de Carga K6 Completadas\n\n' +
-                    'Las pruebas de carga han finalizado. Revisa el [resumen de la ejecución](' + 
-                    context.payload.repository.html_url + '/actions/runs/' + context.runId + ') ' +
-                    'para ver los resultados detallados.\n\n' +
-                    '📊 [Ver métricas en Grafana](' + process.env.GRAFANA_URL + ')'
-            })
+            try {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '## 🚀 Pruebas de Carga K6 Completadas\n\n' +
+                      'Las pruebas de carga han finalizado. Revisa el [resumen de la ejecución](' + 
+                      context.payload.repository.html_url + '/actions/runs/' + context.runId + ') ' +
+                      'para ver los resultados detallados.\n\n' +
+                      '📊 [Ver métricas en Grafana](' + process.env.GRAFANA_URL + ')'
+              });
+              console.log('✅ Comentario en PR creado exitosamente');
+            } catch (error) {
+              console.log('⚠️ No se pudo comentar en el PR (puede ser falta de permisos):', error.message);
+            }
 
   # Job 5: Cleanup
   cleanup:
