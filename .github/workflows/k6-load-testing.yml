@@ -41,9 +41,11 @@ on:
 
 env:
   K6_VERSION: '0.48.0'
-  BASE_URL: 'http://vps-master.duckdns.org:3000'
-  GRAFANA_URL: 'http://vps-master.duckdns.org:3000/grafana'
-  PROMETHEUS_URL: 'http://74.208.45.131:9090'
+  BASE_URL: 'https://vps-master.duckdns.org'
+  GRAFANA_URL: 'https://vps-master.duckdns.org/grafana'
+  PROMETHEUS_URL: 'https://vps-master.duckdns.org/prometheus'
+  SERVER_HOST: 'vps-master.duckdns.org'
+  SERVER_USER: 'root'
 
 jobs:
   # Job 1: Validación y Setup
