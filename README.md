@@ -1,4 +1,4 @@
-# 🌮 Tourist App Arroyo Seco
+# Xi'oi Gourmet - Digital Gastronomic Tourism Platform
 
 Aplicación turística y gastronómica para promover la riqueza cultural de Arroyo Seco, Querétaro.
 
