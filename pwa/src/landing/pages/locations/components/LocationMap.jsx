@@ -283,7 +283,7 @@ const LocationMap = ({
   };
 
   return (
-    <div className="relative w-full h-[75vh] bg-gray-100 rounded-lg overflow-hidden">
+    <div className="relative w-full h-full bg-gray-100 rounded-lg overflow-hidden">
       {locations.length === 0 ? (
         <div className="w-full h-full flex items-center justify-center text-gray-500 text-center p-4">
           <div>
@@ -354,143 +354,9 @@ const LocationMap = ({
                   click: () => onLocationClick(location),
                 }}
               >
-                <Popup>
-                  <div className="text-center popup-content">
-                    <h3 className="font-bold text-lg">{location.name}</h3>
-                    {location.type && (
-                      <span
-                        className={`inline-block px-2 py-1 text-xs rounded-full mt-1 ${
-                          location.type === LOCATION_TYPES.RESTAURANT
-                            ? "bg-orange-100 text-orange-700"
-                            : location.type === LOCATION_TYPES.LANDMARK
-                            ? "bg-blue-100 text-blue-700"
-                            : location.type === LOCATION_TYPES.MARKET
-                            ? "bg-green-100 text-green-700"
-                            : location.type === LOCATION_TYPES.WORKSHOP
-                            ? "bg-amber-100 text-amber-700"
-                            : location.type === LOCATION_TYPES.EVENT
-                            ? "bg-purple-100 text-purple-700"
-                            : "bg-gray-100 text-gray-700"
-                        }`}
-                      >
-                        {location.type === LOCATION_TYPES.RESTAURANT && (
-                          <Utensils className="w-3 h-3 inline mr-1" />
-                        )}
-                        {location.type === LOCATION_TYPES.LANDMARK && (
-                          <Landmark className="w-3 h-3 inline mr-1" />
-                        )}
-                        {location.type === LOCATION_TYPES.MARKET && (
-                          <Store className="w-3 h-3 inline mr-1" />
-                        )}
-                        {location.type === LOCATION_TYPES.WORKSHOP && (
-                          <Hammer className="w-3 h-3 inline mr-1" />
-                        )}
-                        {location.type === LOCATION_TYPES.EVENT && (
-                          <Calendar className="w-3 h-3 inline mr-1" />
-                        )}
-                        {location.type === LOCATION_TYPES.RESTAURANT
-                          ? "Restaurante"
-                          : location.type === LOCATION_TYPES.LANDMARK
-                          ? "Lugar emblemático"
-                          : location.type === LOCATION_TYPES.MARKET
-                          ? "Mercado"
-                          : location.type === LOCATION_TYPES.WORKSHOP
-                          ? "Taller"
-                          : location.type === LOCATION_TYPES.EVENT
-                          ? "Evento"
-                          : "Otro"}
-                      </span>
-                    )}
-
-                    {location.image_url && (
-                      <div className="my-2 rounded-md overflow-hidden">
-                        <img
-                          src={location.image_url}
-                          alt={location.name}
-                          className="w-full h-24 object-cover"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src =
-                              "https://via.placeholder.com/400x200?text=Imagen+no+disponible";
-                          }}
-                        />
-                      </div>
-                    )}
-
-                    {location.description && (
-                      <p className="mt-2 text-sm text-gray-700">
-                        {location.description}
-                      </p>
-                    )}
-
-                    <div className="mt-3 text-left text-sm space-y-1">
-                      {location.address && (
-                        <p className="text-gray-600 flex items-start">
-                          <MapPin className="w-3 h-3 mr-1 mt-1 shrink-0" />
-                          <span>{location.address}</span>
-                        </p>
-                      )}
-
-                      {location.phone && (
-                        <p className="text-gray-600">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="inline mr-1"
-                          >
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                          </svg>
-                          {location.phone}
-                        </p>
-                      )}
-
-                      {location.rating && (
-                        <p className="text-amber-500 font-medium">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="inline mr-1"
-                          >
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                          </svg>
-                          {location.rating.toFixed(1)}
-                        </p>
-                      )}
-                    </div>
-
-                    <button
-                      className="mt-3 w-full px-3 py-1.5 bg-linear-to-r from-amber-500 to-orange-600 text-white text-sm rounded-md hover:from-amber-600 hover:to-orange-700 transition-all"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onLocationClick(location);
-                      }}
-                    >
-                      Ver más detalles
-                    </button>
-                  </div>
-                </Popup>
               </Marker>
             ))}
           </MapContainer>
-
-          {/* Indicador de estilo de mapa activo */}
-          <div className="absolute bottom-4 left-4 z-900 bg-white bg-opacity-75 rounded px-2 py-1 text-xs shadow">
-            Mapa: {MAP_PROVIDERS[activeMapProvider].name}
-          </div>
 
           {/* Indicador visual durante la transición */}
           {isTransitioning && (

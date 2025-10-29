@@ -1,15 +1,26 @@
 {
   "name": "tourist-app-tests",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
+  "description": "Suite completa de pruebas para Tourist App Arroyo Seco",
   "scripts": {
     "lint": "eslint .",
     "test": "jest",
+    "test:unit": "jest --testMatch='**/unit/**/*.spec.ts'",
+    "test:integration": "jest --testMatch='**/integration/**/*.spec.ts'",
     "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
+    "test:load": "k6 run ../monitoring/k6/load-test-landing.js",
+    "test:load:admin": "k6 run ../monitoring/k6/load-test-admin.js",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "playwright:install": "playwright install --with-deps",
     "prepare": "npx husky"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "@playwright/test": "^1.49.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.10.2",
@@ -23,5 +34,9 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }
