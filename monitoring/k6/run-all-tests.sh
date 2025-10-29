@@ -13,13 +13,17 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Detectar directorio del proyecto (ajustar según estructura)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
 # Configuración
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-RESULTS_DIR="monitoring/k6/results/${TIMESTAMP}"
-K6_DIR="monitoring/k6"
+RESULTS_DIR="${PROJECT_DIR}/monitoring/k6/results/${TIMESTAMP}"
+K6_DIR="${PROJECT_DIR}/monitoring/k6"
 
 # Navegar al directorio del proyecto
-cd "$(dirname "$0")/../.."
+cd "$PROJECT_DIR"
 
 # Crear directorio de resultados
 mkdir -p "$RESULTS_DIR"
