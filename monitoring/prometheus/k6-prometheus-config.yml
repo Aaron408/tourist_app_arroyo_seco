@@ -1,0 +1,44 @@
+# Configuración de Prometheus para métricas de K6
+# Este archivo debe agregarse a la configuración principal de Prometheus
+
+# Agregar este job a la sección scrape_configs de /etc/prometheus/prometheus.yml
+
+scrape_configs:
+  # Job para métricas de K6 (cuando K6 exporta a Prometheus)
+  - job_name: 'k6_metrics'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:5656']  # Puerto por defecto de K6 prometheus exporter
+        labels:
+          app: 'tourist_app_arroyo_seco'
+          component: 'load_testing'
+    
+  # Job para la PWA de Arroyo Seco
+  - job_name: 'arroyo_seco_pwa'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:3000']  # Ajustar al puerto de la PWA
+        labels:
+          app: 'tourist_app_arroyo_seco'
+          component: 'pwa'
+    metrics_path: /metrics
+    
+  # Job para monitorear el servidor web que sirve la PWA
+  - job_name: 'arroyo_seco_nginx'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:9113']  # Ya configurado en el servidor
+        labels:
+          app: 'tourist_app_arroyo_seco'
+          component: 'nginx'
+
+# Reglas de alertas para K6
+rule_files:
+  - 'k6_alerts.yml'
+
+# Configuración de retención
+storage:
+  tsdb:
+    retention_time: 30d  # Retener métricas por 30 días
+    retention_size: 10GB
+

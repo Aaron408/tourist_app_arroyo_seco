@@ -1,0 +1,299 @@
+name: K6 Load Testing Pipeline
+
+# Permisos necesarios para el workflow
+permissions:
+  contents: read        # Leer el código del repositorio
+  actions: read         # Leer workflows y artefactos
+  issues: write         # Comentar en issues
+  pull-requests: write  # Comentar en PRs
+
+on:
+  # Ejecutar en push a main
+  push:
+    branches:
+      - main
+    paths:
+      - 'pwa/**'
+      - 'monitoring/k6/**'
+      - '.github/workflows/k6-load-testing.yml'
+  
+  # Ejecutar en pull requests
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'pwa/**'
+      - 'monitoring/k6/**'
+  
+  # Permitir ejecución manual
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Tipo de test a ejecutar'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - landing
+          - admin
+      duration:
+        description: 'Duración del test (minutos)'
+        required: false
+        default: '5'
+
+  # Ejecutar en schedule (diario a las 2 AM)
+  schedule:
+    - cron: '0 2 * * *'
+
+env:
+  K6_VERSION: '0.48.0'
+  BASE_URL: 'https://vps-master.duckdns.org'
+  GRAFANA_URL: 'https://vps-master.duckdns.org/grafana'
+  PROMETHEUS_URL: 'https://vps-master.duckdns.org/prometheus'
+  SERVER_HOST: 'vps-master.duckdns.org'
+  SERVER_USER: 'root'
+
+jobs:
+  # Job 1: Validación y Setup
+  setup:
+    name: Setup y Validación
+    runs-on: ubuntu-latest
+    outputs:
+      should_run_tests: ${{ steps.check.outputs.should_run }}
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+      
+      - name: 🔍 Verificar disponibilidad del servidor
+        id: check
+        run: |
+          echo "Verificando servidor en $BASE_URL"
+          if curl -f -s -o /dev/null -w "%{http_code}" "$BASE_URL" | grep -q "200\|301\|302"; then
+            echo "✅ Servidor disponible"
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ Servidor no disponible, saltando tests"
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: 📊 Resumen de configuración
+        run: |
+          echo "### 🎯 Configuración de Pruebas K6" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL Base:** \`$BASE_URL\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Grafana:** \`$GRAFANA_URL\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Prometheus:** \`$PROMETHEUS_URL\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **K6 Version:** \`$K6_VERSION\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger:** \`${{ github.event_name }}\`" >> $GITHUB_STEP_SUMMARY
+
+  # Job 2: Pruebas de Landing Page
+  test-landing:
+    name: Test Landing Page
+    runs-on: ubuntu-latest
+    needs: setup
+    if: needs.setup.outputs.should_run_tests == 'true'
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+      
+      - name: 📦 Instalar K6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+      
+      - name: 🔍 Verificar instalación de K6
+        run: k6 version
+      
+      - name: 🚀 Ejecutar pruebas de Landing
+        id: k6_landing
+        continue-on-error: true
+        run: |
+          mkdir -p monitoring/k6/results
+          k6 run \
+            --out json=monitoring/k6/results/landing-results.json \
+            --summary-export=monitoring/k6/results/landing-summary.json \
+            monitoring/k6/load-test-landing.js
+      
+      - name: 📊 Parsear resultados
+        if: always()
+        run: |
+          if [ -f monitoring/k6/results/landing-summary.json ]; then
+            echo "### 📊 Resultados - Landing Page" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Extraer métricas clave usando jq
+            if command -v jq &> /dev/null; then
+              TOTAL_REQS=$(jq -r '.metrics.http_reqs.values.count // "N/A"' monitoring/k6/results/landing-summary.json)
+              FAILED_RATE=$(jq -r '.metrics.http_req_failed.values.rate // 0' monitoring/k6/results/landing-summary.json)
+              AVG_DURATION=$(jq -r '.metrics.http_req_duration.values.avg // "N/A"' monitoring/k6/results/landing-summary.json)
+              P95_DURATION=$(jq -r '.metrics.http_req_duration.values["p(95)"] // "N/A"' monitoring/k6/results/landing-summary.json)
+              
+              echo "| Métrica | Valor |" >> $GITHUB_STEP_SUMMARY
+              echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+              echo "| Total Requests | $TOTAL_REQS |" >> $GITHUB_STEP_SUMMARY
+              echo "| Failed Rate | $(printf "%.2f" $(echo "$FAILED_RATE * 100" | bc))% |" >> $GITHUB_STEP_SUMMARY
+              echo "| Avg Duration | $(printf "%.2f" $AVG_DURATION)ms |" >> $GITHUB_STEP_SUMMARY
+              echo "| P95 Duration | $(printf "%.2f" $P95_DURATION)ms |" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+      
+      - name: 📤 Subir resultados como artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-landing-results
+          path: monitoring/k6/results/landing-*.json
+          retention-days: 30
+      
+      - name: 💾 Enviar métricas a Prometheus (opcional)
+        if: always()
+        continue-on-error: true
+        run: |
+          echo "📊 Preparando métricas para Prometheus..."
+          # Aquí se podría usar k6 con output a Prometheus
+          # k6 run --out experimental-prometheus-rw monitoring/k6/load-test-landing.js
+
+  # Job 3: Pruebas de Admin Panel
+  test-admin:
+    name: Test Admin Panel
+    runs-on: ubuntu-latest
+    needs: setup
+    if: needs.setup.outputs.should_run_tests == 'true'
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+      
+      - name: 📦 Instalar K6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+      
+      - name: 🚀 Ejecutar pruebas de Admin
+        id: k6_admin
+        continue-on-error: true
+        run: |
+          mkdir -p monitoring/k6/results
+          k6 run \
+            --out json=monitoring/k6/results/admin-results.json \
+            --summary-export=monitoring/k6/results/admin-summary.json \
+            monitoring/k6/load-test-admin.js
+      
+      - name: 📊 Parsear resultados
+        if: always()
+        run: |
+          if [ -f monitoring/k6/results/admin-summary.json ]; then
+            echo "### 📊 Resultados - Admin Panel" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            if command -v jq &> /dev/null; then
+              TOTAL_REQS=$(jq -r '.metrics.http_reqs.values.count // "N/A"' monitoring/k6/results/admin-summary.json)
+              FAILED_RATE=$(jq -r '.metrics.http_req_failed.values.rate // 0' monitoring/k6/results/admin-summary.json)
+              AVG_DURATION=$(jq -r '.metrics.http_req_duration.values.avg // "N/A"' monitoring/k6/results/admin-summary.json)
+              LOGIN_SUCCESS=$(jq -r '.metrics.login_success_rate.values.rate // 0' monitoring/k6/results/admin-summary.json)
+              
+              echo "| Métrica | Valor |" >> $GITHUB_STEP_SUMMARY
+              echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+              echo "| Total Requests | $TOTAL_REQS |" >> $GITHUB_STEP_SUMMARY
+              echo "| Failed Rate | $(printf "%.2f" $(echo "$FAILED_RATE * 100" | bc))% |" >> $GITHUB_STEP_SUMMARY
+              echo "| Avg Duration | $(printf "%.2f" $AVG_DURATION)ms |" >> $GITHUB_STEP_SUMMARY
+              echo "| Login Success | $(printf "%.2f" $(echo "$LOGIN_SUCCESS * 100" | bc))% |" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+      
+      - name: 📤 Subir resultados como artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-admin-results
+          path: monitoring/k6/results/admin-*.json
+          retention-days: 30
+
+  # Job 4: Reportes y Notificaciones
+  report:
+    name: Generar Reporte Final
+    runs-on: ubuntu-latest
+    needs: [test-landing, test-admin]
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+      
+      - name: 📥 Descargar resultados Landing
+        uses: actions/download-artifact@v4
+        with:
+          name: k6-landing-results
+          path: results/landing
+        continue-on-error: true
+      
+      - name: 📥 Descargar resultados Admin
+        uses: actions/download-artifact@v4
+        with:
+          name: k6-admin-results
+          path: results/admin
+        continue-on-error: true
+      
+      - name: 📊 Generar reporte consolidado
+        run: |
+          echo "## 📊 Reporte Consolidado de Pruebas K6" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ℹ️ Información General" >> $GITHUB_STEP_SUMMARY
+          echo "- **Fecha:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Actor:** @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Enlaces Útiles" >> $GITHUB_STEP_SUMMARY
+          echo "- [📊 Grafana Dashboard]($GRAFANA_URL)" >> $GITHUB_STEP_SUMMARY
+          echo "- [📈 Prometheus]($PROMETHEUS_URL)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🌐 Aplicación]($BASE_URL)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Estado de Jobs" >> $GITHUB_STEP_SUMMARY
+          echo "- Landing Page: ${{ needs.test-landing.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Admin Panel: ${{ needs.test-admin.result }}" >> $GITHUB_STEP_SUMMARY
+      
+      - name: 🔔 Comentar en PR (si aplica)
+        if: github.event_name == 'pull_request'
+        continue-on-error: true  # No fallar si no tiene permisos
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '## 🚀 Pruebas de Carga K6 Completadas\n\n' +
+                      'Las pruebas de carga han finalizado. Revisa el [resumen de la ejecución](' + 
+                      context.payload.repository.html_url + '/actions/runs/' + context.runId + ') ' +
+                      'para ver los resultados detallados.\n\n' +
+                      '📊 [Ver métricas en Grafana](' + process.env.GRAFANA_URL + ')'
+              });
+              console.log('✅ Comentario en PR creado exitosamente');
+            } catch (error) {
+              console.log('⚠️ No se pudo comentar en el PR (puede ser falta de permisos):', error.message);
+            }
+
+  # Job 5: Cleanup
+  cleanup:
+    name: Limpieza
+    runs-on: ubuntu-latest
+    needs: [report]
+    if: always()
+    
+    steps:
+      - name: 🧹 Limpiar recursos temporales
+        run: |
+          echo "✅ Pipeline completado"
+          echo "📦 Artefactos almacenados por 30 días"
+

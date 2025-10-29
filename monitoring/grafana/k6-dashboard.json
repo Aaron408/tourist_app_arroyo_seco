@@ -1,0 +1,309 @@
+{
+  "dashboard": {
+    "title": "K6 Load Testing - Arroyo Seco Tourism App",
+    "tags": ["k6", "load-testing", "performance"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0,
+    "refresh": "5s",
+    "panels": [
+      {
+        "title": "Resumen de Pruebas K6",
+        "type": "stat",
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 24,
+          "h": 3
+        },
+        "targets": [
+          {
+            "expr": "sum(k6_http_reqs_total)",
+            "legendFormat": "Total Requests",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(k6_http_reqs_total[5m]))",
+            "legendFormat": "Requests/sec",
+            "refId": "B"
+          },
+          {
+            "expr": "k6_http_req_failed_rate",
+            "legendFormat": "Error Rate",
+            "refId": "C"
+          }
+        ]
+      },
+      {
+        "title": "HTTP Request Duration (P95 & P99)",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 3,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(k6_http_req_duration_bucket[5m])) by (le))",
+            "legendFormat": "P95 Latency",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(k6_http_req_duration_bucket[5m])) by (le))",
+            "legendFormat": "P99 Latency",
+            "refId": "B"
+          },
+          {
+            "expr": "avg(k6_http_req_duration)",
+            "legendFormat": "Avg Latency",
+            "refId": "C"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "ms",
+            "label": "Duration"
+          }
+        ]
+      },
+      {
+        "title": "Request Rate & Error Rate",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 3,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(k6_http_reqs_total[1m]))",
+            "legendFormat": "Request Rate",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(k6_http_reqs_total{expected_response=\"false\"}[1m]))",
+            "legendFormat": "Error Rate",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "reqps",
+            "label": "Requests/sec"
+          }
+        ]
+      },
+      {
+        "title": "Active Virtual Users",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 11,
+          "w": 12,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "k6_vus",
+            "legendFormat": "Virtual Users",
+            "refId": "A"
+          },
+          {
+            "expr": "k6_vus_max",
+            "legendFormat": "Max VUs",
+            "refId": "B"
+          }
+        ]
+      },
+      {
+        "title": "HTTP Status Codes",
+        "type": "piechart",
+        "gridPos": {
+          "x": 12,
+          "y": 11,
+          "w": 6,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "sum by (status) (k6_http_reqs_total)",
+            "legendFormat": "{{ status }}",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "title": "Check Success Rate",
+        "type": "gauge",
+        "gridPos": {
+          "x": 18,
+          "y": 11,
+          "w": 6,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "k6_checks_rate",
+            "legendFormat": "Success Rate",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": 0,
+                  "color": "red"
+                },
+                {
+                  "value": 0.9,
+                  "color": "yellow"
+                },
+                {
+                  "value": 0.95,
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "percentunit"
+          }
+        }
+      },
+      {
+        "title": "Request Duration by Page/Endpoint",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 17,
+          "w": 24,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "avg(k6_http_req_duration{page=\"home\"})",
+            "legendFormat": "Home Page",
+            "refId": "A"
+          },
+          {
+            "expr": "avg(k6_http_req_duration{page=\"gastronomy\"})",
+            "legendFormat": "Gastronomy",
+            "refId": "B"
+          },
+          {
+            "expr": "avg(k6_http_req_duration{page=\"recipes\"})",
+            "legendFormat": "Recipes",
+            "refId": "C"
+          },
+          {
+            "expr": "avg(k6_http_req_duration{page=\"locations\"})",
+            "legendFormat": "Locations",
+            "refId": "D"
+          },
+          {
+            "expr": "avg(k6_http_req_duration{page=\"login\"})",
+            "legendFormat": "Admin Login",
+            "refId": "E"
+          },
+          {
+            "expr": "avg(k6_http_req_duration{page=\"dashboard\"})",
+            "legendFormat": "Admin Dashboard",
+            "refId": "F"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "ms",
+            "label": "Duration"
+          }
+        ]
+      },
+      {
+        "title": "Data Transfer",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 25,
+          "w": 12,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(k6_data_sent[1m]))",
+            "legendFormat": "Data Sent",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(k6_data_received[1m]))",
+            "legendFormat": "Data Received",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "Bps",
+            "label": "Bytes/sec"
+          }
+        ]
+      },
+      {
+        "title": "Iteration Duration",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 25,
+          "w": 12,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(k6_iteration_duration_bucket[5m])) by (le))",
+            "legendFormat": "P95",
+            "refId": "A"
+          },
+          {
+            "expr": "avg(k6_iteration_duration)",
+            "legendFormat": "Avg",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "ms",
+            "label": "Duration"
+          }
+        ]
+      }
+    ],
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m"]
+    },
+    "templating": {
+      "list": [
+        {
+          "name": "datasource",
+          "type": "datasource",
+          "query": "prometheus",
+          "current": {
+            "text": "Prometheus",
+            "value": "Prometheus"
+          }
+        }
+      ]
+    }
+  }
+}
+
