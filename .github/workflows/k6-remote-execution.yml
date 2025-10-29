@@ -56,6 +56,15 @@ jobs:
             monitoring/k6/ \
             $SSH_USER@$SSH_HOST:/home/github/tourist_app_arroyo_seco/monitoring/k6/
       
+      - name: 🔧 Dar permisos de ejecución a scripts
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+            $SSH_USER@$SSH_HOST \
+            "chmod +x /home/github/tourist_app_arroyo_seco/monitoring/k6/*.sh"
+      
       - name: 🚀 Ejecutar tests remotamente
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
