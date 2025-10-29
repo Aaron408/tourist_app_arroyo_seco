@@ -1,0 +1,85 @@
+# ALTERNATIVA: Ejecutar tests EN EL SERVIDOR desde GitHub Actions
+# Esto SÍ enviará métricas a Grafana porque se ejecuta donde está Prometheus
+
+name: K6 Load Testing (Remote Execution)
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - main
+      - TEST
+    paths:
+      - 'pwa/**'
+      - 'monitoring/k6/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  BASE_URL: 'https://vps-master.duckdns.org'
+  GRAFANA_URL: 'https://vps-master.duckdns.org/grafana'
+
+jobs:
+  remote-test:
+    name: Ejecutar K6 en Servidor (con Grafana)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+      
+      - name: 🔑 Configurar SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+      
+      - name: 📤 Sincronizar archivos al servidor
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            monitoring/k6/ \
+            $SSH_USER@$SSH_HOST:/home/github/tourist_app_arroyo_seco/monitoring/k6/
+      
+      - name: 🚀 Ejecutar tests remotamente
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+            $SSH_USER@$SSH_HOST \
+            "cd /home/github/tourist_app_arroyo_seco && ./monitoring/k6/run-all-tests.sh"
+      
+      - name: 📊 Generar resumen
+        run: |
+          echo "## 🚀 Pruebas K6 Ejecutadas en Servidor" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Los tests se ejecutaron en el servidor VPS" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Las métricas están disponibles en Grafana" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Ver Resultados:" >> $GITHUB_STEP_SUMMARY
+          echo "- [📊 Grafana Dashboard]($GRAFANA_URL)" >> $GITHUB_STEP_SUMMARY
+          echo "- [📈 Prometheus]($BASE_URL/prometheus)" >> $GITHUB_STEP_SUMMARY
+
+# NOTA: Para usar este workflow necesitas configurar secrets en GitHub:
+# - SSH_PRIVATE_KEY: Tu llave SSH privada para conectar al servidor
+# - SSH_HOST: vps-master.duckdns.org
+# - SSH_USER: root
+#
+# Ir a: GitHub → Settings → Secrets and variables → Actions → New repository secret
+

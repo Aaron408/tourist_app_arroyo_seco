@@ -14,12 +14,13 @@
 
 ### Scripts de K6
 - ✅ `monitoring/k6/load-test-landing.js` - Tests del landing público (6 páginas)
-- ✅ `monitoring/k6/load-test-admin.js` - Tests del panel admin (7 funcionalidades)
+- ✅ `monitoring/k6/load-test-admin.js` - Tests del panel admin (7 funcionalidades) **[CORREGIDO]**
 - ✅ `monitoring/k6/run-all-tests.sh` - Script para ejecutar todos los tests
 - ✅ `monitoring/k6/run-single-test.sh` - Script para ejecutar test individual
 
 ### GitHub Actions
-- ✅ `.github/workflows/k6-load-testing.yml` - Workflow completo con 5 jobs
+- ✅ `.github/workflows/k6-load-testing.yml` - Workflow completo con 5 jobs **[ACTUALIZADO con permisos]**
+- ✅ `.github/workflows/k6-remote-execution.yml` - Workflow alternativo (ejecuta en servidor)
 
 ### Configuración Prometheus
 - ✅ `monitoring/prometheus/k6-prometheus-config.yml` - Config para scraping K6
@@ -31,6 +32,8 @@
 ### Documentación
 - ✅ `docs/INTEGRACION_GITHUB_GRAFANA.md` - Guía completa de integración
 - ✅ `docs/INSTRUCCIONES_ENTREGABLE.md` - Instrucciones para crear el PDF
+- ✅ `docs/GITHUB_ACTIONS_VS_GRAFANA.md` - **NUEVO:** Explica diferencias entre ambos sistemas
+- ✅ `COMANDOS_SIGUIENTES_PASOS.md` - Comandos listos para copiar y pegar
 
 ---
 
@@ -183,11 +186,39 @@ git pull origin TEST
 
 ---
 
+## ⚠️ IMPORTANTE: GitHub Actions vs Grafana
+
+### ¿Por qué los tests de GitHub Actions NO aparecen en Grafana?
+
+**Respuesta corta:** Son dos sistemas separados en diferentes ubicaciones físicas.
+
+- **GitHub Actions:** Ejecuta en la nube de GitHub (máquinas virtuales remotas)
+- **Grafana/Prometheus:** Están en tu servidor VPS (vps-master.duckdns.org)
+
+**No se pueden comunicar** porque:
+- GitHub Actions usa `localhost:9090` = su propia máquina
+- Tu Prometheus está en `vps-master.duckdns.org:9090` = tu servidor
+- Son máquinas diferentes en lugares diferentes
+
+### Estrategia Recomendada:
+
+✅ **GitHub Actions:** Para CI/CD automático (validación de thresholds, reportes en PRs)
+✅ **Servidor + Grafana:** Para análisis profundo (ejecutar `run-all-tests.sh` vía SSH)
+
+**Para el entregable:**
+1. Mostrar workflow de GitHub Actions ejecutándose (capturas)
+2. Mostrar Grafana con datos de una ejecución EN EL SERVIDOR
+3. Explicar que son complementarios (no es un bug)
+
+Ver detalles completos en: `docs/GITHUB_ACTIONS_VS_GRAFANA.md`
+
+---
+
 ## 💡 Recomendaciones Finales
 
 ### Antes de Generar PDF
 1. Ejecutar workflow 2-3 veces para tener datos históricos
-2. Ejecutar tests locales al menos 1 vez
+2. **Ejecutar tests en el servidor al menos 1 vez** (para Grafana)
 3. Verificar que todas las gráficas de Grafana muestren datos
 4. Tomar capturas en alta resolución
 
