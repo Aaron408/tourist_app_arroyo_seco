@@ -108,7 +108,7 @@ export default function(data) {
         try {
           const body = JSON.parse(r.body);
           return body.token !== undefined || body.success === true;
-        } catch {
+        } catch (e) {
           return false;
         }
       },
@@ -122,7 +122,7 @@ export default function(data) {
     try {
       const body = JSON.parse(loginRes.body);
       authToken = body.token;
-    } catch {
+    } catch (e) {
       // Token no disponible en esta implementación mock
     }
     
