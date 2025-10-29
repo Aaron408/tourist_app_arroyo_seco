@@ -212,6 +212,15 @@ export function handleSummary(data) {
 }
 
 function textSummary(data, opts) {
+  // Función helper para obtener valores seguros
+  function getAvg(metricName) {
+    const metric = data.metrics[metricName];
+    if (metric && metric.values && metric.values.avg) {
+      return metric.values.avg.toFixed(2);
+    }
+    return 'N/A';
+  }
+
   return `
 ╔════════════════════════════════════════════════════════════════════╗
 ║           RESUMEN DE PRUEBAS DE CARGA - LANDING PAGE              ║
@@ -219,16 +228,16 @@ function textSummary(data, opts) {
 
 📊 MÉTRICAS PRINCIPALES:
   • Total de Requests: ${data.metrics.http_reqs.values.count}
-  • Requests Fallidos: ${data.metrics.http_req_failed.values.rate * 100}%
+  • Requests Fallidos: ${(data.metrics.http_req_failed.values.rate * 100).toFixed(2)}%
   • Duración Promedio: ${data.metrics.http_req_duration.values.avg.toFixed(2)}ms
   • P95: ${data.metrics.http_req_duration.values['p(95)'].toFixed(2)}ms
   • P99: ${data.metrics.http_req_duration.values['p(99)'].toFixed(2)}ms
 
 ⏱️  TIEMPOS POR PÁGINA:
-  • Home: ${data.metrics.home_page_duration?.values.avg?.toFixed(2) || 'N/A'}ms
-  • Gastronomía: ${data.metrics.gastronomy_page_duration?.values.avg?.toFixed(2) || 'N/A'}ms
-  • Recetas: ${data.metrics.recipes_page_duration?.values.avg?.toFixed(2) || 'N/A'}ms
-  • Ubicaciones: ${data.metrics.locations_page_duration?.values.avg?.toFixed(2) || 'N/A'}ms
+  • Home: ${getAvg('home_page_duration')}ms
+  • Gastronomía: ${getAvg('gastronomy_page_duration')}ms
+  • Recetas: ${getAvg('recipes_page_duration')}ms
+  • Ubicaciones: ${getAvg('locations_page_duration')}ms
 
 ${checkThresholds(data) ? '✅ TODAS LAS PRUEBAS PASARON' : '❌ ALGUNAS PRUEBAS FALLARON'}
 `;
