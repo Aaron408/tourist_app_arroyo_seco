@@ -25,7 +25,7 @@ echo ""
 # Ejecutar K6
 K6_PROMETHEUS_RW_SERVER_URL=http://localhost:9090/prometheus/api/v1/write \
 K6_PROMETHEUS_RW_PUSH_INTERVAL=5s \
-k6-prometheus run \
+k6 run \
   -o experimental-prometheus-rw \
   --tag testid=${TEST_NAME}-${TIMESTAMP} \
   --tag environment=production \
