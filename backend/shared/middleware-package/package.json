@@ -1,0 +1,34 @@
+{
+  "name": "@mono-repo/shared-middleware",
+  "version": "1.0.0",
+  "description": "Shared middleware for mono-repo microservices",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "node scripts/build.js"
+  },
+  "keywords": [
+    "middleware",
+    "authentication",
+    "jwt",
+    "validation",
+    "microservices"
+  ],
+  "author": "Your Team",
+  "license": "MIT",
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "cors": "^2.8.5",
+    "compression": "^1.7.4",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "peerDependencies": {
+    "express": "^4.18.0"
+  }
+}
