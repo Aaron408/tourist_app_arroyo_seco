@@ -1,9 +1,11 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useAuth } from '@/contexts/AuthContext';
+import SessionDebugInfo from '@/components/SessionDebugInfo';
 import { BorderRadius, Colors, Shadows, Spacing, Typography } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View, Alert } from 'react-native';
 
 const culturalSections = [
   {
@@ -109,9 +111,27 @@ export default function ExploreScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const { logout, user } = useAuth();
 
   const toggleSection = (sectionId: string) => {
     setExpandedSection(expandedSection === sectionId ? null : sectionId);
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Cerrar Sesión',
+      '¿Estás seguro que deseas cerrar sesión?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { 
+          text: 'Cerrar Sesión', 
+          style: 'destructive',
+          onPress: async () => {
+            await logout();
+          }
+        }
+      ]
+    );
   };
 
   const ModernContentCard = ({ item }: { item: { title: string; description: string; details: string } }) => (
@@ -174,12 +194,32 @@ export default function ExploreScreen() {
   return (
     <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
       <ThemedView style={[styles.header, { backgroundColor: colors.surface }]}>
-        <ThemedText type="title" style={[styles.headerTitle, { color: colors.primary }]}>
-          🧭 Explorar Cultura
-        </ThemedText>
-        <ThemedText style={[styles.headerSubtitle, { color: colors.gray600 }]}>
-          Conocimiento tradicional de Arroyo Seco
-        </ThemedText>
+        <View style={styles.headerContent}>
+          <View>
+            <ThemedText type="title" style={[styles.headerTitle, { color: colors.primary }]}>
+              🧭 Explorar Cultura
+            </ThemedText>
+            <ThemedText style={[styles.headerSubtitle, { color: colors.gray600 }]}>
+              Conocimiento tradicional de Arroyo Seco
+            </ThemedText>
+          </View>
+          {user && (
+            <TouchableOpacity
+              onPress={handleLogout}
+              style={[styles.logoutButton, { backgroundColor: colors.errorContainer }]}
+              activeOpacity={0.7}
+            >
+              <ThemedText style={[styles.logoutButtonText, { color: colors.error }]}>
+                Salir
+              </ThemedText>
+            </TouchableOpacity>
+          )}
+        </View>
+        {user && (
+          <ThemedText style={[styles.userGreeting, { color: colors.onSurfaceVariant }]}>
+            👋 Hola, {user.name}
+          </ThemedText>
+        )}
       </ThemedView>
 
       <ScrollView 
@@ -204,6 +244,9 @@ export default function ExploreScreen() {
           </ThemedText>
         </ThemedView>
       </ScrollView>
+
+      {/* Debug component - solo visible en desarrollo */}
+      <SessionDebugInfo />
     </ThemedView>
   );
 }
@@ -219,6 +262,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0,0,0,0.1)',
   },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: Spacing.sm,
+  },
   headerTitle: {
     ...Typography.headlineMedium,
     fontWeight: '700',
@@ -226,6 +275,19 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     ...Typography.bodyLarge,
+  },
+  userGreeting: {
+    ...Typography.bodyMedium,
+    marginTop: Spacing.xs,
+  },
+  logoutButton: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  logoutButtonText: {
+    ...Typography.labelMedium,
+    fontWeight: '600',
   },
   scrollView: {
     flex: 1,
