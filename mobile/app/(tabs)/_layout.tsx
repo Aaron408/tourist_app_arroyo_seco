@@ -55,6 +55,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="map.fill" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="workshops"
+        options={{
+          title: t('Layout.tabs.workshops'),
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="book.circle.fill" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }
