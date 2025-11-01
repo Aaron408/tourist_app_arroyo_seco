@@ -3,6 +3,7 @@
         "index": "Home",
         "recipes": "Recipes",
         "restaurants":"Restaurants",
-        "explore": "Explore"
+        "explore": "Explore",
+        "workshops": "Workshops"
     }
 }
