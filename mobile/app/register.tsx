@@ -8,7 +8,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Animated,
   Dimensions,
   Alert,
 } from "react-native";
@@ -40,27 +39,40 @@ const colors = {
   orange700: "#C2410C",
   red500: "#EF4444",
   red400: "#F87171",
-  // Mantener compatibilidad temporal
   blue500: "#3B82F6",
   green500: "#10B981",
 };
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [localError, setLocalError] = useState("");
 
-  const { login } = useAuth();
+  const { register } = useAuth();
   const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
+    // Reset error
     setLocalError("");
 
-    if (!email.trim() || !password.trim()) {
+    if (
+      !name.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !confirmPassword.trim()
+    ) {
       setLocalError("Por favor completa todos los campos");
+      return;
+    }
+
+    if (name.trim().length < 2) {
+      setLocalError("El nombre debe tener al menos 2 caracteres");
       return;
     }
 
@@ -70,15 +82,34 @@ export default function LoginScreen() {
       return;
     }
 
+    if (password.length < 6) {
+      setLocalError("La contraseña debe tener al menos 6 caracteres");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setLocalError("Las contraseñas no coinciden");
+      return;
+    }
+
     setIsLoading(true);
-    const result = await login(email.trim(), password);
+    const result = await register(name.trim(), email.trim(), password);
     setIsLoading(false);
 
     if (result.success) {
-      router.replace("/(tabs)");
+      Alert.alert(
+        "Registro exitoso",
+        "Tu cuenta ha sido creada correctamente",
+        [
+          {
+            text: "OK",
+            onPress: () => router.replace("/(tabs)"),
+          },
+        ]
+      );
     } else {
-      setLocalError(result.error || "Error al iniciar sesión");
-      Alert.alert("Error", result.error || "Error al iniciar sesión");
+      setLocalError(result.error || "Error al crear la cuenta");
+      Alert.alert("Error", result.error || "Error al crear la cuenta");
     }
   };
 
@@ -135,13 +166,37 @@ export default function LoginScreen() {
                   <Text style={styles.logoEmoji}>🍽️</Text>
                 </LinearGradient>
               </View>
-              <Text style={styles.title}>Bienvenido de nuevo</Text>
+              <Text style={styles.title}>Crear cuenta</Text>
               <Text style={styles.subtitle}>Arroyo Seco Tourism</Text>
             </View>
 
             {/* Glassmorphic Card */}
             <BlurView intensity={80} tint="dark" style={styles.card}>
               <View style={styles.cardContent}>
+                {/* Name Input */}
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Nombre completo</Text>
+                  <View
+                    style={[
+                      styles.inputWrapper,
+                      focusedInput === "name" && styles.inputWrapperFocused,
+                    ]}
+                  >
+                    <Text style={styles.inputIcon}>👤</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Juan Pérez"
+                      placeholderTextColor={colors.gray400}
+                      value={name}
+                      onChangeText={setName}
+                      onFocus={() => setFocusedInput("name")}
+                      onBlur={() => setFocusedInput(null)}
+                      autoCapitalize="words"
+                      autoComplete="name"
+                    />
+                  </View>
+                </View>
+
                 {/* Email Input */}
                 <View style={styles.inputGroup}>
                   <Text style={styles.label}>Correo electrónico</Text>
@@ -154,7 +209,7 @@ export default function LoginScreen() {
                     <Text style={styles.inputIcon}>✉️</Text>
                     <TextInput
                       style={styles.input}
-                      placeholder="admin@arroyoseco.com"
+                      placeholder="tu@email.com"
                       placeholderTextColor={colors.gray400}
                       value={email}
                       onChangeText={setEmail}
@@ -179,7 +234,7 @@ export default function LoginScreen() {
                     <Text style={styles.inputIcon}>🔒</Text>
                     <TextInput
                       style={styles.input}
-                      placeholder="••••••••"
+                      placeholder="Mínimo 6 caracteres"
                       placeholderTextColor={colors.gray400}
                       value={password}
                       onChangeText={setPassword}
@@ -201,6 +256,47 @@ export default function LoginScreen() {
                   </View>
                 </View>
 
+                {/* Confirm Password Input */}
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Confirmar contraseña</Text>
+                  <View
+                    style={[
+                      styles.inputWrapper,
+                      focusedInput === "confirmPassword" &&
+                        styles.inputWrapperFocused,
+                    ]}
+                  >
+                    <Text style={styles.inputIcon}>🔒</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Repite tu contraseña"
+                      placeholderTextColor={colors.gray400}
+                      value={confirmPassword}
+                      onChangeText={setConfirmPassword}
+                      onFocus={() => setFocusedInput("confirmPassword")}
+                      onBlur={() => setFocusedInput(null)}
+                      secureTextEntry={!showConfirmPassword}
+                      autoCapitalize="none"
+                    />
+                    <TouchableOpacity
+                      onPress={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      style={styles.eyeButton}
+                    >
+                      <Ionicons
+                        name={
+                          showConfirmPassword
+                            ? "eye-outline"
+                            : "eye-off-outline"
+                        }
+                        size={24}
+                        color={colors.gray400}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
                 {/* Error Message */}
                 {localError ? (
                   <View style={styles.errorContainer}>
@@ -209,21 +305,15 @@ export default function LoginScreen() {
                   </View>
                 ) : null}
 
-                {/* Forgot Password */}
-
-                {/* <TouchableOpacity style={styles.forgotButton}>
-                  <Text style={styles.forgotText}>¿Olvidaste tu contraseña?</Text>
-                </TouchableOpacity> */}
-
-                {/* Login Button */}
+                {/* Register Button */}
                 <TouchableOpacity
-                  onPress={handleLogin}
+                  onPress={handleRegister}
                   disabled={isLoading}
                   activeOpacity={0.9}
                 >
                   <LinearGradient
                     colors={[colors.amber600, colors.orange600]}
-                    style={styles.loginButton}
+                    style={styles.registerButton}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                   >
@@ -238,19 +328,21 @@ export default function LoginScreen() {
                         />
                       </View>
                     ) : (
-                      <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
+                      <Text style={styles.registerButtonText}>
+                        Crear Cuenta
+                      </Text>
                     )}
                   </LinearGradient>
                 </TouchableOpacity>
 
                 {/* Footer */}
                 <Text style={styles.footerText}>
-                  ¿No tienes una cuenta?{" "}
+                  ¿Ya tienes una cuenta?{" "}
                   <Text
                     style={styles.footerLink}
-                    onPress={() => router.push("/register")}
+                    onPress={() => router.push("/login")}
                   >
-                    Regístrate aquí
+                    Inicia sesión aquí
                   </Text>
                 </Text>
               </View>
@@ -302,6 +394,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "center",
     padding: 24,
+    paddingTop: 60,
+    paddingBottom: 40,
   },
   header: {
     alignItems: "center",
@@ -347,23 +441,6 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     padding: 24,
-  },
-  demoBadgeGradient: {
-    padding: 16,
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: 16,
-  },
-  demoBadgeTitle: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: colors.white,
-    marginBottom: 8,
-  },
-  demoBadgeText: {
-    fontSize: 13,
-    color: colors.gray400,
-    marginTop: 4,
   },
   inputGroup: {
     marginBottom: 20,
@@ -430,16 +507,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 20,
   },
-  forgotButton: {
-    alignSelf: "flex-end",
-    marginBottom: 24,
-  },
-  forgotText: {
-    fontSize: 14,
-    color: colors.amber500,
-    fontWeight: "600",
-  },
-  loginButton: {
+  registerButton: {
     height: 56,
     borderRadius: 12,
     justifyContent: "center",
@@ -449,8 +517,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 12,
     elevation: 8,
+    marginTop: 8,
   },
-  loginButtonText: {
+  registerButtonText: {
     fontSize: 17,
     fontWeight: "700",
     color: colors.white,
