@@ -1,226 +1,252 @@
-import { LanguageSwitcher } from '@/components/languageSwitcher';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { BorderRadius, Colors, Shadows, Spacing, Typography } from '@/constants/theme';
-import { useLanguage } from '@/contexts/languageProvider';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { router } from 'expo-router';
-import React from 'react';
-import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-const screenWidth = Dimensions.get('window').width;
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
+import { BlurView } from "expo-blur";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+
+const { width } = Dimensions.get("window");
+
+const colors = {
+  gray900: "#111827",
+  gray800: "#1F2937",
+  gray700: "#374151",
+  gray600: "#4B5563",
+  gray500: "#6B7280",
+  gray400: "#9CA3AF",
+  gray300: "#D1D5DB",
+  gray100: "#F3F4F6",
+  white: "#FFFFFF",
+  amber50: "#FFFBEB",
+  amber500: "#F59E0B",
+  amber600: "#D97706",
+  amber700: "#B45309",
+  orange500: "#F97316",
+  orange600: "#EA580C",
+  orange700: "#C2410C",
+};
 
 const sections = [
   {
-    id: 'recipes',
-    title: 'Recetas Tradicionales',
-    icon: '🍲',
-    description: 'Descubre los sabores auténticos de Arroyo Seco',
-    route: 'recipes' as const,
+    id: "recipes",
+    title: "Recetas Tradicionales",
+    icon: "🍲",
+    description: "Descubre los sabores auténticos de Arroyo Seco",
+    route: "recipes",
   },
   {
-    id: 'ingredients',
-    title: 'Ingredientes Indígenas',
-    icon: '🌱',
-    description: 'Catálogo de ingredientes locales y sus propiedades',
-    route: 'ingredients' as const,
+    id: "gastronomy",
+    title: "Ingredientes Indígenas",
+    icon: "🌱",
+    description: "Catálogo de ingredientes locales y sus propiedades",
+    route: "gastronomy",
   },
   {
-    id: 'restaurants',
-    title: 'Ruta del Sabor',
-    icon: '🍽',
-    description: 'Restaurantes tradicionales de la región',
-    route: 'restaurants' as const,
+    id: "restaurants",
+    title: "Ruta del Sabor",
+    icon: "🍽️",
+    description: "Restaurantes tradicionales de la región",
+    route: "restaurants",
   },
   {
-    id: 'techniques',
-    title: 'Técnicas Culinarias',
-    icon: '👨‍🍳',
-    description: 'Métodos ancestrales de preparación',
-    route: 'explore' as const,
+    id: "workshops",
+    title: "Técnicas Culinarias",
+    icon: "👨‍🍳",
+    description: "Métodos ancestrales de preparación",
+    route: "workshops",
   },
 ];
 
 const stats = [
-  { label: 'Recetas Tradicionales', value: '25+', icon: '📖' },
-  { label: 'Ingredientes Locales', value: '50+', icon: '🌿' },
-  { label: 'Restaurantes', value: '15', icon: '🏪' },
-  { label: 'Técnicas Ancestrales', value: '12', icon: '⚡' },
+  { label: "Recetas", value: "25+", icon: "📖" },
+  { label: "Ingredientes", value: "50+", icon: "🌿" },
+  { label: "Restaurantes", value: "15", icon: "🏪" },
+  { label: "Técnicas", value: "12", icon: "⚡" },
 ];
 
 export default function HomeScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+  const router = useRouter();
 
   const navigateToSection = (route: string) => {
-    if (route === 'ingredients') {
-      router.push('/screens/ingredients');
-    } else {
-      router.push(`/(tabs)/${route}` as any);
-    }
+    router.push(`/(tabs)/${route}` as any);
   };
-  // Language switch
-  const { currentLanguage, setLanguage } = useLanguage();
-
-  const toggleLanguage = () => {
-    setLanguage(currentLanguage === "es" ? "en" : "es");
-  };
-
-  const SectionCard = ({ section }: { section: typeof sections[0] }) => (
-    <TouchableOpacity
-      style={[
-        styles.modernSectionCard,
-        {
-          backgroundColor: colors.surface,
-          ...Shadows.md,
-        }
-      ]}
-      onPress={() => navigateToSection(section.route)}
-      activeOpacity={0.8}
-    >
-      <View style={[styles.modernSectionIconContainer, { backgroundColor: colors.primaryContainer }]}>
-        <ThemedText style={[styles.modernSectionIcon, { color: colors.primary }]}>
-          {section.icon}
-        </ThemedText>
-      </View>
-      <View style={styles.modernSectionContent}>
-        <ThemedText style={[styles.modernSectionTitle, { color: colors.text }]}>
-          {section.title}
-        </ThemedText>
-        <ThemedText style={[styles.modernSectionDescription, { color: colors.outline }]}>
-          {section.description}
-        </ThemedText>
-        <View style={[styles.modernSectionArrow, { borderLeftColor: colors.primary }]} />
-      </View>
-    </TouchableOpacity>
-  );
-
-  const StatCard = ({ stat }: { stat: typeof stats[0] }) => (
-    <View
-      style={[
-        styles.modernStatCard,
-        {
-          backgroundColor: colors.surface,
-          ...Shadows.sm,
-        }
-      ]}
-    >
-      <View style={[styles.modernStatIconContainer, { backgroundColor: colors.secondaryContainer }]}>
-        <ThemedText style={[styles.modernStatIcon, { color: colors.secondary }]}>
-          {stat.icon}
-        </ThemedText>
-      </View>
-      <ThemedText style={[styles.modernStatValue, { color: colors.primary }]}>
-        {stat.value}
-      </ThemedText>
-      <ThemedText style={[styles.modernStatLabel, { color: colors.outline }]}>
-        {stat.label}
-      </ThemedText>
-    </View>
-  );
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Modern Header */}
-      <View style={[styles.modernHeader, { backgroundColor: colors.surface }]}>
-        <View style={styles.modernHeaderContent}>
-          <View style={[styles.modernHeaderBadge, { backgroundColor: colors.primaryContainer }]}>
-            <ThemedText style={[styles.modernHeaderEmoji, { color: colors.primary }]}>
-              🏛️
-            </ThemedText>
-          </View>
-          <ThemedText style={[styles.modernHeaderTitle, { color: colors.text }]}>
-            Arroyo Seco
-          </ThemedText>
-          <ThemedText style={[styles.modernHeaderSubtitle, { color: colors.outline }]}>
-            Plataforma Turística Cultural
-          </ThemedText>
-          <View style={[styles.modernHeaderDivider, { backgroundColor: colors.outlineVariant }]} />
-          <LanguageSwitcher />
-        </View>
-      </View>
+    <View style={styles.container}>
+      <StatusBar style="light" />
 
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+      <LinearGradient
+        colors={[colors.amber600, colors.orange600, colors.orange700]}
+        style={styles.gradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
       >
-        {/* Modern Stats Grid */}
-        <View style={styles.modernStatsSection}>
-          <View style={styles.modernSectionHeader}>
-            <ThemedText style={[styles.modernSectionHeaderTitle, { color: colors.text }]}>
-              Contenido Disponible
-            </ThemedText>
-            <ThemedText style={[styles.modernSectionHeaderSubtitle, { color: colors.outline }]}>
-              Explora nuestro catálogo cultural
-            </ThemedText>
-          </View>
-          <View style={styles.modernStatsGrid}>
-            {stats.map((stat, index) => (
-              <StatCard key={index} stat={stat} />
-            ))}
-          </View>
-        </View>
+        {/* Animated circles */}
+        <View
+          style={[
+            styles.circle,
+            styles.circle1,
+            { backgroundColor: colors.amber500 },
+          ]}
+        />
+        <View
+          style={[
+            styles.circle,
+            styles.circle2,
+            { backgroundColor: colors.orange500 },
+          ]}
+        />
+        <View
+          style={[
+            styles.circle,
+            styles.circle3,
+            { backgroundColor: colors.amber600 },
+          ]}
+        />
 
-        {/* Modern Modules Section */}
-        <View style={styles.modernModulesSection}>
-          <View style={styles.modernSectionHeader}>
-            <ThemedText style={[styles.modernSectionHeaderTitle, { color: colors.text }]}>
-              Explorar Módulos
-            </ThemedText>
-            <ThemedText style={[styles.modernSectionHeaderSubtitle, { color: colors.outline }]}>
-              Descubre la cultura gastronómica tradicional
-            </ThemedText>
-          </View>
-          {sections.map((section) => (
-            <SectionCard key={section.id} section={section} />
-          ))}
-        </View>
-
-        {/* Modern Info Card */}
-        <View style={[styles.modernInfoCard, { backgroundColor: colors.surfaceVariant, ...Shadows.sm }]}>
-          <View style={[styles.modernInfoIconContainer, { backgroundColor: colors.tertiaryContainer }]}>
-            <ThemedText style={[styles.modernInfoIcon, { color: colors.tertiary }]}>💡</ThemedText>
-          </View>
-          <ThemedText style={[styles.modernInfoTitle, { color: colors.text }]}>
-            Acerca de la Plataforma
-          </ThemedText>
-          <ThemedText style={[styles.modernInfoDescription, { color: colors.outline }]}>
-            Preservamos el conocimiento gastronómico tradicional de Arroyo Seco,
-            promoviendo la cultura local y el turismo sostenible.
-          </ThemedText>
-          <View style={styles.modernFeaturesList}>
-            {[
-              { icon: '📱', text: 'Diseño responsivo' },
-              { icon: '🌐', text: 'Modo offline' },
-              { icon: '🎨', text: 'Contenido visual' },
-            ].map((feature, index) => (
-              <View key={index} style={styles.modernFeatureItem}>
-                <ThemedText style={styles.modernFeatureIcon}>{feature.icon}</ThemedText>
-                <ThemedText style={[styles.modernFeatureText, { color: colors.outline }]}>
-                  {feature.text}
-                </ThemedText>
-              </View>
-            ))}
-          </View>
-        </View>
-
-        {/* Modern CTA Button */}
-        <TouchableOpacity
-          style={[styles.modernCtaButton, { backgroundColor: colors.primary, ...Shadows.md }]}
-          onPress={() => router.push('/(tabs)/explore')}
-          activeOpacity={0.9}
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
         >
-          <View style={styles.modernCtaContent}>
-            <View style={[styles.modernCtaIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-              <ThemedText style={styles.modernCtaEmoji}>🧭</ThemedText>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.logoContainer}>
+              <LinearGradient
+                colors={[colors.amber500, colors.orange600]}
+                style={styles.logoGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Text style={styles.logoEmoji}>🏛️</Text>
+              </LinearGradient>
             </View>
-            <ThemedText style={[styles.modernCtaText, { color: colors.surface }]}>
-              Comenzar Exploración
-            </ThemedText>
+            <Text style={styles.title}>Arroyo Seco</Text>
+            <Text style={styles.subtitle}>Plataforma Turística Cultural</Text>
+            <View style={styles.divider} />
           </View>
-        </TouchableOpacity>
-      </ScrollView>
-    </ThemedView>
+
+          {/* Stats Cards */}
+          <BlurView intensity={80} tint="dark" style={styles.statsContainer}>
+            <View style={styles.statsContent}>
+              <Text style={styles.sectionTitle}>Contenido Disponible</Text>
+              <View style={styles.statsGrid}>
+                {stats.map((stat, index) => (
+                  <View key={index} style={styles.statCard}>
+                    <Text style={styles.statIcon}>{stat.icon}</Text>
+                    <Text style={styles.statValue}>{stat.value}</Text>
+                    <Text style={styles.statLabel}>{stat.label}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </BlurView>
+
+          {/* Modules Section */}
+          <View style={styles.modulesSection}>
+            <Text style={styles.modulesTitle}>Explorar Módulos</Text>
+            {sections.map((section) => (
+              <TouchableOpacity
+                key={section.id}
+                activeOpacity={0.9}
+                onPress={() => navigateToSection(section.route)}
+              >
+                <BlurView intensity={80} tint="dark" style={styles.moduleCard}>
+                  <View style={styles.moduleContent}>
+                    <View style={styles.moduleIconContainer}>
+                      <LinearGradient
+                        colors={[colors.amber500, colors.orange600]}
+                        style={styles.moduleIconGradient}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                      >
+                        <Text style={styles.moduleIcon}>{section.icon}</Text>
+                      </LinearGradient>
+                    </View>
+                    <View style={styles.moduleTextContainer}>
+                      <Text style={styles.moduleTitle}>{section.title}</Text>
+                      <Text style={styles.moduleDescription}>
+                        {section.description}
+                      </Text>
+                    </View>
+                    <Ionicons
+                      name="chevron-forward"
+                      size={24}
+                      color={colors.amber500}
+                      style={styles.moduleArrow}
+                    />
+                  </View>
+                </BlurView>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* Info Card */}
+          <BlurView intensity={80} tint="dark" style={styles.infoCard}>
+            <View style={styles.infoContent}>
+              <View style={styles.infoIconContainer}>
+                <LinearGradient
+                  colors={[colors.amber500, colors.orange600]}
+                  style={styles.infoIconGradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.infoIcon}>💡</Text>
+                </LinearGradient>
+              </View>
+              <Text style={styles.infoTitle}>
+                Acerca de la Plataforma
+              </Text>
+              <Text style={styles.infoDescription}>
+                Preservamos el conocimiento gastronómico tradicional de Arroyo
+                Seco, promoviendo la cultura local y el turismo sostenible.
+              </Text>
+              <View style={styles.featuresContainer}>
+                {[
+                  { icon: "📱", text: "Diseño responsivo" },
+                  { icon: "🌐", text: "Modo offline" },
+                  { icon: "🎨", text: "Contenido visual" },
+                ].map((feature, index) => (
+                  <View key={index} style={styles.featureItem}>
+                    <Text style={styles.featureIcon}>{feature.icon}</Text>
+                    <Text style={styles.featureText}>{feature.text}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </BlurView>
+
+          {/* CTA Button */}
+          <TouchableOpacity activeOpacity={0.9} style={styles.ctaContainer}>
+            <LinearGradient
+              colors={[colors.amber600, colors.orange600]}
+              style={styles.ctaButton}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+              <View style={styles.ctaIconContainer}>
+                <Text style={styles.ctaEmoji}>🧭</Text>
+              </View>
+              <Text style={styles.ctaText}>Comenzar Exploración</Text>
+              <Ionicons
+                name="arrow-forward"
+                size={24}
+                color={colors.white}
+                style={styles.ctaArrow}
+              />
+            </LinearGradient>
+          </TouchableOpacity>
+        </ScrollView>
+      </LinearGradient>
+    </View>
   );
 }
 
@@ -228,380 +254,288 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    paddingTop: 60,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
+  gradient: {
+    flex: 1,
   },
-  headerContent: {
-    alignItems: 'center',
+  circle: {
+    position: "absolute",
+    borderRadius: 999,
+    opacity: 0.15,
   },
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    textAlign: 'center',
+  circle1: {
+    width: 350,
+    height: 350,
+    top: -100,
+    right: -100,
+    opacity: 0.2,
   },
-  headerSubtitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8,
-    textAlign: 'center',
+  circle2: {
+    width: 250,
+    height: 250,
+    bottom: 100,
+    left: -50,
+    opacity: 0.2,
   },
-  headerDescription: {
-    fontSize: 16,
-    textAlign: 'center',
-    lineHeight: 22,
+  circle3: {
+    width: 180,
+    height: 180,
+    top: "50%",
+    right: -75,
+    opacity: 0.2,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
-  statsSection: {
-    padding: 20,
+  header: {
+    alignItems: "center",
+    paddingTop: 60,
+    paddingBottom: 32,
+    paddingHorizontal: 24,
   },
-  sectionHeaderText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  logoContainer: {
+    marginBottom: 20,
+  },
+  logoGradient: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 3,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    shadowColor: colors.amber500,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  logoEmoji: {
+    fontSize: 48,
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: "800",
+    color: colors.white,
+    marginBottom: 8,
+    textAlign: "center",
+    letterSpacing: 0.5,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: colors.gray300,
+    textAlign: "center",
+    fontWeight: "600",
+  },
+  divider: {
+    width: 60,
+    height: 3,
+    backgroundColor: colors.amber500,
+    borderRadius: 2,
+    marginTop: 16,
+  },
+  statsContainer: {
+    marginHorizontal: 20,
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+    marginBottom: 24,
+  },
+  statsContent: {
+    padding: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: colors.white,
     marginBottom: 16,
+    textAlign: "center",
   },
   statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 10,
   },
   statCard: {
-    width: (screenWidth - 56) / 2,
-    padding: 16,
+    width: "48%",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
     borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    padding: 12,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
   },
   statIcon: {
     fontSize: 24,
     marginBottom: 8,
   },
   statValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 4,
+    fontSize: 22,
+    fontWeight: "800",
+    color: colors.amber500,
+    marginBottom: 2,
   },
   statLabel: {
     fontSize: 12,
-    textAlign: 'center',
-    lineHeight: 16,
+    color: colors.gray300,
+    textAlign: "center",
+    fontWeight: "600",
   },
-  sectionsContainer: {
-    padding: 20,
-    paddingTop: 0,
+  modulesSection: {
+    paddingHorizontal: 24,
+    marginBottom: 24,
   },
-  sectionCard: {
-    flexDirection: 'row',
-    padding: 20,
+  modulesTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: colors.white,
     marginBottom: 16,
-    borderRadius: 16,
+  },
+  moduleCard: {
+    borderRadius: 20,
+    overflow: "hidden",
     borderWidth: 1,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  sectionIcon: {
-    marginRight: 16,
-  },
-  iconText: {
-    fontSize: 32,
-  },
-  sectionContent: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  sectionDescription: {
-    fontSize: 14,
-    lineHeight: 18,
-  },
-  infoSection: {
-    margin: 20,
-    padding: 20,
-    borderRadius: 16,
-  },
-  infoTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    borderColor: "rgba(255, 255, 255, 0.1)",
     marginBottom: 12,
   },
-  infoText: {
-    fontSize: 16,
-    lineHeight: 22,
-    marginBottom: 16,
+  moduleContent: {
+    padding: 20,
+    flexDirection: "row",
+    alignItems: "center",
   },
-  featuresContainer: {
-    gap: 8,
+  moduleIconContainer: {
+    marginRight: 16,
   },
-  feature: {
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  ctaButton: {
-    margin: Spacing.lg,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-    borderRadius: BorderRadius.lg,
-    alignItems: 'center',
-  },
-  ctaText: {
-    ...Typography.titleLarge,
-    fontWeight: '600',
-  },
-
-  // Estilos modernos para tarjetas de sección
-  modernSectionCard: {
-    marginHorizontal: Spacing.lg,
-    marginBottom: Spacing.md,
-    borderRadius: BorderRadius.xl,
-    padding: Spacing.lg,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  modernSectionIconContainer: {
+  moduleIconGradient: {
     width: 56,
     height: 56,
-    borderRadius: BorderRadius.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: Spacing.md,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1.5,
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
-  modernSectionIcon: {
+  moduleIcon: {
     fontSize: 28,
   },
-  modernSectionContent: {
+  moduleTextContainer: {
     flex: 1,
-    position: 'relative',
   },
-  modernSectionTitle: {
-    ...Typography.titleMedium,
-    fontWeight: '600',
+  moduleTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: colors.white,
     marginBottom: 4,
   },
-  modernSectionDescription: {
-    ...Typography.bodyMedium,
-    lineHeight: 20,
+  moduleDescription: {
+    fontSize: 14,
+    color: colors.gray300,
+    lineHeight: 18,
   },
-  modernSectionArrow: {
-    position: 'absolute',
-    right: 0,
-    top: '50%',
-    width: 0,
-    height: 0,
-    borderLeftWidth: 8,
-    borderTopWidth: 6,
-    borderBottomWidth: 6,
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
-    transform: [{ translateY: -6 }],
+  moduleArrow: {
+    marginLeft: 8,
   },
-
-  // Estilos modernos para tarjetas de estadísticas
-  modernStatCard: {
-    width: (screenWidth - Spacing.lg * 3) / 2,
-    padding: Spacing.lg,
-    borderRadius: BorderRadius.lg,
-    alignItems: 'center',
+  infoCard: {
+    marginHorizontal: 24,
+    borderRadius: 24,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+    marginBottom: 24,
   },
-  modernStatIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: Spacing.md,
+  infoContent: {
+    padding: 24,
+    alignItems: "center",
   },
-  modernStatIcon: {
-    fontSize: 24,
+  infoIconContainer: {
+    marginBottom: 16,
   },
-  modernStatValue: {
-    ...Typography.headlineSmall,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  modernStatLabel: {
-    ...Typography.bodySmall,
-    textAlign: 'center',
-    lineHeight: 16,
-  },
-
-  // Estilos modernos para el header
-  modernHeader: {
-    paddingTop: 60,
-    paddingBottom: Spacing.xl,
-    paddingHorizontal: Spacing.lg,
-  },
-  modernHeaderContent: {
-    alignItems: 'center',
-  },
-  modernHeaderBadge: {
-    width: 80,
-    height: 80,
-    borderRadius: BorderRadius.xl,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: Spacing.md,
-  },
-  modernHeaderEmoji: {
-    fontSize: 40,
-  },
-  modernHeaderTitle: {
-    ...Typography.headlineLarge,
-    fontWeight: '700',
-    marginBottom: Spacing.xs,
-    textAlign: 'center',
-  },
-  modernHeaderSubtitle: {
-    ...Typography.titleMedium,
-    textAlign: 'center',
-    marginBottom: Spacing.lg,
-  },
-  modernHeaderDivider: {
-    width: 60,
-    height: 3,
-    borderRadius: BorderRadius.sm,
-  },
-
-  // Estilos para secciones modernas
-  modernStatsSection: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
-  },
-  modernSectionHeader: {
-    marginBottom: Spacing.lg,
-    alignItems: 'center',
-  },
-  modernSectionHeaderTitle: {
-    ...Typography.titleLarge,
-    fontWeight: '600',
-    marginBottom: 4,
-    textAlign: 'center',
-  },
-  modernSectionHeaderSubtitle: {
-    ...Typography.bodyMedium,
-    textAlign: 'center',
-  },
-  modernStatsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.md,
-    justifyContent: 'space-between',
-  },
-  modernModulesSection: {
-    paddingTop: Spacing.lg,
-  },
-
-  // Estilos para tarjeta de información moderna
-  modernInfoCard: {
-    margin: Spacing.lg,
-    padding: Spacing.xl,
-    borderRadius: BorderRadius.xl,
-    alignItems: 'center',
-  },
-  modernInfoIconContainer: {
+  infoIconGradient: {
     width: 64,
     height: 64,
-    borderRadius: BorderRadius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: Spacing.md,
+    borderRadius: 32,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
-  modernInfoIcon: {
+  infoIcon: {
     fontSize: 32,
   },
-  modernInfoTitle: {
-    ...Typography.titleLarge,
-    fontWeight: '600',
-    marginBottom: Spacing.sm,
-    textAlign: 'center',
+  infoTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: colors.white,
+    marginBottom: 12,
+    textAlign: "center",
   },
-  modernInfoDescription: {
-    ...Typography.bodyMedium,
-    textAlign: 'center',
+  infoDescription: {
+    fontSize: 15,
+    color: colors.gray300,
+    textAlign: "center",
     lineHeight: 22,
-    marginBottom: Spacing.lg,
+    marginBottom: 20,
   },
-  modernFeaturesList: {
-    width: '100%',
-    gap: Spacing.sm,
+  featuresContainer: {
+    width: "100%",
+    gap: 12,
   },
-  modernFeatureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: Spacing.sm,
+  featureItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
   },
-  modernFeatureIcon: {
-    fontSize: 18,
-    marginRight: Spacing.sm,
+  featureIcon: {
+    fontSize: 20,
+    marginRight: 12,
   },
-  modernFeatureText: {
-    ...Typography.bodyMedium,
-    flex: 1,
+  featureText: {
+    fontSize: 15,
+    color: colors.gray300,
+    fontWeight: "600",
   },
-
-  // Estilos para botón CTA moderno
-  modernCtaButton: {
-    marginHorizontal: Spacing.lg,
-    marginVertical: Spacing.xl,
-    borderRadius: BorderRadius.xl,
-    overflow: 'hidden',
+  ctaContainer: {
+    paddingHorizontal: 24,
   },
-  modernCtaContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.xl,
+  ctaButton: {
+    height: 64,
+    borderRadius: 20,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: colors.amber500,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
+    elevation: 10,
   },
-  modernCtaIcon: {
+  ctaIconContainer: {
     width: 40,
     height: 40,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: Spacing.md,
-  },
-  modernCtaEmoji: {
-    fontSize: 20,
-  },
-  modernCtaText: {
-    ...Typography.titleMedium,
-    fontWeight: '600',
-  },
-  // Just as test
-  languageButton: {
-    marginTop: Spacing.md,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.lg,
-    borderRadius: BorderRadius.lg,
-    alignItems: "center",
+    borderRadius: 12,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
   },
-  languageButtonText: {
-    ...Typography.bodyMedium,
-    fontWeight: "600",
+  ctaEmoji: {
+    fontSize: 22,
+  },
+  ctaText: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: colors.white,
+    letterSpacing: 0.5,
+  },
+  ctaArrow: {
+    marginLeft: 8,
   },
 });

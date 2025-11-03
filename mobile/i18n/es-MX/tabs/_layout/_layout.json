@@ -1,9 +1,9 @@
 {
     "tabs":{
         "index": "Inicio",
-        "recipes": "Recetas",
-        "restaurants":"Restaurantes",
         "explore": "Explorar",
-        "workshops": "Talleres"
+        "gastronomy": "Gastronomía",
+        "experiences": "Experiencias",
+        "settings": "Ajustes"
     }
 }

@@ -185,7 +185,7 @@ export default function RegisterScreen() {
                     <Text style={styles.inputIcon}>👤</Text>
                     <TextInput
                       style={styles.input}
-                      placeholder="Juan Pérez"
+                      placeholder="Tú nombre"
                       placeholderTextColor={colors.gray400}
                       value={name}
                       onChangeText={setName}

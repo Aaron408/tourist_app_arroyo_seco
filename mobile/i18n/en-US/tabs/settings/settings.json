@@ -1,0 +1,41 @@
+{
+  "title": "Settings",
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit profile",
+    "name": "Name",
+    "email": "Email"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "language": "Language",
+    "theme": "Theme",
+    "themeOptions": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "notifications": "Notifications",
+    "notificationsEnabled": "Notifications enabled"
+  },
+  "support": {
+    "title": "Support & Help",
+    "contactSupport": "Contact support",
+    "reportBug": "Report a problem",
+    "faq": "Frequently asked questions"
+  },
+  "about": {
+    "title": "About",
+    "aboutApp": "About the app",
+    "version": "Version",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy"
+  },
+  "account": {
+    "title": "Account",
+    "logout": "Log out",
+    "logoutConfirm": "Are you sure you want to log out?",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  }
+}

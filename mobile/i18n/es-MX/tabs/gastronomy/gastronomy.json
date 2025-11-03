@@ -1,0 +1,24 @@
+{
+  "title": "Gastronomía",
+  "subtitle": "Descubre la riqueza culinaria de Arroyo Seco",
+  "tabs": {
+    "recipes": "Recetas",
+    "ingredients": "Ingredientes",
+    "techniques": "Técnicas"
+  },
+  "recipes": {
+    "title": "Recetas Tradicionales",
+    "description": "Platillos auténticos de la región",
+    "viewRecipe": "Ver receta"
+  },
+  "ingredients": {
+    "title": "Ingredientes Locales",
+    "description": "Productos autóctonos de la Sierra Gorda",
+    "viewDetails": "Ver detalles"
+  },
+  "techniques": {
+    "title": "Técnicas Culinarias",
+    "description": "Métodos ancestrales de preparación",
+    "learnMore": "Aprender más"
+  }
+}

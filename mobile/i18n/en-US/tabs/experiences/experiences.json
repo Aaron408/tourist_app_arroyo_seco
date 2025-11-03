@@ -1,0 +1,22 @@
+{
+  "title": "Experiences",
+  "subtitle": "Participate in cultural events and workshops",
+  "tabs": {
+    "workshops": "Workshops",
+    "events": "Events"
+  },
+  "workshops": {
+    "title": "Gastronomic Workshops",
+    "description": "Learn traditional techniques",
+    "available": "Available",
+    "duration": "Duration",
+    "register": "Register"
+  },
+  "events": {
+    "title": "Cultural Events",
+    "description": "Celebrations and festivals",
+    "upcoming": "Upcoming events",
+    "date": "Date",
+    "location": "Location"
+  }
+}

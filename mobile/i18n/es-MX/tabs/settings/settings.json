@@ -1,0 +1,41 @@
+{
+  "title": "Ajustes",
+  "profile": {
+    "title": "Perfil",
+    "editProfile": "Editar perfil",
+    "name": "Nombre",
+    "email": "Correo electrónico"
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themeOptions": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "notifications": "Notificaciones",
+    "notificationsEnabled": "Notificaciones activadas"
+  },
+  "support": {
+    "title": "Soporte y Ayuda",
+    "contactSupport": "Contactar soporte",
+    "reportBug": "Reportar un problema",
+    "faq": "Preguntas frecuentes"
+  },
+  "about": {
+    "title": "Acerca de",
+    "aboutApp": "Acerca de la aplicación",
+    "version": "Versión",
+    "terms": "Términos y condiciones",
+    "privacy": "Política de privacidad"
+  },
+  "account": {
+    "title": "Cuenta",
+    "logout": "Cerrar sesión",
+    "logoutConfirm": "¿Estás seguro que deseas cerrar sesión?",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar"
+  }
+}
