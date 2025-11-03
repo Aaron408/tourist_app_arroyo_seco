@@ -24,7 +24,7 @@ type TranslationKey = string;
 
 // Interfaces
 interface LanguageContextType {
-  t: (key: TranslationKey) => any;
+  t: any; // Changed to any to support object notation
   currentLanguage: LanguageCode;
   isLoading: boolean;
   setLanguage: (language: LanguageCode) => void;
@@ -38,6 +38,11 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const { currentLanguage, isLoading, setLanguage, initializeLanguage } = useLanguageStore();
 
+  // Map short codes to full locale codes
+  const getLocaleCode = (lang: LanguageCode) => {
+    return lang === 'en' ? 'en-US' : 'es-MX';
+  };
+
   // Cache-first for language translations
   const [cache, setCache] = useState<Record<string, any>>({});
 
@@ -47,8 +52,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 
   // Preload translations when language changes
   useEffect(() => {
+    const localeCode = getLocaleCode(currentLanguage);
     Object.keys(translationModules)
-      .filter((k) => k.startsWith(currentLanguage))
+      .filter((k) => k.startsWith(localeCode))
       .forEach((cacheKey) => {
         if (!cache[cacheKey]) {
           translationModules[cacheKey]()
@@ -69,22 +75,46 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   const getNestedValue = (obj: any, path: string) =>
       path.split(".").reduce((acc, part) => acc?.[part], obj);
 
-  // Translation provider (sync)
-  const t = (key: TranslationKey) => {
+  // Build the translations object from cache
+  const buildTranslationsObject = () => {
+    const translations: any = {};
+    const localeCode = getLocaleCode(currentLanguage);
+    
+    Object.keys(cache).forEach((cacheKey) => {
+      const [lang, namespace] = cacheKey.split('.');
+      if (lang === localeCode) {
+        translations[namespace] = cache[cacheKey];
+      }
+    });
+    
+    return translations;
+  };
+
+  // Translation provider - Hybrid approach: function that also works as object
+  const translationsObj = buildTranslationsObject();
+  
+  // Create a function that can be called AND has properties
+  const translationFunction = (key: TranslationKey) => {
     const [namespace, ...rest] = key.split('.');
-    const cacheKey = `${currentLanguage}.${namespace}`;
+    const localeCode = getLocaleCode(currentLanguage);
+    const cacheKey = `${localeCode}.${namespace}`;
     const translations = cache[cacheKey];
 
     if (!translations) {
-      // Fallback if not loaded yet
-      return key;
+      return key; // Fallback if not loaded yet
     }
 
     return rest.length > 0
       ? getNestedValue(translations, rest.join('.'))
       : translations;
   };
+  
+  // Add all translation properties to the function
+  Object.keys(translationsObj).forEach((key) => {
+    (translationFunction as any)[key] = translationsObj[key];
+  });
 
+  const t = translationFunction;
 
   const value: LanguageContextType = {
     t,

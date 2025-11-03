@@ -12,6 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useLanguage } from "@/contexts/languageProvider";
 
 const { width } = Dimensions.get("window");
 
@@ -74,6 +75,63 @@ const stats = [
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { t, isLoading } = useLanguage();
+
+  // Return loading state if translations aren't ready
+  if (isLoading || !t.index) {
+    return (
+      <View style={styles.container}>
+        <LinearGradient
+          colors={[colors.amber600, colors.orange600, colors.orange700]}
+          style={styles.gradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: colors.white, fontSize: 18 }}>Cargando...</Text>
+          </View>
+        </LinearGradient>
+      </View>
+    );
+  }
+
+  const sections = [
+    {
+      id: "recipes",
+      title: t.index.modules.recipes.title,
+      icon: "🍲",
+      description: t.index.modules.recipes.description,
+      route: "recipes",
+    },
+    {
+      id: "gastronomy",
+      title: t.index.modules.ingredients.title,
+      icon: "🌱",
+      description: t.index.modules.ingredients.description,
+      route: "gastronomy",
+    },
+    {
+      id: "restaurants",
+      title: t.index.modules.restaurants.title,
+      icon: "🍽️",
+      description: t.index.modules.restaurants.description,
+      route: "restaurants",
+    },
+    {
+      id: "workshops",
+      title: t.index.modules.techniques.title,
+      icon: "👨‍🍳",
+      description: t.index.modules.techniques.description,
+      route: "workshops",
+    },
+  ];
+
+  const stats = [
+    { label: t.index.stats.recipes, value: "25+", icon: "📖" },
+    { label: t.index.stats.ingredients, value: "50+", icon: "🌿" },
+    { label: t.index.stats.restaurants, value: "15", icon: "🏪" },
+    { label: t.index.stats.techniques, value: "12", icon: "⚡" },
+  ];
 
   const navigateToSection = (route: string) => {
     router.push(`/(tabs)/${route}` as any);
@@ -129,15 +187,15 @@ export default function HomeScreen() {
                 <Text style={styles.logoEmoji}>🏛️</Text>
               </LinearGradient>
             </View>
-            <Text style={styles.title}>Arroyo Seco</Text>
-            <Text style={styles.subtitle}>Plataforma Turística Cultural</Text>
+            <Text style={styles.title}>{t.index.title}</Text>
+            <Text style={styles.subtitle}>{t.index.subtitle}</Text>
             <View style={styles.divider} />
           </View>
 
           {/* Stats Cards */}
           <BlurView intensity={80} tint="dark" style={styles.statsContainer}>
             <View style={styles.statsContent}>
-              <Text style={styles.sectionTitle}>Contenido Disponible</Text>
+              <Text style={styles.sectionTitle}>{t.index.contentAvailable}</Text>
               <View style={styles.statsGrid}>
                 {stats.map((stat, index) => (
                   <View key={index} style={styles.statCard}>
@@ -152,7 +210,7 @@ export default function HomeScreen() {
 
           {/* Modules Section */}
           <View style={styles.modulesSection}>
-            <Text style={styles.modulesTitle}>Explorar Módulos</Text>
+            <Text style={styles.modulesTitle}>{t.index.exploreModules}</Text>
             {sections.map((section) => (
               <TouchableOpacity
                 key={section.id}
@@ -203,17 +261,16 @@ export default function HomeScreen() {
                 </LinearGradient>
               </View>
               <Text style={styles.infoTitle}>
-                Acerca de la Plataforma
+                {t.index.aboutPlatform.title}
               </Text>
               <Text style={styles.infoDescription}>
-                Preservamos el conocimiento gastronómico tradicional de Arroyo
-                Seco, promoviendo la cultura local y el turismo sostenible.
+                {t.index.aboutPlatform.description}
               </Text>
               <View style={styles.featuresContainer}>
                 {[
-                  { icon: "📱", text: "Diseño responsivo" },
-                  { icon: "🌐", text: "Modo offline" },
-                  { icon: "🎨", text: "Contenido visual" },
+                  { icon: "📱", text: t.index.aboutPlatform.features.responsive },
+                  { icon: "🌐", text: t.index.aboutPlatform.features.offline },
+                  { icon: "🎨", text: t.index.aboutPlatform.features.visual },
                 ].map((feature, index) => (
                   <View key={index} style={styles.featureItem}>
                     <Text style={styles.featureIcon}>{feature.icon}</Text>
@@ -235,7 +292,7 @@ export default function HomeScreen() {
               <View style={styles.ctaIconContainer}>
                 <Text style={styles.ctaEmoji}>🧭</Text>
               </View>
-              <Text style={styles.ctaText}>Comenzar Exploración</Text>
+              <Text style={styles.ctaText}>{t.index.startExploring}</Text>
               <Ionicons
                 name="arrow-forward"
                 size={24}

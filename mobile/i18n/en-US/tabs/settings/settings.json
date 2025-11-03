@@ -1,5 +1,6 @@
 {
   "title": "Settings",
+  "subtitle": "Customize your experience",
   "profile": {
     "title": "Profile",
     "editProfile": "Edit profile",
@@ -7,9 +8,9 @@
     "email": "Email"
   },
   "preferences": {
-    "title": "Preferences",
+    "title": "PREFERENCES",
     "language": "Language",
-    "theme": "Theme",
+    "theme": "Dark mode",
     "themeOptions": {
       "light": "Light",
       "dark": "Dark",
@@ -19,23 +20,43 @@
     "notificationsEnabled": "Notifications enabled"
   },
   "support": {
-    "title": "Support & Help",
+    "title": "SUPPORT",
     "contactSupport": "Contact support",
-    "reportBug": "Report a problem",
+    "reportBug": "Report problem",
     "faq": "Frequently asked questions"
   },
   "about": {
-    "title": "About",
+    "title": "ABOUT",
     "aboutApp": "About the app",
+    "aboutAppMessage": "Cultural Tourist Platform v1.0.0",
     "version": "Version",
     "terms": "Terms and conditions",
     "privacy": "Privacy policy"
   },
   "account": {
     "title": "Account",
-    "logout": "Log out",
-    "logoutConfirm": "Are you sure you want to log out?",
+    "logout": "Log Out",
+    "logoutTitle": "Log Out",
+    "logoutMessage": "Are you sure you want to log out?",
+    "logoutSuccess": "Logged out",
+    "logoutSuccessMessage": "You have successfully logged out",
     "cancel": "Cancel",
     "confirm": "Confirm"
+  },
+  "language": {
+    "title": "Select Language",
+    "subtitle": "Choose your preferred language",
+    "spanish": "Español",
+    "english": "English",
+    "close": "Close",
+    "changed": "Language changed",
+    "changedMessage": "The language has been changed to"
+  },
+  "alerts": {
+    "report": "Report",
+    "faq": "FAQ",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "inDevelopment": "Feature in development"
   }
 }

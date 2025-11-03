@@ -1,0 +1,27 @@
+{
+    "title": "Explore",
+    "subtitle": "Discover Arroyo Seco",
+    "searchPlaceholder": "Search places...",
+    "viewToggle": {
+        "map": "Map",
+        "list": "List"
+    },
+    "filters": {
+        "all": "All",
+        "restaurants": "Restaurants",
+        "locations": "Locations"
+    },
+    "results": {
+        "single": "result",
+        "multiple": "results"
+    },
+    "actions": {
+        "call": "Call",
+        "map": "Map",
+        "viewOnMap": "Tap to view on map"
+    },
+    "category": {
+        "plaza": "Plaza",
+        "natural": "Natural"
+    }
+}

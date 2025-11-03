@@ -1,0 +1,27 @@
+{
+    "title": "Explorar",
+    "subtitle": "Descubre Arroyo Seco",
+    "searchPlaceholder": "Buscar lugares...",
+    "viewToggle": {
+        "map": "Mapa",
+        "list": "Lista"
+    },
+    "filters": {
+        "all": "Todos",
+        "restaurants": "Restaurantes",
+        "locations": "Lugares"
+    },
+    "results": {
+        "single": "resultado",
+        "multiple": "resultados"
+    },
+    "actions": {
+        "call": "Llamar",
+        "map": "Mapa",
+        "viewOnMap": "Toca para ver en el mapa"
+    },
+    "category": {
+        "plaza": "Plaza",
+        "natural": "Natural"
+    }
+}

@@ -1,5 +1,6 @@
 {
-  "title": "Ajustes",
+  "title": "Configuración",
+  "subtitle": "Personaliza tu experiencia",
   "profile": {
     "title": "Perfil",
     "editProfile": "Editar perfil",
@@ -7,9 +8,9 @@
     "email": "Correo electrónico"
   },
   "preferences": {
-    "title": "Preferencias",
+    "title": "PREFERENCIAS",
     "language": "Idioma",
-    "theme": "Tema",
+    "theme": "Modo oscuro",
     "themeOptions": {
       "light": "Claro",
       "dark": "Oscuro",
@@ -19,23 +20,43 @@
     "notificationsEnabled": "Notificaciones activadas"
   },
   "support": {
-    "title": "Soporte y Ayuda",
+    "title": "SOPORTE",
     "contactSupport": "Contactar soporte",
-    "reportBug": "Reportar un problema",
+    "reportBug": "Reportar problema",
     "faq": "Preguntas frecuentes"
   },
   "about": {
-    "title": "Acerca de",
-    "aboutApp": "Acerca de la aplicación",
+    "title": "ACERCA DE",
+    "aboutApp": "Acerca de la app",
+    "aboutAppMessage": "Plataforma Turística Cultural v1.0.0",
     "version": "Versión",
     "terms": "Términos y condiciones",
     "privacy": "Política de privacidad"
   },
   "account": {
     "title": "Cuenta",
-    "logout": "Cerrar sesión",
-    "logoutConfirm": "¿Estás seguro que deseas cerrar sesión?",
+    "logout": "Cerrar Sesión",
+    "logoutTitle": "Cerrar Sesión",
+    "logoutMessage": "¿Estás seguro que deseas cerrar tu sesión?",
+    "logoutSuccess": "Sesión cerrada",
+    "logoutSuccessMessage": "Has cerrado sesión correctamente",
     "cancel": "Cancelar",
     "confirm": "Confirmar"
+  },
+  "language": {
+    "title": "Seleccionar Idioma",
+    "subtitle": "Elige tu idioma preferido",
+    "spanish": "Español",
+    "english": "English",
+    "close": "Cerrar",
+    "changed": "Idioma cambiado",
+    "changedMessage": "El idioma se ha cambiado a"
+  },
+  "alerts": {
+    "report": "Reportar",
+    "faq": "FAQ",
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "inDevelopment": "Función en desarrollo"
   }
 }

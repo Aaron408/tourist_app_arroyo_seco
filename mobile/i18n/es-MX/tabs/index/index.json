@@ -1,3 +1,41 @@
 {
-    "greet": "Bienvenido"
+    "greet": "Bienvenido",
+    "title": "Arroyo Seco",
+    "subtitle": "Plataforma Turística Cultural",
+    "contentAvailable": "Contenido Disponible",
+    "stats": {
+        "recipes": "Recetas",
+        "ingredients": "Ingredientes",
+        "restaurants": "Restaurantes",
+        "techniques": "Técnicas"
+    },
+    "exploreModules": "Explorar Módulos",
+    "modules": {
+        "recipes": {
+            "title": "Recetas Tradicionales",
+            "description": "Descubre los sabores auténticos de Arroyo Seco"
+        },
+        "ingredients": {
+            "title": "Ingredientes Indígenas",
+            "description": "Catálogo de ingredientes locales y sus propiedades"
+        },
+        "restaurants": {
+            "title": "Ruta del Sabor",
+            "description": "Restaurantes tradicionales de la región"
+        },
+        "techniques": {
+            "title": "Técnicas Culinarias",
+            "description": "Métodos ancestrales de preparación"
+        }
+    },
+    "aboutPlatform": {
+        "title": "Acerca de la Plataforma",
+        "description": "Preservamos el conocimiento gastronómico tradicional de Arroyo Seco, promoviendo la cultura local y el turismo sostenible.",
+        "features": {
+            "responsive": "Diseño responsivo",
+            "offline": "Modo offline",
+            "visual": "Contenido visual"
+        }
+    },
+    "startExploring": "Comenzar Exploración"
 }

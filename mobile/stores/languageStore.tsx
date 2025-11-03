@@ -30,7 +30,7 @@ interface LanguageState {
 export const useLanguageStore = create<LanguageState>()(
   persist(
     (set, get) => ({
-      currentLanguage: 'en', // Default language English
+      currentLanguage: 'es', // Default language Spanish
       isLoading: true,
       
       setLanguage: (language: LanguageCode) => {
@@ -48,6 +48,11 @@ export const useLanguageStore = create<LanguageState>()(
       
       initializeLanguage: async () => {
         try {
+          const { currentLanguage } = get();
+          // Force Spanish if language is English (to override old cached value)
+          if (currentLanguage === 'en') {
+            set({ currentLanguage: 'es' });
+          }
           // Consider add device location for set up language
           // const deviceLocale = Localization.locale;
           set({ isLoading: false });
