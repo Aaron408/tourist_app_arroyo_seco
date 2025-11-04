@@ -302,12 +302,6 @@ export default function SplashScreen() {
             <Text style={styles.loadingText}>Cargando experiencia...</Text>
           </Animated.View>
         </View>
-
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Powered by</Text>
-          <Text style={styles.footerBrand}>Arroyo Seco Tourism</Text>
-        </View>
       </LinearGradient>
     </View>
   );

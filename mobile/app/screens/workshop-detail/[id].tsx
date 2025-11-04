@@ -1,553 +1,364 @@
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { BorderRadius, Colors, Shadows, Spacing } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useLanguage } from '@/contexts/languageProvider';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-  ActivityIndicator,
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
   View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import workshopService, { WorkshopDetail } from '@/services/workshopService';
-import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+  Dimensions,
+  Alert,
+} from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
+import { BlurView } from "expo-blur";
+import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { workshopService, WorkshopDetail } from "@/services/workshopService";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
+
+const colors = {
+  gray900: "#111827",
+  gray800: "#1F2937",
+  gray700: "#374151",
+  gray600: "#4B5563",
+  gray500: "#6B7280",
+  gray400: "#9CA3AF",
+  gray300: "#D1D5DB",
+  gray100: "#F3F4F6",
+  white: "#FFFFFF",
+  amber50: "#FFFBEB",
+  amber500: "#F59E0B",
+  amber600: "#D97706",
+  amber700: "#B45309",
+  orange500: "#F97316",
+  orange600: "#EA580C",
+  orange700: "#C2410C",
+  red500: "#EF4444",
+  red400: "#F87171",
+  green500: "#10B981",
+};
 
 export default function WorkshopDetailScreen() {
-  const params = useLocalSearchParams();
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
-  const { t } = useLanguage();
-  const insets = useSafeAreaInsets();
-
-  const [workshop, setWorkshop] = useState<WorkshopDetail | null>(null);
+  const { id } = useLocalSearchParams();
   const [loading, setLoading] = useState(true);
+  const [workshop, setWorkshop] = useState<WorkshopDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showVideo, setShowVideo] = useState(false);
-  const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus | null>(null);
-  
-  const videoRef = useRef<Video>(null);
-
-  const workshopId = parseInt(params.id as string);
 
   useEffect(() => {
-    loadWorkshopDetails();
-  }, [workshopId]);
+    if (id) {
+      loadWorkshopDetail();
+    }
+  }, [id]);
 
-  // Cleanup video when component unmounts or video is hidden
-  useEffect(() => {
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.unloadAsync();
-      }
-    };
-  }, []);
-
-  const loadWorkshopDetails = async () => {
+  const loadWorkshopDetail = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await workshopService.getWorkshopById(workshopId);
+      const workshopId = typeof id === "string" ? parseInt(id) : id;
+      const data = await workshopService.getWorkshopById(workshopId as number);
       setWorkshop(data);
     } catch (err) {
-      console.error('Error loading workshop:', err);
-      setError('No se pudo cargar el taller. Intenta más tarde.');
+      console.error("Error loading workshop:", err);
+      setError("No se pudo cargar el taller");
+      Alert.alert("Error", "No se pudo cargar la información del taller");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVideoPlayPause = async () => {
-    if (!videoRef.current) return;
+  const capacityPercent = workshop
+    ? Math.round((workshop.currentAttendees / workshop.maxCapacity) * 100)
+    : 0;
 
-    if (videoStatus?.isLoaded && videoStatus.isPlaying) {
-      await videoRef.current.pauseAsync();
-    } else {
-      await videoRef.current.playAsync();
-    }
+  type WorkshopType = "in_person" | "online" | "hybrid";
+
+  const getTypeLabel = () => {
+    if (!workshop) return "";
+    const labels: Record<WorkshopType, string> = {
+      in_person: "Presencial",
+      online: "En línea",
+      hybrid: "Híbrido",
+    };
+    return labels[workshop.workshopType as WorkshopType];
   };
 
-  const handleVideoToggle = async () => {
-    if (showVideo && videoRef.current) {
-      await videoRef.current.pauseAsync();
-    }
-    setShowVideo(!showVideo);
+  const formatDate = () => {
+    if (!workshop) return "";
+    const startDate = new Date(workshop.startDate);
+    return startDate.toLocaleDateString("es-MX", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const handleBack = () => {
+    router.back();
   };
 
   if (loading) {
     return (
-      <>
-        <Stack.Screen
-          options={{
-            headerShown: true,
-            headerTitle: 'Cargando...',
-            headerBackTitle: 'Talleres',
-          }}
-        />
-        <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
-          <View
-            style={[
-              styles.centerContainer,
-              { paddingTop: insets.top + Spacing.lg },
-            ]}
-          >
-            <ActivityIndicator size="large" color={colors.primary} />
-            <ThemedText
-              style={[
-                styles.loadingText,
-                { color: colors.onSurfaceVariant, marginTop: Spacing.lg },
-              ]}
-            >
-              Cargando detalles...
-            </ThemedText>
+      <View style={styles.container}>
+        <StatusBar style="light" />
+        <LinearGradient
+          colors={[colors.amber600, colors.orange600, colors.orange700]}
+          style={styles.gradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.white} />
+            <Text style={styles.loadingText}>Cargando detalles...</Text>
           </View>
-        </ThemedView>
-      </>
+        </LinearGradient>
+      </View>
     );
   }
 
   if (error || !workshop) {
     return (
-      <>
-        <Stack.Screen
-          options={{
-            headerShown: true,
-            headerTitle: 'Error',
-            headerBackTitle: 'Talleres',
-          }}
-        />
-        <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
-          <View
-            style={[
-              styles.centerContainer,
-              { paddingTop: insets.top + Spacing.lg },
-            ]}
-          >
-            <ThemedText style={[styles.errorIcon, { fontSize: 48 }]}>⚠️</ThemedText>
-            <ThemedText
-              style={[
-                styles.errorTitle,
-                { color: colors.onSurface, marginTop: Spacing.lg },
-              ]}
-            >
-              Error al cargar el taller
-            </ThemedText>
-            <ThemedText
-              style={[
-                styles.errorText,
-                { color: colors.onSurfaceVariant, marginTop: Spacing.md },
-              ]}
-            >
-              {error}
-            </ThemedText>
-            <TouchableOpacity
-              style={[styles.retryButton, { backgroundColor: colors.primary }]}
-              onPress={loadWorkshopDetails}
-              activeOpacity={0.8}
-            >
-              <ThemedText style={[styles.retryButtonText, { color: colors.onPrimary }]}>
-                🔄 Intentar de nuevo
-              </ThemedText>
+      <View style={styles.container}>
+        <StatusBar style="light" />
+        <LinearGradient
+          colors={[colors.amber600, colors.orange600, colors.orange700]}
+          style={styles.gradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.loadingContainer}>
+            <Ionicons name="alert-circle" size={64} color={colors.white} />
+            <Text style={styles.loadingText}>
+              {error || "No se encontró el taller"}
+            </Text>
+            <TouchableOpacity onPress={handleBack} style={styles.retryButton}>
+              <Text style={styles.retryButtonText}>Volver</Text>
             </TouchableOpacity>
           </View>
-        </ThemedView>
-      </>
+        </LinearGradient>
+      </View>
     );
   }
 
-  const typeLabel = workshopService.getWorkshopTypeLabel(workshop.workshopType);
-  const typeColor = workshopService.getWorkshopTypeColor(workshop.workshopType);
-  const dateRange = workshopService.formatDateRange(workshop.startDate, workshop.endDate);
-  const hasVideo = workshopService.hasAvailableVideo(workshop);
-  const videoUrl = hasVideo ? workshopService.getAvailableVideoUrl(workshop) : null;
-  const capacityPercent = Math.round((workshop.currentAttendees / workshop.maxCapacity) * 100);
+  const getImageUrl = () => {
+    if (workshop.images && workshop.images.length > 0) {
+      return workshop.images[0].url;
+    }
+    if (workshop.thumbnailUrl) {
+      return workshop.thumbnailUrl;
+    }
+    return null;
+  };
+
+  const imageUrl = getImageUrl();
 
   return (
-    <>
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          headerTitle: '',
-          headerBackTitle: 'Talleres',
-        }}
-      />
-      <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={[
-            styles.scrollContent,
-            {
-              paddingBottom: insets.bottom + Spacing.lg,
-            },
-          ]}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Header Image */}
-          <View style={styles.imageContainer}>
-            {workshop.images && workshop.images.length > 0 ? (
-              <Image
-                source={{ uri: workshop.images[0].url }}
-                style={styles.headerImage}
-                resizeMode="cover"
-              />
-            ) : (
-              <View style={[styles.imagePlaceholder, { backgroundColor: colors.surfaceVariant }]}>
-                <ThemedText style={styles.placeholderIcon}>🎓</ThemedText>
-              </View>
-            )}
-            {/* Type Badge on Image */}
-            <View
-              style={[
-                styles.typeBadgeOverlay,
-                { backgroundColor: typeColor + 'E6' },
-              ]}
-            >
-              <ThemedText style={styles.typeLabelOverlay}>{typeLabel}</ThemedText>
-            </View>
-          </View>
+    <View style={styles.container}>
+      <StatusBar style="light" />
 
-          {/* Content */}
-          <View
-            style={[
-              styles.content,
-              { paddingHorizontal: Spacing.lg, paddingTop: Spacing.lg },
-            ]}
-          >
-            {/* Title */}
-            <ThemedText style={[styles.title, { color: colors.onSurface }]}>
-              {workshop.title}
-            </ThemedText>
-
-            {/* Code */}
-            <ThemedText
-              style={[
-                styles.code,
-                { color: colors.onSurfaceVariant, marginTop: Spacing.sm },
-              ]}
-            >
-              Código: {workshop.code}
-            </ThemedText>
-
-            {/* Short Description */}
-            <ThemedText
-              style={[
-                styles.shortDescription,
-                {
-                  color: colors.onSurfaceVariant,
-                  marginTop: Spacing.md,
-                },
-              ]}
-            >
-              {workshop.shortDescription}
-            </ThemedText>
-
-            {/* Date and Time Section */}
-            <View
-              style={[
-                styles.infoSection,
-                {
-                  backgroundColor: colors.surfaceVariant,
-                  marginTop: Spacing.lg,
-                },
-              ]}
-            >
-              <ThemedText style={[styles.infoTitle, { color: colors.onSurfaceVariant }]}>
-                📅 Fecha y Hora
-              </ThemedText>
-              <ThemedText style={[styles.infoValue, { color: colors.onSurface }]}>
-                {dateRange}
-              </ThemedText>
-            </View>
-
-            {/* Location Info (if in-person or hybrid) */}
-            {(workshop.workshopType === 'in_person' || workshop.workshopType === 'hybrid') &&
-              workshop.locationAddress && (
-                <View
-                  style={[
-                    styles.infoSection,
-                    {
-                      backgroundColor: colors.surfaceVariant,
-                      marginTop: Spacing.md,
-                    },
-                  ]}
-                >
-                  <ThemedText style={[styles.infoTitle, { color: colors.onSurfaceVariant }]}>
-                    📍 Ubicación
-                  </ThemedText>
-                  <ThemedText style={[styles.infoValue, { color: colors.onSurface }]}>
-                    {workshop.locationAddress}
-                  </ThemedText>
-                </View>
-              )}
-
-            {/* Online Meeting Info (if online or hybrid) */}
-            {(workshop.workshopType === 'online' || workshop.workshopType === 'hybrid') &&
-              workshop.onlineMeetingUrl && (
-                <View
-                  style={[
-                    styles.infoSection,
-                    {
-                      backgroundColor: colors.surfaceVariant,
-                      marginTop: Spacing.md,
-                    },
-                  ]}
-                >
-                  <ThemedText style={[styles.infoTitle, { color: colors.onSurfaceVariant }]}>
-                    💻 Plataforma: {workshop.onlineMeetingPlatform || 'En línea'}
-                  </ThemedText>
-                  <TouchableOpacity
-                    style={[
-                      styles.urlButton,
-                      { backgroundColor: colors.primary, marginTop: Spacing.sm },
-                    ]}
-                    activeOpacity={0.8}
-                  >
-                    <ThemedText style={[styles.urlButtonText, { color: colors.onPrimary }]}>
-                      🔗 Acceder a la reunión
-                    </ThemedText>
-                  </TouchableOpacity>
-                </View>
-              )}
-
-            {/* Capacity Section */}
-            <View
-              style={[
-                styles.capacitySection,
-                {
-                  backgroundColor: colors.primaryContainer,
-                  marginTop: Spacing.lg,
-                },
-              ]}
-            >
-              <View style={styles.capacityHeader}>
-                <ThemedText style={[styles.capacityTitle, { color: colors.onPrimaryContainer }]}>
-                  👥 Capacidad
-                </ThemedText>
-                {workshop.isFull ? (
-                  <View style={[styles.fullBadge, { backgroundColor: '#FF6B6B' }]}>
-                    <ThemedText style={styles.fullBadgeText}>⚠️ Lleno</ThemedText>
-                  </View>
-                ) : (
-                  <View style={[styles.availableBadge, { backgroundColor: '#4ECDC4' }]}>
-                    <ThemedText style={styles.availableBadgeText}>
-                      {workshop.availableSpots} {workshop.availableSpots === 1 ? 'lugar' : 'lugares'} disponible
-                      {workshop.availableSpots !== 1 ? 's' : ''}
-                    </ThemedText>
-                  </View>
-                )}
-              </View>
-              <View
-                style={[
-                  styles.capacityBar,
-                  { backgroundColor: colors.primaryContainer, marginTop: Spacing.md },
-                ]}
-              >
-                <View
-                  style={[
-                    styles.capacityFill,
-                    {
-                      width: `${capacityPercent}%`,
-                      backgroundColor: capacityPercent > 80 ? '#FF6B6B' : '#4ECDC4',
-                    },
-                  ]}
-                />
-              </View>
-              <ThemedText
-                style={[
-                  styles.capacityInfo,
-                  { color: colors.onPrimaryContainer, marginTop: Spacing.sm },
-                ]}
-              >
-                {workshop.currentAttendees} de {workshop.maxCapacity} participantes
-              </ThemedText>
-            </View>
-
-            {/* Video Section */}
-            {hasVideo && videoUrl && (
-              <View
-                style={[
-                  styles.videoSection,
-                  {
-                    backgroundColor: colors.surface,
-                    marginTop: Spacing.lg,
-                    ...Shadows.md,
-                  },
-                ]}
-              >
-                <View style={styles.videoHeader}>
-                  <ThemedText style={[styles.videoTitle, { color: colors.onSurface }]}>
-                    🎥 Video del Taller
-                  </ThemedText>
-                  <TouchableOpacity
-                    style={[
-                      styles.videoToggleButton,
-                      {
-                        backgroundColor: colors.primary,
-                      },
-                    ]}
-                    onPress={handleVideoToggle}
-                    activeOpacity={0.8}
-                  >
-                    <ThemedText style={[styles.videoToggleText, { color: colors.onPrimary }]}>
-                      {showVideo ? '⏸️ Ocultar' : '▶️ Ver'}
-                    </ThemedText>
-                  </TouchableOpacity>
-                </View>
-
-                {showVideo && (
-                  <View style={styles.videoPlayerContainer}>
-                    <Video
-                      ref={videoRef}
-                      source={{ uri: videoUrl }}
-                      style={styles.videoPlayer}
-                      useNativeControls
-                      resizeMode={ResizeMode.CONTAIN}
-                      isLooping={false}
-                      onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
-                      onError={(error) => {
-                        console.error('Video error:', error);
-                      }}
-                    />
-                    {videoStatus?.isLoaded && (
-                      <View style={styles.videoControls}>
-                        <TouchableOpacity
-                          style={[styles.playPauseButton, { backgroundColor: colors.primary }]}
-                          onPress={handleVideoPlayPause}
-                          activeOpacity={0.8}
-                        >
-                          <ThemedText style={[styles.playPauseText, { color: colors.onPrimary }]}>
-                            {videoStatus.isPlaying ? '⏸️ Pausar' : '▶️ Reproducir'}
-                          </ThemedText>
-                        </TouchableOpacity>
-                      </View>
-                    )}
-                  </View>
-                )}
-              </View>
-            )}
-
-            {/* Full Description */}
-            {workshop.description && (
-              <View style={[styles.descriptionSection, { marginTop: Spacing.lg }]}>
-                <ThemedText style={[styles.sectionTitle, { color: colors.onSurface }]}>
-                  📝 Descripción Completa
-                </ThemedText>
-                <ThemedText
-                  style={[
-                    styles.descriptionText,
-                    {
-                      color: colors.onSurfaceVariant,
-                      marginTop: Spacing.md,
-                    },
-                  ]}
-                >
-                  {workshop.description}
-                </ThemedText>
-              </View>
-            )}
-
-            {/* Requirements */}
-            {workshop.requirements && (
-              <View style={[styles.descriptionSection, { marginTop: Spacing.lg }]}>
-                <ThemedText style={[styles.sectionTitle, { color: colors.onSurface }]}>
-                  ✅ Requisitos
-                </ThemedText>
-                <ThemedText
-                  style={[
-                    styles.descriptionText,
-                    {
-                      color: colors.onSurfaceVariant,
-                      marginTop: Spacing.md,
-                    },
-                  ]}
-                >
-                  {workshop.requirements}
-                </ThemedText>
-              </View>
-            )}
-
-            {/* Objectives */}
-            {workshop.objectives && (
-              <View style={[styles.descriptionSection, { marginTop: Spacing.lg }]}>
-                <ThemedText style={[styles.sectionTitle, { color: colors.onSurface }]}>
-                  🎯 Objetivos
-                </ThemedText>
-                <ThemedText
-                  style={[
-                    styles.descriptionText,
-                    {
-                      color: colors.onSurfaceVariant,
-                      marginTop: Spacing.md,
-                    },
-                  ]}
-                >
-                  {workshop.objectives}
-                </ThemedText>
-              </View>
-            )}
-
-            {/* Donations Info */}
-            {workshop.allowsDonations && (
-              <View
-                style={[
-                  styles.donationsSection,
-                  {
-                    backgroundColor: colors.secondaryContainer,
-                    marginTop: Spacing.lg,
-                  },
-                ]}
-              >
-                <ThemedText style={[styles.donationsText, { color: colors.onSecondaryContainer }]}>
-                  💝 Este taller acepta donaciones voluntarias
-                </ThemedText>
-              </View>
-            )}
-          </View>
-        </ScrollView>
-
-        {/* Inscribe Button */}
+      <LinearGradient
+        colors={[colors.amber600, colors.orange600, colors.orange700]}
+        style={styles.gradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        {/* Animated circles */}
         <View
           style={[
-            styles.buttonContainer,
-            {
-              paddingBottom: insets.bottom + Spacing.lg,
-              paddingHorizontal: Spacing.lg,
-              backgroundColor: colors.background,
-              borderTopColor: colors.outline,
-              ...Shadows.lg,
-            },
+            styles.circle,
+            styles.circle1,
+            { backgroundColor: colors.amber500 },
           ]}
-        >
+        />
+        <View
+          style={[
+            styles.circle,
+            styles.circle2,
+            { backgroundColor: colors.orange500 },
+          ]}
+        />
+
+        {/* Header with Image */}
+        <View style={styles.imageHeader}>
+          {imageUrl ? (
+            <Image
+              source={{ uri: imageUrl }}
+              style={styles.headerImage}
+              resizeMode="cover"
+            />
+          ) : (
+            <View style={styles.imagePlaceholder}>
+              <Text style={styles.placeholderIcon}>🍲</Text>
+            </View>
+          )}
+          <LinearGradient
+            colors={["transparent", "rgba(0,0,0,0.7)"]}
+            style={styles.imageGradient}
+          />
+          <View style={styles.typeBadgeContainer}>
+            <BlurView intensity={80} tint="dark" style={styles.typeBadge}>
+              <View style={styles.typeBadgeContent}>
+                <Ionicons name="people" size={14} color={colors.amber500} />
+                <Text style={styles.typeBadgeText}>{getTypeLabel()}</Text>
+              </View>
+            </BlurView>
+          </View>
+
+          {/* Back Button */}
           <TouchableOpacity
-            style={[
-              styles.inscribeButton,
-              {
-                backgroundColor: workshop.isFull ? colors.outlineVariant : colors.primary,
-                opacity: workshop.isFull ? 0.6 : 1,
-              },
-            ]}
-            onPress={() => {
-              // TODO: Add inscription functionality
-              alert('Inscripción ' + workshop.title);
-            }}
-            disabled={workshop.isFull}
+            style={styles.backButton}
             activeOpacity={0.8}
+            onPress={handleBack}
           >
-            <ThemedText style={[styles.inscribeButtonText, { color: colors.onPrimary }]}>
-              {workshop.isFull ? 'Taller Lleno' : '✍️ Inscribirse'}
-            </ThemedText>
+            <BlurView intensity={80} tint="dark" style={styles.backButtonBlur}>
+              <Ionicons name="arrow-back" size={24} color={colors.white} />
+            </BlurView>
           </TouchableOpacity>
         </View>
-      </ThemedView>
-    </>
+
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Main Info Card */}
+          <BlurView intensity={90} tint="dark" style={styles.mainCard}>
+            <View style={styles.mainCardContent}>
+              <Text style={styles.title}>{workshop.title}</Text>
+              <Text style={styles.code}>Código: {workshop.code}</Text>
+              <Text style={styles.shortDescription}>
+                {workshop.shortDescription}
+              </Text>
+            </View>
+          </BlurView>
+
+          {/* Date & Location Card */}
+          <BlurView intensity={80} tint="dark" style={styles.infoCard}>
+            <View style={styles.infoCardContent}>
+              <View style={styles.infoRow}>
+                <View style={styles.infoIconContainer}>
+                  <Ionicons name="calendar" size={20} color={colors.amber500} />
+                </View>
+                <View style={styles.infoTextContainer}>
+                  <Text style={styles.infoLabel}>Fecha y Hora</Text>
+                  <Text style={styles.infoValue}>{formatDate()}</Text>
+                </View>
+              </View>
+
+              {workshop.locationAddress && (
+                <>
+                  <View style={styles.infoDivider} />
+                  <View style={styles.infoRow}>
+                    <View style={styles.infoIconContainer}>
+                      <Ionicons
+                        name="location"
+                        size={20}
+                        color={colors.amber500}
+                      />
+                    </View>
+                    <View style={styles.infoTextContainer}>
+                      <Text style={styles.infoLabel}>Ubicación</Text>
+                      <Text style={styles.infoValue}>
+                        {workshop.locationAddress}
+                      </Text>
+                    </View>
+                  </View>
+                </>
+              )}
+            </View>
+          </BlurView>
+
+          {/* Capacity Card */}
+          <BlurView intensity={80} tint="dark" style={styles.capacityCard}>
+            <View style={styles.capacityCardContent}>
+              <View style={styles.capacityHeader}>
+                <Text style={styles.capacityTitle}>👥 Capacidad</Text>
+                {workshop.isFull ? (
+                  <View style={styles.fullBadge}>
+                    <Text style={styles.fullBadgeText}>⚠️ Lleno</Text>
+                  </View>
+                ) : (
+                  <View style={styles.availableBadge}>
+                    <Text style={styles.availableBadgeText}>
+                      ✓ {workshop.availableSpots} disponibles
+                    </Text>
+                  </View>
+                )}
+              </View>
+
+              <View style={styles.capacityBarContainer}>
+                <View style={styles.capacityBar}>
+                  <LinearGradient
+                    colors={
+                      capacityPercent > 80
+                        ? [colors.red400, colors.red500]
+                        : [colors.green500, colors.amber500]
+                    }
+                    style={[
+                      styles.capacityFill,
+                      { width: `${capacityPercent}%` },
+                    ]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                  />
+                </View>
+                <Text style={styles.capacityText}>
+                  {workshop.currentAttendees} / {workshop.maxCapacity}{" "}
+                  participantes
+                </Text>
+              </View>
+            </View>
+          </BlurView>
+
+          {/* Description Section */}
+          {workshop.description && (
+            <BlurView intensity={80} tint="dark" style={styles.sectionCard}>
+              <View style={styles.sectionContent}>
+                <Text style={styles.sectionTitle}>📝 Descripción</Text>
+                <Text style={styles.sectionText}>{workshop.description}</Text>
+              </View>
+            </BlurView>
+          )}
+
+        </ScrollView>
+
+        {/* Fixed Bottom Button */}
+        <View style={styles.bottomButtonContainer}>
+          <BlurView intensity={90} tint="dark" style={styles.bottomButtonBlur}>
+            <View style={styles.bottomButtonContent}>
+              <TouchableOpacity
+                style={[
+                  styles.inscribeButton,
+                  workshop.isFull && styles.inscribeButtonDisabled,
+                ]}
+                disabled={workshop.isFull}
+                activeOpacity={0.9}
+              >
+                <LinearGradient
+                  colors={
+                    workshop.isFull
+                      ? [colors.gray600, colors.gray700]
+                      : [colors.amber600, colors.orange600]
+                  }
+                  style={styles.inscribeGradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                >
+                  <Text style={styles.inscribeText}>
+                    {workshop.isFull ? "Taller Lleno" : "✍️ Inscribirse Ahora"}
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          </BlurView>
+        </View>
+      </LinearGradient>
+    </View>
   );
 }
 
@@ -555,239 +366,324 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  centerContainer: {
+  gradient: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  },
+  circle: {
+    position: "absolute",
+    borderRadius: 999,
+    opacity: 0.15,
+  },
+  circle1: {
+    width: 300,
+    height: 300,
+    top: -100,
+    right: -100,
+    opacity: 0.2,
+  },
+  circle2: {
+    width: 250,
+    height: 250,
+    bottom: 100,
+    left: -75,
+    opacity: 0.2,
+  },
+  imageHeader: {
+    width: "100%",
+    height: 280,
+    position: "relative",
+  },
+  headerImage: {
+    width: "100%",
+    height: "100%",
+  },
+  imagePlaceholder: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  placeholderIcon: {
+    fontSize: 80,
+  },
+  imageGradient: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 120,
+  },
+  typeBadgeContainer: {
+    position: "absolute",
+    bottom: 16,
+    right: 16,
+  },
+  typeBadge: {
+    borderRadius: 12,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
+  typeBadgeContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    gap: 6,
+  },
+  typeBadgeText: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: colors.white,
+  },
+  backButton: {
+    position: "absolute",
+    top: 60,
+    left: 16,
+  },
+  backButtonBlur: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
   },
   scrollView: {
     flex: 1,
+    marginBottom: 48,
   },
   scrollContent: {
-    flexGrow: 1,
+    padding: 24,
+    paddingBottom: 120,
   },
-  imageContainer: {
-    position: 'relative',
-    width: '100%',
-    height: 280,
+  mainCard: {
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+    marginBottom: 16,
   },
-  headerImage: {
-    width: '100%',
-    height: '100%',
-  },
-  imagePlaceholder: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  placeholderIcon: {
-    fontSize: 64,
-  },
-  typeBadgeOverlay: {
-    position: 'absolute',
-    top: Spacing.lg,
-    left: Spacing.lg,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.md,
-  },
-  typeLabelOverlay: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  content: {
-    flex: 1,
+  mainCardContent: {
+    padding: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 26,
+    fontWeight: "800",
+    color: colors.white,
+    marginBottom: 8,
   },
   code: {
-    fontSize: 12,
-    fontWeight: '500',
+    fontSize: 13,
+    color: colors.gray400,
+    marginBottom: 12,
+    fontWeight: "600",
   },
   shortDescription: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 16,
+    color: colors.gray300,
+    lineHeight: 24,
   },
-  infoSection: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
+  infoCard: {
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+    marginBottom: 16,
   },
-  infoTitle: {
-    fontSize: 12,
-    fontWeight: '600',
-    marginBottom: Spacing.sm,
+  infoCardContent: {
+    padding: 20,
+  },
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  infoIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "rgba(245, 158, 11, 0.2)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  infoTextContainer: {
+    flex: 1,
+  },
+  infoLabel: {
+    fontSize: 13,
+    color: colors.gray400,
+    marginBottom: 4,
+    fontWeight: "600",
   },
   infoValue: {
-    fontSize: 14,
-    fontWeight: '500',
-    lineHeight: 20,
+    fontSize: 15,
+    color: colors.white,
+    lineHeight: 22,
+    fontWeight: "500",
   },
-  urlButton: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
+  infoDivider: {
+    height: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    marginVertical: 16,
   },
-  urlButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
+  capacityCard: {
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+    marginBottom: 16,
   },
-  capacitySection: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
+  capacityCardContent: {
+    padding: 20,
   },
   capacityHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
   },
   capacityTitle: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: "700",
+    color: colors.white,
   },
   fullBadge: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
+    backgroundColor: colors.red500,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
   },
   fullBadgeText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.white,
   },
   availableBadge: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
+    backgroundColor: colors.green500,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
   },
   availableBadgeText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.white,
+  },
+  capacityBarContainer: {
+    gap: 8,
   },
   capacityBar: {
-    width: '100%',
+    width: "100%",
     height: 8,
-    borderRadius: BorderRadius.sm,
-    overflow: 'hidden',
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: 4,
+    overflow: "hidden",
   },
   capacityFill: {
-    height: '100%',
+    height: "100%",
+    borderRadius: 4,
   },
-  capacityInfo: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  videoSection: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-  },
-  videoHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  videoTitle: {
+  capacityText: {
     fontSize: 14,
-    fontWeight: '600',
+    color: colors.gray300,
+    fontWeight: "600",
   },
-  videoToggleButton: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.sm,
+  sectionCard: {
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
   },
-  videoToggleText: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  videoPlayerContainer: {
-    marginTop: Spacing.md,
-    borderRadius: BorderRadius.md,
-    overflow: 'hidden',
-  },
-  videoPlayer: {
-    width: '100%',
-    height: 220,
-    backgroundColor: '#000',
-  },
-  videoControls: {
-    marginTop: Spacing.sm,
-    alignItems: 'center',
-  },
-  playPauseButton: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.md,
-  },
-  playPauseText: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  descriptionSection: {
-    paddingHorizontal: 0,
+  sectionContent: {
+    padding: 20,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: "700",
+    color: colors.white,
+    marginBottom: 12,
   },
-  descriptionText: {
-    fontSize: 13,
-    lineHeight: 20,
+  sectionText: {
+    fontSize: 15,
+    color: colors.gray300,
+    lineHeight: 24,
   },
-  donationsSection: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
+  donationsCard: {
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(245, 158, 11, 0.3)",
+  },
+  donationsContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    gap: 12,
+  },
+  donationsIcon: {
+    fontSize: 24,
   },
   donationsText: {
-    fontSize: 13,
-    fontWeight: '500',
+    flex: 1,
+    fontSize: 14,
+    color: colors.white,
+    fontWeight: "600",
   },
-  buttonContainer: {
+  bottomButtonContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  bottomButtonBlur: {
     borderTopWidth: 1,
+    borderTopColor: "rgba(255, 255, 255, 0.1)",
+  },
+  bottomButtonContent: {
+    padding: 24,
   },
   inscribeButton: {
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingBottom: 24,
   },
-  inscribeButtonText: {
-    fontSize: 16,
-    fontWeight: '700',
+  inscribeButtonDisabled: {
+    opacity: 0.6,
+  },
+  inscribeGradient: {
+    paddingVertical: 16,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  inscribeText: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: colors.white,
+    letterSpacing: 0.5,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 16,
   },
   loadingText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  errorIcon: {
-    textAlign: 'center',
-  },
-  errorTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  errorText: {
-    fontSize: 14,
-    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: "600",
+    color: colors.white,
   },
   retryButton: {
-    marginTop: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
+    marginTop: 20,
+    backgroundColor: colors.amber500,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
   },
   retryButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: "700",
+    color: colors.white,
   },
 });

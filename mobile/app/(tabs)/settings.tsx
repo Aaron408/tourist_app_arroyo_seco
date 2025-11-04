@@ -60,12 +60,6 @@ export default function SettingsScreen() {
   const handleLanguageChange = (languageCode: "es" | "en") => {
     setLanguageModalVisible(false);
     setLanguage(languageCode);
-    Alert.alert(
-      languageCode === "es" ? "Idioma cambiado" : "Language changed",
-      languageCode === "es" 
-        ? "El idioma se ha cambiado a Español" 
-        : "The language has been changed to English"
-    );
   };
 
   const getCurrentLanguageName = () => {
