@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Pressable,
+  Alert,
+  Platform,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
@@ -14,6 +16,7 @@ import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import workshopService, { Workshop as WorkshopType } from "@/services/workshopService";
+import * as Calendar from 'expo-calendar';
 
 const colors = {
   gray900: "#111827",
@@ -99,6 +102,63 @@ export default function ExperiencesScreen() {
       pathname: '/screens/workshop-detail/[id]',
       params: { id: workshopId.toString() },
     });
+  };
+
+  const handleAddToCalendar = async (event: typeof mockEvents[0]) => {
+    try {
+      // Solicitar permisos para acceder al calendario
+      const { status } = await Calendar.requestCalendarPermissionsAsync();
+      
+      if (status !== 'granted') {
+        Alert.alert(
+          'Permiso requerido',
+          'Necesitamos acceso a tu calendario para agregar el evento.'
+        );
+        return;
+      }
+
+      // Obtener los calendarios disponibles
+      const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+      
+      // Buscar el calendario predeterminado o el primero disponible
+      const defaultCalendar = calendars.find(cal => cal.isPrimary) || calendars[0];
+      
+      if (!defaultCalendar) {
+        Alert.alert('Error', 'No se encontró un calendario disponible');
+        return;
+      }
+
+      // Crear fecha de inicio (asumimos 9:00 AM)
+      const startDate = new Date(event.date);
+      startDate.setHours(9, 0, 0, 0);
+      
+      // Crear fecha de fin (2 horas después)
+      const endDate = new Date(startDate);
+      endDate.setHours(11, 0, 0, 0);
+
+      // Crear el evento en el calendario
+      const eventId = await Calendar.createEventAsync(defaultCalendar.id, {
+        title: event.name,
+        startDate: startDate,
+        endDate: endDate,
+        notes: event.description,
+        location: `${event.location}, Arroyo Seco`,
+        timeZone: 'America/Mexico_City',
+      });
+
+      if (eventId) {
+        Alert.alert(
+          '✅ Evento agregado',
+          'El evento se ha agregado a tu calendario correctamente'
+        );
+      }
+    } catch (error) {
+      console.error('Error al agregar evento al calendario:', error);
+      Alert.alert(
+        'Error',
+        'No se pudo agregar el evento al calendario'
+      );
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -297,7 +357,11 @@ export default function ExperiencesScreen() {
               </View>
             </View>
 
-            <TouchableOpacity style={styles.eventButton} activeOpacity={0.9}>
+            <TouchableOpacity 
+              style={styles.eventButton} 
+              activeOpacity={0.9}
+              onPress={() => handleAddToCalendar(event)}
+            >
               <LinearGradient
                 colors={[colors.amber600, colors.orange600]}
                 style={styles.eventButtonGradient}
