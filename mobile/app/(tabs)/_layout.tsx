@@ -116,25 +116,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* Keep old tabs hidden for backward compatibility */}
-      <Tabs.Screen
-        name="recipes"
-        options={{
-          href: null,
-        }}
-      />
-      <Tabs.Screen
-        name="restaurants"
-        options={{
-          href: null,
-        }}
-      />
-      <Tabs.Screen
-        name="workshops"
-        options={{
-          href: null,
-        }}
-      />
     </Tabs>
   );
 }

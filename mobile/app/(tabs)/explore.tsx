@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
 
@@ -93,9 +94,17 @@ const mockLocations = [
 const allPlaces = [...mockRestaurants, ...mockLocations];
 
 export default function ExploreScreen() {
+  const params = useLocalSearchParams<{ initialView?: string }>();
   const [viewType, setViewType] = useState<ViewType>("map");
   const [filter, setFilter] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Set initial view from navigation params
+  useEffect(() => {
+    if (params.initialView && (params.initialView === "map" || params.initialView === "list")) {
+      setViewType(params.initialView as ViewType);
+    }
+  }, [params.initialView]);
 
   const filteredPlaces = allPlaces.filter((place) => {
     const matchesFilter =

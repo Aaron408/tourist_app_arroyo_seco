@@ -101,7 +101,8 @@ export default function HomeScreen() {
       title: t.index.modules.recipes.title,
       icon: "🍲",
       description: t.index.modules.recipes.description,
-      route: "recipes",
+      route: "gastronomy",
+      params: { initialTab: "recipes" },
     },
     {
       id: "gastronomy",
@@ -109,20 +110,23 @@ export default function HomeScreen() {
       icon: "🌱",
       description: t.index.modules.ingredients.description,
       route: "gastronomy",
+      params: { initialTab: "ingredients" },
     },
     {
       id: "restaurants",
       title: t.index.modules.restaurants.title,
       icon: "🍽️",
       description: t.index.modules.restaurants.description,
-      route: "restaurants",
+      route: "explore",
+      params: { initialView: "map" },
     },
     {
       id: "workshops",
       title: t.index.modules.techniques.title,
       icon: "👨‍🍳",
       description: t.index.modules.techniques.description,
-      route: "workshops",
+      route: "gastronomy",
+      params: { initialTab: "techniques" },
     },
   ];
 
@@ -133,8 +137,15 @@ export default function HomeScreen() {
     { label: t.index.stats.techniques, value: "12", icon: "⚡" },
   ];
 
-  const navigateToSection = (route: string) => {
-    router.push(`/(tabs)/${route}` as any);
+  const navigateToSection = (route: string, params?: { initialTab?: string; initialView?: string }) => {
+    if (params) {
+      router.push({
+        pathname: `/(tabs)/${route}` as any,
+        params: params,
+      });
+    } else {
+      router.push(`/(tabs)/${route}` as any);
+    }
   };
 
   return (
@@ -215,7 +226,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 key={section.id}
                 activeOpacity={0.9}
-                onPress={() => navigateToSection(section.route)}
+                onPress={() => navigateToSection(section.route, section.params)}
               >
                 <BlurView intensity={80} tint="dark" style={styles.moduleCard}>
                   <View style={styles.moduleContent}>
@@ -247,42 +258,12 @@ export default function HomeScreen() {
             ))}
           </View>
 
-          {/* Info Card */}
-          <BlurView intensity={80} tint="dark" style={styles.infoCard}>
-            <View style={styles.infoContent}>
-              <View style={styles.infoIconContainer}>
-                <LinearGradient
-                  colors={[colors.amber500, colors.orange600]}
-                  style={styles.infoIconGradient}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                >
-                  <Text style={styles.infoIcon}>💡</Text>
-                </LinearGradient>
-              </View>
-              <Text style={styles.infoTitle}>
-                {t.index.aboutPlatform.title}
-              </Text>
-              <Text style={styles.infoDescription}>
-                {t.index.aboutPlatform.description}
-              </Text>
-              <View style={styles.featuresContainer}>
-                {[
-                  { icon: "📱", text: t.index.aboutPlatform.features.responsive },
-                  { icon: "🌐", text: t.index.aboutPlatform.features.offline },
-                  { icon: "🎨", text: t.index.aboutPlatform.features.visual },
-                ].map((feature, index) => (
-                  <View key={index} style={styles.featureItem}>
-                    <Text style={styles.featureIcon}>{feature.icon}</Text>
-                    <Text style={styles.featureText}>{feature.text}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          </BlurView>
-
           {/* CTA Button */}
-          <TouchableOpacity activeOpacity={0.9} style={styles.ctaContainer}>
+          <TouchableOpacity 
+            activeOpacity={0.9} 
+            style={styles.ctaContainer}
+            onPress={() => navigateToSection("explore", { initialView: "list" })}
+          >
             <LinearGradient
               colors={[colors.amber600, colors.orange600]}
               style={styles.ctaButton}
