@@ -1,83 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChefHat, Clock, Users, Flame, Heart } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
 import Header from './components/Header';
 import Filters from './components/Filters';
+import { gastronomyAPI } from '../../../common/api';
 
 const Recipes = () => {
   const { getTranslations } = useLanguageStore();
   const t = getTranslations();
+
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
-
-  const recipes = [
-    {
-      id: 1,
-      name: 'Enchiladas Queretanas',
-      description: 'Enchiladas tradicionales rellenas de queso fresco y bañadas en salsa roja',
-      image: 'https://images.unsplash.com/photo-1599974168528-80ddb8c13f90?w=800&q=80',
-      difficulty: 'medium',
-      time: '45 min',
-      servings: 4,
-      category: 'Plato Principal',
-      isFavorite: true,
-    },
-    {
-      id: 2,
-      name: 'Gorditas de Maíz',
-      description: 'Gorditas hechas a mano con maíz local, perfectas para rellenar',
-      image: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?w=800&q=80',
-      difficulty: 'easy',
-      time: '30 min',
-      servings: 6,
-      category: 'Antojitos',
-      isFavorite: false,
-    },
-    {
-      id: 3,
-      name: 'Mole de Olla',
-      description: 'Caldo tradicional con verduras frescas y carne de res',
-      image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&q=80',
-      difficulty: 'hard',
-      time: '2 hrs',
-      servings: 8,
-      category: 'Sopas',
-      isFavorite: true,
-    },
-    {
-      id: 4,
-      name: 'Atole de Elote',
-      description: 'Bebida caliente tradicional hecha con elote tierno',
-      image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=800&q=80',
-      difficulty: 'easy',
-      time: '20 min',
-      servings: 4,
-      category: 'Bebidas',
-      isFavorite: false,
-    },
-    {
-      id: 5,
-      name: 'Nopales Asados',
-      description: 'Nopales frescos asados con especias tradicionales',
-      image: 'https://images.unsplash.com/photo-1626200419199-391ae4be7a41?w=800&q=80',
-      difficulty: 'easy',
-      time: '15 min',
-      servings: 4,
-      category: 'Guarniciones',
-      isFavorite: false,
-    },
-    {
-      id: 6,
-      name: 'Pan de Pulque',
-      description: 'Pan tradicional fermentado con pulque natural',
-      image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80',
-      difficulty: 'medium',
-      time: '3 hrs',
-      servings: 12,
-      category: 'Postres',
-      isFavorite: true,
-    },
-  ];
 
   const difficulties = ['easy', 'medium', 'hard'];
 
@@ -90,6 +27,47 @@ const Recipes = () => {
     return colors[difficulty] || 'bg-gray-100 text-gray-700';
   };
 
+  // ==============================
+  // Fetch recipes from API
+  // ==============================
+  const fetchRecipes = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const language = t.languageCode || 'es';
+      const response = await gastronomyAPI.recipes.getAll({ language });
+      
+      const formattedRecipes = response.data.map(recipe => {
+        const translation = recipe.translations?.[0] || {};
+        return {
+          id: recipe.id,
+          name: translation.name || 'No name',
+          description: translation.description || '',
+          image: recipe.multimedia?.[0]?.url || 'https://images.unsplash.com/photo-1599974168528-80ddb8c13f90?w=800&q=80',
+          difficulty: recipe.difficulty || 'medium',
+          time: recipe.duration ? `${recipe.duration} min` : 'N/A',
+          servings: recipe.servings || 4,
+          category: translation.category || 'General',
+          isFavorite: recipe.isFavorite || false,
+        };
+      });
+
+      setRecipes(formattedRecipes);
+    } catch (err) {
+      console.error(err);
+      setError(t.gastronomyPage.recipes.fetchError || 'Error fetching recipes');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecipes();
+  }, [t.languageCode]);
+
+  // ==============================
+  // Filters
+  // ==============================
   const filteredRecipes = recipes.filter(recipe => {
     const matchesSearch = recipe.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          recipe.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -102,6 +80,12 @@ const Recipes = () => {
     medium: t.gastronomyPage.recipes.difficulty.medium,
     hard: t.gastronomyPage.recipes.difficulty.hard,
   };
+
+  // ==============================
+  // Render
+  // ==============================
+  if (loading) return <div className="text-center py-20">{t.gastronomyPage.recipes.loading || 'Loading...'}</div>;
+  if (error) return <div className="text-center py-20 text-red-600">{error}</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-amber-50 to-white">

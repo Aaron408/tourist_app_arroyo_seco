@@ -1,15 +1,18 @@
 import './App.css';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { useLanguageStore as useLandingLanguageStore } from './landing/stores/languageStore';
 import { useLanguageStore as useAdminLanguageStore } from './admin/stores/languageStore';
-import { AuthProvider } from './admin/contexts/AuthContext';
+import { AuthProvider } from './admin/contexts/AuthProvider';
 
 // Import routes
+import { commonRoutes } from './common/routes/commonRoutes';
 import { landingRoutes } from './landing/routes/LandingRoutes';
 import { adminRoutes } from './admin/routes/AdminRoutes';
 
+// Create router with all routes
 const router = createBrowserRouter([
+  ...commonRoutes,
   ...landingRoutes,
   ...adminRoutes,
 ]);
@@ -19,17 +22,14 @@ export default function App() {
   const { initializeLanguage: initAdmin, setLanguage: setAdminLanguage } = useAdminLanguageStore();
 
   useEffect(() => {
-    // Initialize all language stores
     initLanding();
     initAdmin();
 
-    // Sync language changes across all stores
     const syncLanguage = (languageCode) => {
       setLandingLanguage(languageCode);
       setAdminLanguage(languageCode);
     };
 
-    // Listen for language changes in localStorage
     const handleStorageChange = (e) => {
       if (e.key === 'preferredLanguage' && e.newValue) {
         syncLanguage(e.newValue);

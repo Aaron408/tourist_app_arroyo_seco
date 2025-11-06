@@ -1,44 +1,4 @@
 /**
- * Constantes de la API
- */
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.arroyoseco-app.com';
-export const API_TIMEOUT = 10000; // 10 segundos
-
-/**
- * Códigos de estado HTTP
- */
-export const HTTP_STATUS = {
-  OK: 200,
-  CREATED: 201,
-  BAD_REQUEST: 400,
-  UNAUTHORIZED: 401,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500
-};
-
-/**
- * Configuración del mapa
- */
-export const MAP_CONFIG = {
-  CENTER: [21.5470145, -99.6907782], // Centro en la Presidencia Municipal de Arroyo Seco
-  ZOOM: 13,
-  MAX_ZOOM: 18,
-  MIN_ZOOM: 10
-};
-
-/**
- * Tipos de ubicaciones
- */
-export const LOCATION_TYPES = {
-  RESTAURANT: 'restaurant',
-  EVENT: 'event',
-  LANDMARK: 'landmark',
-  MARKET: 'market',
-  WORKSHOP: 'workshop'
-};
-
-/**
  * Rutas de la aplicación landing
  */
 export const ROUTES = {
@@ -67,6 +27,27 @@ export const ROUTES = {
   EVENTS: "/eventos",
   FLAVOR_ROUTE: "/eventos/ruta-del-sabor",
   WORKSHOPS: "/eventos/talleres",
+};
+
+/**
+ * Configuración del mapa
+ */
+export const MAP_CONFIG = {
+  CENTER: [21.5470145, -99.6907782], // Centro en la Presidencia Municipal de Arroyo Seco
+  ZOOM: 13,
+  MAX_ZOOM: 18,
+  MIN_ZOOM: 10
+};
+
+/**
+ * Tipos de ubicaciones
+ */
+export const LOCATION_TYPES = {
+  RESTAURANT: 'restaurant',
+  EVENT: 'event',
+  LANDMARK: 'landmark',
+  MARKET: 'market',
+  WORKSHOP: 'workshop'
 };
 
 /**

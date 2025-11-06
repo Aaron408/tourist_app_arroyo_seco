@@ -1,0 +1,108 @@
+{
+  "navigation": {
+    "dashboard": { "title": "Dashboard" },
+    "catalogs": {
+      "title": "Catalogs",
+      "recipes": "Recipes",
+      "ingredients": "Ingredients",
+      "techniques": "Techniques",
+      "tools": "Tools",
+      "locations": "Locations"
+    },
+    "events": {
+      "title": "Events",
+      "workshops": "Workshops",
+      "routes": "Flavor Routes"
+    },
+    "translations": { "title": "Translations" },
+    "feedback": { "title": "Feedback" },
+    "users": { "title": "Users" },
+    "statistics": { "title": "Statistics" }
+  },
+  "loginPage": {
+    "title": "Admin Login",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Login",
+    "forgotPassword": "Forgot password?"
+  },
+  "dashboardPage": {
+    "welcome": "Welcome to the Admin Panel",
+    "overview": "Overview of system metrics and recent activity"
+  },
+  "catalogsPage": {
+    "title": "Catalog Management",
+    "description": "Manage recipes, ingredients, techniques, tools, and locations.",
+    "actions": {
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View"
+    },
+    "recipes": {
+      "title": "Recipes",
+      "addRecipe": "Add Recipe",
+      "editRecipe": "Edit Recipe"
+    },
+    "ingredients": {
+      "title": "Ingredients",
+      "addIngredient": "Add Ingredient",
+      "editIngredient": "Edit Ingredient"
+    },
+    "techniques": {
+      "title": "Techniques",
+      "addTechnique": "Add Technique",
+      "editTechnique": "Edit Technique"
+    },
+    "tools": {
+      "title": "Tools",
+      "addTool": "Add Tool",
+      "editTool": "Edit Tool"
+    },
+    "locations": {
+      "title": "Locations",
+      "addLocation": "Add Location",
+      "editLocation": "Edit Location"
+    }
+  },
+  "eventsPage": {
+    "title": "Event Management",
+    "description": "Manage events, workshops, and flavor routes.",
+    "workshops": { "title": "Workshops", "addWorkshop": "Add Workshop", "editWorkshop": "Edit Workshop" },
+    "routes": { "title": "Flavor Routes", "addRoute": "Add Route", "editRoute": "Edit Route" }
+  },
+  "translationsPage": {
+    "title": "Translations",
+    "description": "Manage translation strings for the platform.",
+    "actions": { "edit": "Edit", "save": "Save", "cancel": "Cancel" }
+  },
+  "feedbackPage": {
+    "title": "User Feedback",
+    "description": "Review user feedback and inquiries.",
+    "status": { "pending": "Pending", "reviewed": "Reviewed" }
+  },
+  "usersPage": {
+    "title": "User Management",
+    "description": "Manage users and their roles.",
+    "roles": { "admin": "Admin", "editor": "Editor", "viewer": "Viewer" }
+  },
+  "statisticsPage": {
+    "title": "Statistics",
+    "description": "View system usage, metrics and analytics."
+  },
+  "common": {
+    "search": "Search...",
+    "filter": "Filter",
+    "all": "All",
+    "addNew": "Add New",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "viewDetails": "View Details",
+    "back": "Back"
+  },
+  "footer": {
+    "allRightsReserved": "All rights reserved."
+  }
+}
