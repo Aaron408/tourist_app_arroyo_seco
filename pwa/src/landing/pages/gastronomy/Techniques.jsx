@@ -1,83 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChefHat, Clock, BookOpen, Sparkles } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
 import Header from './components/Header';
 import Filters from './components/Filters';
+import { gastronomyAPI } from '../../../common/api';
 
-const CulinaryTechniques = () => {
+const Techniques = () => {
   const { getTranslations } = useLanguageStore();
   const t = getTranslations();
+
+  const [techniques, setTechniques] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
-
-  const techniques = [
-    {
-      id: 1,
-      name: 'Nixtamalización',
-      description: 'Proceso ancestral de cocción del maíz con cal para crear masa',
-      image: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800&q=80',
-      category: 'preparation',
-      time: '8-12 horas',
-      difficulty: 'medium',
-      steps: 8,
-      tools: ['Olla grande', 'Cal', 'Metate'],
-    },
-    {
-      id: 2,
-      name: 'Molienda en Metate',
-      description: 'Técnica tradicional para moler granos y especias',
-      image: 'https://images.unsplash.com/photo-1596797882870-8c33deeacb98?w=800&q=80',
-      category: 'grinding',
-      time: '30-45 min',
-      difficulty: 'medium',
-      steps: 5,
-      tools: ['Metate', 'Mano de metate'],
-    },
-    {
-      id: 3,
-      name: 'Cocción en Comal',
-      description: 'Método de cocción sobre superficie plana de barro o metal',
-      image: 'https://images.unsplash.com/photo-1599974168528-80ddb8c13f90?w=800&q=80',
-      category: 'cooking',
-      time: '15-30 min',
-      difficulty: 'easy',
-      steps: 4,
-      tools: ['Comal', 'Pala de madera'],
-    },
-    {
-      id: 4,
-      name: 'Fermentación de Pulque',
-      description: 'Proceso de fermentación natural del aguamiel de maguey',
-      image: 'https://images.unsplash.com/photo-1582106245687-672783c674d4?w=800&q=80',
-      category: 'fermentation',
-      time: '3-7 días',
-      difficulty: 'hard',
-      steps: 12,
-      tools: ['Tinas de madera', 'Jícaras', 'Acocote'],
-    },
-    {
-      id: 5,
-      name: 'Secado al Sol',
-      description: 'Conservación de chiles y frutas mediante deshidratación solar',
-      image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80',
-      category: 'preservation',
-      time: '2-5 días',
-      difficulty: 'easy',
-      steps: 3,
-      tools: ['Petates', 'Mallas', 'Estructuras de madera'],
-    },
-    {
-      id: 6,
-      name: 'Tatemado',
-      description: 'Técnica de asado directo sobre fuego para desarrollar sabores ahumados',
-      image: 'https://images.unsplash.com/photo-1626200419199-391ae4be7a41?w=800&q=80',
-      category: 'cooking',
-      time: '20-40 min',
-      difficulty: 'medium',
-      steps: 6,
-      tools: ['Comal', 'Pinzas', 'Carbón o leña'],
-    },
-  ];
 
   const categories = ['preparation', 'grinding', 'cooking', 'fermentation', 'preservation'];
 
@@ -92,6 +29,47 @@ const CulinaryTechniques = () => {
     return colors[category] || 'bg-gray-100 text-gray-700';
   };
 
+  // ==============================
+  // Fetch techniques from API
+  // ==============================
+  const fetchTechniques = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const language = t.languageCode || 'es';
+      const response = await gastronomyAPI.techniques.getAll({ language });
+      
+      const formattedTechniques = response.data.map(technique => {
+        const translation = technique.translations?.[0] || {};
+        return {
+          id: technique.id,
+          name: translation.name || 'No name',
+          description: translation.description || '',
+          image: technique.image || 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800&q=80',
+          category: technique.category || 'preparation',
+          time: technique.time || 'N/A',
+          difficulty: technique.difficulty || 'medium',
+          steps: technique.steps || 0,
+          tools: technique.tools || [],
+        };
+      });
+
+      setTechniques(formattedTechniques);
+    } catch (err) {
+      console.error(err);
+      setError(t.gastronomyPage.techniques.fetchError || 'Error fetching techniques');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTechniques();
+  }, [t.languageCode]);
+
+  // ==============================
+  // Filters
+  // ==============================
   const filteredTechniques = techniques.filter(technique => {
     const matchesSearch = technique.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          technique.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -103,6 +81,12 @@ const CulinaryTechniques = () => {
   categories.forEach(category => {
     categoryLabels[category] = t.gastronomyPage.techniques.categories[category];
   });
+
+  // ==============================
+  // Render
+  // ==============================
+  if (loading) return <div className="text-center py-20">{t.gastronomyPage.techniques.loading || 'Loading...'}</div>;
+  if (error) return <div className="text-center py-20 text-red-600">{error}</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 via-pink-50 to-white">
@@ -184,21 +168,23 @@ const CulinaryTechniques = () => {
                 </div>
 
                 {/* Tools */}
-                <div className="mb-4">
-                  <p className="text-xs font-semibold text-gray-500 uppercase mb-2">
-                    {t.gastronomyPage.techniques.toolsNeeded}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {technique.tools.map((tool, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium"
-                      >
-                        {tool}
-                      </span>
-                    ))}
+                {technique.tools.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                      {t.gastronomyPage.techniques.toolsNeeded}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {technique.tools.map((tool, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium"
+                        >
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all">
                   {t.gastronomyPage.techniques.seeTutorial} →
@@ -251,4 +237,4 @@ const CulinaryTechniques = () => {
   );
 };
 
-export default CulinaryTechniques;
+export default Techniques;
