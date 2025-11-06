@@ -1,5 +1,5 @@
-import esMX from './es-MX';
-import enUS from './en-US';
+import esMX from './es-MX.json';
+import enUS from './en-US.json';
 
 export const translations = {
   'es-MX': esMX,

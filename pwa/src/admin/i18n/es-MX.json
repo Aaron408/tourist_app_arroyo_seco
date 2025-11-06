@@ -1,0 +1,116 @@
+{
+  "navigation": {
+    "dashboard": { "title": "Panel" },
+    "catalogs": {
+      "title": "Catálogos",
+      "recipes": "Recetas",
+      "ingredients": "Ingredientes",
+      "techniques": "Técnicas",
+      "tools": "Utensilios",
+      "locations": "Ubicaciones"
+    },
+    "events": {
+      "title": "Eventos",
+      "workshops": "Talleres",
+      "routes": "Rutas del Sabor"
+    },
+    "translations": { "title": "Traducciones" },
+    "feedback": { "title": "Retroalimentación" },
+    "users": { "title": "Usuarios" },
+    "statistics": { "title": "Estadísticas" }
+  },
+  "loginPage": {
+    "title": "Ingreso Administrativo",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "loginButton": "Iniciar sesión",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
+  },
+  "dashboardPage": {
+    "welcome": "Bienvenido al Panel de Administración",
+    "overview": "Resumen de métricas del sistema y actividad reciente"
+  },
+  "catalogsPage": {
+    "title": "Gestión de Catálogos",
+    "description": "Administra recetas, ingredientes, técnicas, utensilios y ubicaciones.",
+    "actions": {
+      "add": "Agregar",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "view": "Ver"
+    },
+    "recipes": {
+      "title": "Recetas",
+      "addRecipe": "Agregar Receta",
+      "editRecipe": "Editar Receta"
+    },
+    "ingredients": {
+      "title": "Ingredientes",
+      "addIngredient": "Agregar Ingrediente",
+      "editIngredient": "Editar Ingrediente"
+    },
+    "techniques": {
+      "title": "Técnicas",
+      "addTechnique": "Agregar Técnica",
+      "editTechnique": "Editar Técnica"
+    },
+    "tools": {
+      "title": "Utensilios",
+      "addTool": "Agregar Utensilio",
+      "editTool": "Editar Utensilio"
+    },
+    "locations": {
+      "title": "Ubicaciones",
+      "addLocation": "Agregar Ubicación",
+      "editLocation": "Editar Ubicación"
+    }
+  },
+  "eventsPage": {
+    "title": "Gestión de Eventos",
+    "description": "Administra eventos, talleres y rutas del sabor.",
+    "workshops": {
+      "title": "Talleres",
+      "addWorkshop": "Agregar Taller",
+      "editWorkshop": "Editar Taller"
+    },
+    "routes": {
+      "title": "Rutas del Sabor",
+      "addRoute": "Agregar Ruta",
+      "editRoute": "Editar Ruta"
+    }
+  },
+  "translationsPage": {
+    "title": "Traducciones",
+    "description": "Administra las cadenas de traducción de la plataforma.",
+    "actions": { "edit": "Editar", "save": "Guardar", "cancel": "Cancelar" }
+  },
+  "feedbackPage": {
+    "title": "Retroalimentación de Usuarios",
+    "description": "Revisa comentarios y consultas de los usuarios.",
+    "status": { "pending": "Pendiente", "reviewed": "Revisado" }
+  },
+  "usersPage": {
+    "title": "Gestión de Usuarios",
+    "description": "Administra usuarios y sus roles.",
+    "roles": { "admin": "Administrador", "editor": "Editor", "viewer": "Visualizador" }
+  },
+  "statisticsPage": {
+    "title": "Estadísticas",
+    "description": "Visualiza métricas de uso del sistema y análisis."
+  },
+  "common": {
+    "search": "Buscar...",
+    "filter": "Filtrar",
+    "all": "Todos",
+    "addNew": "Agregar Nuevo",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "viewDetails": "Ver Detalles",
+    "back": "Regresar"
+  },
+  "footer": {
+    "allRightsReserved": "Todos los derechos reservados."
+  }
+}

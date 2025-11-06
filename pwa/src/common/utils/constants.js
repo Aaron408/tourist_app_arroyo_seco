@@ -1,43 +1,42 @@
 /**
- * Constantes de la API
+ * API Base URLs
  */
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.arroyoseco-app.com';
-export const API_TIMEOUT = 10000; // 10 segundos
+export const API_BASE_URL = 'https://vps-master.duckdns.org';
+export const AUTH_API_URL = 'https://vps-master.duckdns.org/authMS';
+export const GASTRONOMY_API_URL = 'https://vps-master.duckdns.org/gastronomyMS';
 
 /**
- * Códigos de estado HTTP
+ * API Configuration
+ */
+export const API_TIMEOUT = 10000; // 10 seconds
+
+/**
+ * HTTP Status Codes
  */
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
+  NO_CONTENT: 204,
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500
+  INTERNAL_SERVER_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503
 };
 
 /**
- * Rutas de administración
+ * Application Routes
  */
 export const ROUTES = {
-  LOGIN: '', // Ruta base /administracion (login)
-  HOME: 'home', // /administracion/home
-};
-
-/**
- * Mensajes de la aplicación
- */
-export const MESSAGES = {
-  WELCOME: 'Bienvenido al panel de administración',
-  LOGIN_SUCCESS: 'Has iniciado sesión correctamente',
-  LOGOUT_SUCCESS: 'Has cerrado sesión correctamente',
-};
-
-/**
- * Opciones de paginación
- */
-export const PAGINATION = {
-  DEFAULT_PAGE_SIZE: 10,
-  DEFAULT_PAGE: 1,
+  // Home
+  HOME: '/',
+  
+  // Legal pages - Spanish
+  POLICY_SPANISH: '/aviso-de-privacidad',
+  TERMS_SPANISH: '/terminos-y-condiciones',
+  
+  // Legal pages - English
+  POLICY_ENGLISH: '/privacy-policy',
+  TERMS_ENGLISH: '/terms-and-conditions',
 };

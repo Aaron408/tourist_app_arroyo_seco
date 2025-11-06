@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import LandingLayout from '../layouts/LandingLayout';
 import { ROUTES } from '../utils/constants';
+import LoadingFallback from '../../common/components/LoadingFallback';
 
 const HomePage = lazy(() => import('../pages/home/Home.jsx'));
 const GastronomyPage = lazy(() => import('../pages/gastronomy/Gastronomy.jsx'));
@@ -19,12 +20,6 @@ const EventsPage = lazy(() => import('../pages/events/Events.jsx'));
 const FlavorRoutePage = lazy(() => import('../pages/events/FlavorRoute.jsx'));
 const WorkshopsPage = lazy(() => import('../pages/events/Workshops.jsx'));
 const NotFoundPage = lazy(() => import('../pages/NotFound.jsx'));
-
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center h-screen">
-    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
-  </div>
-);
 
 export const landingRoutes = [
   {
