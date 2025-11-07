@@ -10,10 +10,10 @@ export const API_CONFIG = {
   // Dispositivo físico: usa la IP de tu computadora en la red local
   DEV_URL: __DEV__ 
     ? 'https://vps-master.duckdns.org/authMS/'
-    : 'https://your-production-api.com',
+    : 'https://vps-master.duckdns.org/authMS/',
   
   // URL de producción
-  PROD_URL: 'https://your-production-api.com',
+  PROD_URL: 'https://vps-master.duckdns.org/authMS/',
   
   // Timeout para las peticiones (en ms)
   TIMEOUT: 10000,
