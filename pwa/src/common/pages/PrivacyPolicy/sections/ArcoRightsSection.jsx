@@ -39,7 +39,7 @@ const ArcoRightsSection = () => (
     </p>
     <div className="bg-blue-100 p-4 rounded-lg">
       <p className="text-blue-900 font-semibold">
-        Correo electrónico: example@victics.com
+        Correo electrónico: ratonrangelmejia+2@gmail.com
       </p>
     </div>
 
@@ -62,7 +62,7 @@ const ArcoRightsSection = () => (
       </p>
       <ol className="list-decimal pl-6 space-y-1 text-green-800">
         <li>
-          Envíe un correo electrónico a: example@victics.com con el asunto
+          Envíe un correo electrónico a: ratonrangelmejia+2@gmail.com con el asunto
           "Solicitud de Cancelación de Cuenta"
         </li>
         <li>

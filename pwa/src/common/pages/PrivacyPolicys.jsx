@@ -15,7 +15,7 @@ const PrivacyPolicy = () => {
           </h1>
           <p className="text-lg text-gray-600">Conforme a la LFPDPPP</p>
           <p className="text-md text-gray-500 mt-2">Proyecto "Xi'oi Gourmet"</p>
-          <p className="text-md text-gray-500">Plataforma Digital "Ruta del Sabor"</p>
+          <p className="text-md text-gray-500">Plataforma Digital "Xi'oi Gourmet"</p>
           <p className="text-sm text-gray-400 mt-3">
             Última actualización: 17 de octubre de 2025
           </p>
@@ -29,16 +29,16 @@ const PrivacyPolicy = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. IDENTIDAD Y DOMICILIO DEL RESPONSABLE</h2>
             
             <p className="text-gray-700 leading-relaxed mb-4">
-              <strong>Victics</strong> (en adelante, "el Responsable" o "Victics") con domicilio en Arroyo Seco, 
+              <strong>Victics</strong> (en adelante, "el Responsable" o "Victics") con domicilio en Querétaro, 
               Querétaro, México, es el responsable del tratamiento de los datos personales que usted nos proporcione 
-              a través de la plataforma digital "Ruta del Sabor".
+              a través de la plataforma digital "Xi'oi Gourmet".
             </p>
 
             <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="text-lg font-semibold text-blue-900 mb-2">Datos de Contacto</h3>
-              <p className="text-blue-800"><strong>Correo electrónico:</strong> example@victics.com</p>
-              <p className="text-blue-800"><strong>Domicilio:</strong> Arroyo Seco, Querétaro, México</p>
-              <p className="text-blue-800"><strong>Plataforma:</strong> Ruta del Sabor</p>
+              <p className="text-blue-800"><strong>Correo electrónico:</strong> ratonrangelmejia+2@gmail.com</p>
+              <p className="text-blue-800"><strong>Domicilio:</strong> Querétaro, Querétaro, México</p>
+              <p className="text-blue-800"><strong>Plataforma:</strong> Xi'oi Gourmet</p>
             </div>
           </section>
 
@@ -169,7 +169,7 @@ const PrivacyPolicy = () => {
               Para ejercer cualquiera de los Derechos ARCO, usted deberá presentar una solicitud por escrito a través del siguiente medio:
             </p>
             <div className="bg-blue-100 p-4 rounded-lg">
-              <p className="text-blue-900 font-semibold">Correo electrónico: example@victics.com</p>
+              <p className="text-blue-900 font-semibold">Correo electrónico: ratonrangelmejia+2@gmail.com</p>
             </div>
 
             <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-2">5.3 Plazo de Respuesta</h3>
@@ -182,7 +182,7 @@ const PrivacyPolicy = () => {
             <div className="bg-green-50 p-4 rounded-lg">
               <p className="text-green-900 mb-2">Para facilitar el ejercicio del derecho de cancelación, Victics ofrece un procedimiento simplificado:</p>
               <ol className="list-decimal pl-6 space-y-1 text-green-800">
-                <li>Envíe un correo electrónico a: example@victics.com con el asunto "Solicitud de Cancelación de Cuenta"</li>
+                <li>Envíe un correo electrónico a: ratonrangelmejia+2@gmail.com con el asunto "Solicitud de Cancelación de Cuenta"</li>
                 <li>Incluya su nombre de usuario registrado y correo electrónico asociado</li>
                 <li>Victics confirmará la solicitud en un plazo máximo de 5 días hábiles</li>
                 <li>La eliminación definitiva se realizará en un plazo de 15 días hábiles</li>
@@ -218,7 +218,7 @@ const PrivacyPolicy = () => {
             <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
               <h3 className="text-xl font-semibold text-red-900 mb-2">10.1 Prohibición Expresa</h3>
               <p className="text-red-800 font-semibold">
-                La Plataforma "Ruta del Sabor" NO está dirigida a menores de 18 años de edad.
+                La Plataforma "Xi'oi Gourmet" NO está dirigida a menores de 18 años de edad.
               </p>
               <p className="text-red-800 mt-2">
                 Victics NO recaba, almacena ni procesa intencionalmente datos personales de menores de edad.
@@ -227,7 +227,7 @@ const PrivacyPolicy = () => {
 
             <p className="text-gray-700 leading-relaxed mt-4">
               Si usted es padre, madre o tutor legal y descubre que su hijo menor de edad ha proporcionado datos personales 
-              sin su consentimiento, le solicitamos contactar inmediatamente a: <strong>example@victics.com</strong>
+              sin su consentimiento, le solicitamos contactar inmediatamente a: <strong>ratonrangelmejia+2@gmail.com</strong>
             </p>
           </section>
 
@@ -259,9 +259,9 @@ const PrivacyPolicy = () => {
             </p>
 
             <div className="bg-gray-100 p-6 rounded-lg">
-              <p className="text-gray-800 mb-2"><strong>Correo electrónico:</strong> example@victics.com</p>
+              <p className="text-gray-800 mb-2"><strong>Correo electrónico:</strong> ratonrangelmejia+2@gmail.com</p>
               <p className="text-gray-800 mb-2"><strong>Asunto:</strong> "Privacidad - Datos Personales"</p>
-              <p className="text-gray-800"><strong>Domicilio:</strong> Arroyo Seco, Querétaro, México</p>
+              <p className="text-gray-800"><strong>Domicilio:</strong> Querétaro, Querétaro, México</p>
             </div>
 
             <p className="text-gray-700 leading-relaxed mt-4">
@@ -285,10 +285,10 @@ const PrivacyPolicy = () => {
               Responsable del Tratamiento de Datos Personales
             </p>
             <p className="text-sm text-gray-600">
-              Plataforma "Ruta del Sabor"
+              Plataforma "Xi'oi Gourmet"
             </p>
             <p className="text-sm text-gray-500 mt-2">
-              Arroyo Seco, Querétaro, México
+              Querétaro, Querétaro, México
             </p>
             <p className="text-xs text-gray-400 mt-4">
               Este Aviso de Privacidad se emite en cumplimiento de la Ley Federal de Protección de Datos Personales 

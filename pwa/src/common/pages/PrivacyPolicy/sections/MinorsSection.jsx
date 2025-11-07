@@ -22,7 +22,7 @@ const MinorsSection = () => (
       Si usted es padre, madre o tutor legal y descubre que su hijo menor de
       edad ha proporcionado datos personales sin su consentimiento, le
       solicitamos contactar inmediatamente a:{" "}
-      <strong>example@victics.com</strong>
+      <strong>ratonrangelmejia+2@gmail.com</strong>
     </p>
   </section>
 );
