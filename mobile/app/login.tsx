@@ -136,7 +136,7 @@ export default function LoginScreen() {
                 </LinearGradient>
               </View>
               <Text style={styles.title}>Bienvenido de nuevo</Text>
-              <Text style={styles.subtitle}>Arroyo Seco Tourism</Text>
+                            <Text style={styles.subtitle}>Xiao Gourmet Tourism</Text>
             </View>
 
             {/* Glassmorphic Card */}

@@ -40,7 +40,7 @@ const sections = [
     id: "recipes",
     title: "Recetas Tradicionales",
     icon: "🍲",
-    description: "Descubre los sabores auténticos de Arroyo Seco",
+    description: "Descubre los sabores auténticos de la región",
     route: "recipes",
   },
   {

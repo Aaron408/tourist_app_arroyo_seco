@@ -44,7 +44,7 @@ type TabType = "workshops" | "events";
 const mockEvents = [
   {
     id: 1,
-    name: "Festival Gastronómico Arroyo Seco",
+    name: "Festival Gastronómico",
     description:
       "Celebración de la gastronomía tradicional con demostraciones en vivo",
     date: "2025-12-15",
@@ -142,7 +142,7 @@ export default function ExperiencesScreen() {
         startDate: startDate,
         endDate: endDate,
         notes: event.description,
-        location: `${event.location}, Arroyo Seco`,
+        location: `${event.location}, Xiao Gourmet`,
         timeZone: 'America/Mexico_City',
       });
 
@@ -417,7 +417,7 @@ export default function ExperiencesScreen() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>✨ Experiencias</Text>
           <Text style={styles.headerSubtitle}>
-            Talleres y eventos culturales de Arroyo Seco
+            Talleres y eventos culturales de Xiao Gourmet
           </Text>
         </View>
 

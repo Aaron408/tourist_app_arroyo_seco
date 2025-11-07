@@ -1,17 +1,39 @@
 {
   "expo": {
-    "name": "tourist_app_arroyo_seco",
-    "slug": "tourist_app_arroyo_seco",
+    "name": "Xiao Gourmet",
+    "description": "Plataforma turística cultural que preserva y comparte el conocimiento gastronómico tradicional de Xiao Gourmet, Querétaro",
+    "slug": "tourist-app-xiao-gourmet",
     "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "touristapparroyoseco",
+    "scheme": "touristappxiao",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "owner": "aaron408",
+    "privacy": "public",
+    "platforms": ["ios", "android", "web"],
+    
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.xiaogourmet.touristapp",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true,
+          "NSExceptionDomains": {
+            "vps-master.duckdns.org": {
+              "NSIncludesSubdomains": true,
+              "NSTemporaryExceptionAllowsInsecureHTTPLoads": true
+            }
+          }
+        }
+      }
     },
+    
     "android": {
+      "package": "com.xiaogourmet.touristapp",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -19,12 +41,47 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "intentFilters": [
+        {
+          "action": "android.intent.action.MAIN",
+          "category": [
+            "android.intent.category.LAUNCHER"
+          ]
+        },
+        {
+          "action": "android.intent.action.VIEW",
+          "category": [
+            "android.intent.category.DEFAULT",
+            "android.intent.category.BROWSABLE"
+          ],
+          "data": {
+            "scheme": "touristappxiaogourmet"
+          }
+        }
+      ],
+      "minSdkVersion": 24,
+      "targetSdkVersion": 34,
+      "usesCleartextTraffic": false,
+      "softwareKeyboardLayoutMode": "pan"
     },
+    
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro",
+      "name": "Xiao Gourmet App"
     },
+    
     "plugins": [
       "expo-router",
       [
@@ -38,11 +95,96 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permitir acceso a la cámara"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Permitir acceso a la ubicación"
+        }
       ]
     ],
+    
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    
+    "extra": {
+      "apiBaseUrl": "https://vps-master.duckdns.org",
+      "apiTimeout": 10000,
+      "apiVersion": "1.0.0",
+      "services": {
+        "auth": {
+          "path": "/authMS",
+          "port": 5357,
+          "version": "1.0.0",
+          "timeout": 10000,
+          "description": "Servicio de autenticación y manejo de usuarios"
+        },
+        "workshops": {
+          "path": "/workshopMS",
+          "port": 5126,
+          "version": "1.0.0",
+          "timeout": 10000,
+          "description": "Gestión de talleres (workshops)"
+        },
+        "reviews": {
+          "path": "/reviewMS",
+          "port": 6061,
+          "version": "1.0.0",
+          "timeout": 10000,
+          "description": "Sistema de reseñas y calificaciones"
+        },
+        "gastronomy": {
+          "path": "/gastronomyMS",
+          "port": 5199,
+          "version": "1.0.0",
+          "timeout": 10000,
+          "description": "Gestión de gastronomía y menús"
+        },
+        "locations": {
+          "path": "/locationMS",
+          "port": 5888,
+          "version": "1.0.0",
+          "timeout": 10000,
+          "description": "Administración de ubicaciones y zonas"
+        },
+        "content": {
+          "path": "/contentMS",
+          "version": "1.0.0",
+          "timeout": 10000,
+          "description": "Servicio de contenido"
+        },
+        "recipes": {
+          "path": "/recipeMS",
+          "version": "1.0.0",
+          "timeout": 10000,
+          "description": "Servicio de recetas"
+        },
+        "restaurants": {
+          "path": "/restaurantMS",
+          "version": "1.0.0",
+          "timeout": 10000,
+          "description": "Servicio de restaurantes"
+        }
+      },
+      "features": {
+        "offlineSupport": true,
+        "pushNotifications": false,
+        "locationServices": true,
+        "cameraSupport": true
+      },
+      "appStore": {
+        "category": "Travel & Local",
+        "contentRating": "4+",
+        "minAge": 4
+      }
     }
   }
 }

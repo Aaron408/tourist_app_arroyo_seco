@@ -45,7 +45,7 @@ const recipeData = {
   difficulty: "Intermedio",
   time: "3 horas",
   servings: "6-8 personas",
-  region: "Arroyo Seco",
+  region: "Xiao Gourmet",
   imageUrl:
     "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=800",
   ingredients: [

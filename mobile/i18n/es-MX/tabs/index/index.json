@@ -1,6 +1,6 @@
 {
     "greet": "Bienvenido",
-    "title": "Arroyo Seco",
+    "title": "Xiao Gourmet",
     "subtitle": "Plataforma Turística Cultural",
     "contentAvailable": "Contenido Disponible",
     "stats": {
@@ -13,7 +13,7 @@
     "modules": {
         "recipes": {
             "title": "Recetas Tradicionales",
-            "description": "Descubre los sabores auténticos de Arroyo Seco"
+            "description": "Descubre los sabores auténticos de Xiao Gourmet"
         },
         "ingredients": {
             "title": "Ingredientes Indígenas",
@@ -30,7 +30,7 @@
     },
     "aboutPlatform": {
         "title": "Acerca de la Plataforma",
-        "description": "Preservamos el conocimiento gastronómico tradicional de Arroyo Seco, promoviendo la cultura local y el turismo sostenible.",
+        "description": "Preservamos el conocimiento gastronómico tradicional de Xiao Gourmet, promoviendo la cultura local y el turismo sostenible.",
         "features": {
             "responsive": "Diseño responsivo",
             "offline": "Modo offline",

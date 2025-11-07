@@ -280,7 +280,7 @@ export default function ExploreScreen() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>🗺️ Explorar</Text>
           <Text style={styles.headerSubtitle}>
-            Descubre Arroyo Seco
+            Descubre lugares y sabores de Xiao Gourmet
           </Text>
         </View>
 

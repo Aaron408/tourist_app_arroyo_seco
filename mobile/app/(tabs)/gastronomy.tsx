@@ -326,7 +326,7 @@ export default function GastronomyScreen() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>🍽️ Gastronomía</Text>
           <Text style={styles.headerSubtitle}>
-            Descubre la riqueza culinaria de Arroyo Seco
+            Descubre la riqueza culinaria de Xiao Gourmet
           </Text>
         </View>
 

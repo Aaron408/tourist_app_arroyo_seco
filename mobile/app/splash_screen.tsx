@@ -257,7 +257,7 @@ export default function SplashScreen() {
               },
             ]}
           >
-            <Text style={styles.title}>Arroyo Seco</Text>
+            <Text style={styles.title}>Xiao Gourmet</Text>
             <View style={styles.divider} />
           </Animated.View>
 

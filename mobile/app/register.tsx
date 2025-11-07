@@ -167,7 +167,7 @@ export default function RegisterScreen() {
                 </LinearGradient>
               </View>
               <Text style={styles.title}>Crear cuenta</Text>
-              <Text style={styles.subtitle}>Arroyo Seco Tourism</Text>
+                            <Text style={styles.subtitle}>Xiao Gourmet Tourism</Text>
             </View>
 
             {/* Glassmorphic Card */}

@@ -248,7 +248,7 @@ export default function IngredientsScreen() {
         {/* Header */}
         <View style={[styles.header, { backgroundColor: colors.surface, ...Shadows.sm }]}>
           <ThemedText style={[styles.headerTitle, { color: colors.onSurface }]}>
-            🥬 Ingredientes de Arroyo Seco
+                        🥬 Ingredientes de Xiao Gourmet
           </ThemedText>
           <ThemedText style={[styles.headerSubtitle, { color: colors.onSurfaceVariant }]}>
             Descubre los sabores auténticos de nuestra región

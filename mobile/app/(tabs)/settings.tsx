@@ -279,7 +279,7 @@ export default function SettingsScreen() {
                   label={t.Settings?.about?.aboutApp || 'Acerca de la app'}
                   onPress={() =>
                     Alert.alert(
-                      "Arroyo Seco",
+                      "" + (t.Settings?.about?.aboutApp || "Acerca de la app"),
                       t.Settings?.about?.aboutAppMessage || "Plataforma Turística Cultural v1.0.0"
                     )
                   }
