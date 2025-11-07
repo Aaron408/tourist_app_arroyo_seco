@@ -30,6 +30,11 @@ export const ROUTES = {
 };
 
 /**
+ * API Base URLs
+ */
+export const API_BASE_URL = 'https://vps-master.duckdns.org';
+
+/**
  * Configuración del mapa
  */
 export const MAP_CONFIG = {
