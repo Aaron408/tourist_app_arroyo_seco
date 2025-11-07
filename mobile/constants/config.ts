@@ -9,7 +9,7 @@ export const API_CONFIG = {
   // iOS Simulator: usa localhost
   // Dispositivo físico: usa la IP de tu computadora en la red local
   DEV_URL: __DEV__ 
-    ? 'http://192.168.100.6:3000'
+    ? 'https://vps-master.duckdns.org/authMS/'
     : 'https://your-production-api.com',
   
   // URL de producción
