@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
-  Dimensions,
   Alert,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -15,9 +14,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
 import { workshopService, WorkshopDetail } from "@/services/workshopService";
-
-const { width } = Dimensions.get("window");
 
 const colors = {
   gray900: "#111827",
@@ -47,11 +45,14 @@ export default function WorkshopDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [workshop, setWorkshop] = useState<WorkshopDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const videoRef = useRef<Video>(null);
+  const [, setVideoStatus] = useState<AVPlaybackStatus | null>(null);
 
   useEffect(() => {
     if (id) {
       loadWorkshopDetail();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadWorkshopDetail = async () => {
@@ -321,6 +322,41 @@ export default function WorkshopDetailScreen() {
               <View style={styles.sectionContent}>
                 <Text style={styles.sectionTitle}>📝 Descripción</Text>
                 <Text style={styles.sectionText}>{workshop.description}</Text>
+              </View>
+            </BlurView>
+          )}
+
+          {/* Video Section */}
+          {workshop.videos && workshop.videos.length > 0 && (
+            <BlurView intensity={80} tint="dark" style={styles.sectionCard}>
+              <View style={styles.sectionContent}>
+                <Text style={styles.sectionTitle}>🎥 Videos</Text>
+                {workshop.videos.map((video, index) => (
+                  <View key={video.id} style={styles.videoContainer}>
+                    {video.isAvailable ? (
+                      <Video
+                        ref={videoRef}
+                        source={{ uri: video.url }}
+                        style={styles.video}
+                        useNativeControls
+                        resizeMode={ResizeMode.CONTAIN}
+                        onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
+                      />
+                    ) : (
+                      <View style={styles.videoUnavailable}>
+                        <Ionicons name="lock-closed" size={48} color={colors.gray400} />
+                        <Text style={styles.videoUnavailableText}>
+                          Video no disponible
+                        </Text>
+                        {video.availableFrom && (
+                          <Text style={styles.videoAvailabilityText}>
+                            Disponible desde: {new Date(video.availableFrom).toLocaleDateString('es-MX')}
+                          </Text>
+                        )}
+                      </View>
+                    )}
+                  </View>
+                ))}
               </View>
             </BlurView>
           )}
@@ -685,5 +721,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     color: colors.white,
+  },
+  videoContainer: {
+    marginTop: 12,
+    borderRadius: 12,
+    overflow: "hidden",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+  },
+  video: {
+    width: "100%",
+    height: 220,
+  },
+  videoUnavailable: {
+    width: "100%",
+    height: 220,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    gap: 8,
+  },
+  videoUnavailableText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: colors.white,
+    marginTop: 8,
+  },
+  videoAvailabilityText: {
+    fontSize: 13,
+    color: colors.gray400,
+    marginTop: 4,
   },
 });
