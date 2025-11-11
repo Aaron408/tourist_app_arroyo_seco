@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Switch,
   Modal,
   Linking,
   Alert,
@@ -16,6 +16,7 @@ import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useLanguage } from '@/contexts/languageProvider';
+import { useAuth } from '@/contexts/AuthContext'; // ← AÑADIR ESTA IMPORTACIÓN
 
 const colors = {
   gray900: "#111827",
@@ -38,7 +39,6 @@ const colors = {
   red600: "#DC2626",
 };
 
-// Mock user data - replace with actual context
 const mockUser = {
   name: "Aaron Reyes Ruiz",
   email: "aaron@email.com",
@@ -47,6 +47,7 @@ const mockUser = {
 export default function SettingsScreen() {
   const router = useRouter();
   const { t, currentLanguage, setLanguage } = useLanguage();
+  const { logout } = useAuth(); // ← AÑADIR ESTA LÍNEA
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
@@ -67,14 +68,32 @@ export default function SettingsScreen() {
     return lang ? `${lang.flag} ${lang.name}` : "Español";
   };
 
-  const handleLogout = () => {
-    setLogoutModalVisible(false);
-    // Implement logout logic
-    Alert.alert(
-      t.Settings?.account?.logoutSuccess || "Sesión cerrada", 
-      t.Settings?.account?.logoutSuccessMessage || "Has cerrado sesión correctamente"
-    );
-    // router.replace('/login');
+  // ← FUNCIÓN HANDLELOGOUT CORREGIDA
+  const handleLogout = async () => {
+    try {
+      // Cierra el modal
+      setLogoutModalVisible(false);
+
+      // CRÍTICO: Llama primero al logout del contexto para cambiar isAuthenticated a false
+      await logout();
+
+      // Limpia AsyncStorage (por si logout() no lo hace)
+      await AsyncStorage.removeItem("userToken");
+      await AsyncStorage.removeItem("userData");
+
+      // Muestra mensaje de confirmación
+      Alert.alert(
+        t.Settings?.account?.logoutSuccess || "Sesión cerrada",
+        t.Settings?.account?.logoutSuccessMessage || "Has cerrado sesión correctamente"
+      );
+
+      // Redirige al login (la ruta correcta depende de tu estructura de carpetas)
+      // Prueba primero con "login", si no funciona usa "/(auth)/login"
+      router.replace("/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+      Alert.alert("Error", "No se pudo cerrar la sesión correctamente.");
+    }
   };
 
   const handleContactSupport = () => {
@@ -135,7 +154,6 @@ export default function SettingsScreen() {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       >
-        {/* Animated circles */}
         <View
           style={[
             styles.circle,
@@ -151,7 +169,6 @@ export default function SettingsScreen() {
           ]}
         />
 
-        {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>⚙️ {t.Settings?.title || 'Configuración'}</Text>
           <Text style={styles.headerSubtitle}>{t.Settings?.subtitle || 'Personaliza tu experiencia'}</Text>
@@ -162,7 +179,6 @@ export default function SettingsScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          {/* Profile Card */}
           <BlurView intensity={80} tint="dark" style={styles.profileCard}>
             <View style={styles.profileContent}>
               <View style={styles.avatarContainer}>
@@ -184,7 +200,6 @@ export default function SettingsScreen() {
             </View>
           </BlurView>
 
-          {/* Preferences Section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>{t.Settings?.preferences?.title || 'PREFERENCIAS'}</Text>
             <BlurView intensity={80} tint="dark" style={styles.sectionCard}>
@@ -195,47 +210,10 @@ export default function SettingsScreen() {
                   value={getCurrentLanguageName()}
                   onPress={() => setLanguageModalVisible(true)}
                 />
-                {/* <View style={styles.divider} /> */}
-                {/* <SettingsItem
-                  icon="moon"
-                  label="Modo oscuro"
-                  showArrow={false}
-                  rightElement={
-                    <Switch
-                      value={darkMode}
-                      onValueChange={setDarkMode}
-                      trackColor={{
-                        false: colors.gray600,
-                        true: colors.amber500,
-                      }}
-                      thumbColor={colors.white}
-                      ios_backgroundColor={colors.gray600}
-                    />
-                  }
-                /> */}
-                {/* <View style={styles.divider} />
-                <SettingsItem
-                  icon="notifications"
-                  label="Notificaciones"
-                  showArrow={false}
-                  rightElement={
-                    <Switch
-                      value={notificationsEnabled}
-                      onValueChange={setNotificationsEnabled}
-                      trackColor={{
-                        false: colors.gray600,
-                        true: colors.amber500,
-                      }}
-                      thumbColor={colors.white}
-                      ios_backgroundColor={colors.gray600}
-                    />
-                  }
-                /> */}
               </View>
             </BlurView>
           </View>
 
-          {/* Support Section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>{t.Settings?.support?.title || 'SOPORTE'}</Text>
             <BlurView intensity={80} tint="dark" style={styles.sectionCard}>
@@ -269,7 +247,6 @@ export default function SettingsScreen() {
             </BlurView>
           </View>
 
-          {/* About Section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>{t.Settings?.about?.title || 'ACERCA DE'}</Text>
             <BlurView intensity={80} tint="dark" style={styles.sectionCard}>
@@ -317,7 +294,6 @@ export default function SettingsScreen() {
             </BlurView>
           </View>
 
-          {/* Logout Button */}
           <TouchableOpacity
             style={styles.logoutButton}
             onPress={() => setLogoutModalVisible(true)}
@@ -336,11 +312,9 @@ export default function SettingsScreen() {
               </View>
             </BlurView>
           </TouchableOpacity>
-
         </ScrollView>
       </LinearGradient>
 
-      {/* Logout Modal */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -396,7 +370,6 @@ export default function SettingsScreen() {
         </View>
       </Modal>
 
-      {/* Language Modal */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -471,337 +444,63 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  gradient: {
-    flex: 1,
-  },
-  circle: {
-    position: "absolute",
-    borderRadius: 999,
-    opacity: 0.15,
-  },
-  circle1: {
-    width: 300,
-    height: 300,
-    top: -100,
-    right: -100,
-    opacity: 0.2,
-  },
-  circle2: {
-    width: 250,
-    height: 250,
-    bottom: 50,
-    left: -75,
-    opacity: 0.2,
-  },
-  header: {
-    paddingTop: 60,
-    paddingHorizontal: 24,
-    paddingBottom: 20,
-  },
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: "800",
-    color: colors.white,
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: colors.gray300,
-    fontWeight: "600",
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 24,
-    paddingBottom: 100,
-  },
-  profileCard: {
-    borderRadius: 20,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-    marginBottom: 24,
-  },
-  profileContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 20,
-  },
-  avatarContainer: {
-    marginRight: 16,
-  },
-  avatarGradient: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.2)",
-  },
-  avatarText: {
-    fontSize: 28,
-    fontWeight: "800",
-    color: colors.white,
-  },
-  profileInfo: {
-    flex: 1,
-  },
-  profileName: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: colors.white,
-    marginBottom: 4,
-  },
-  profileEmail: {
-    fontSize: 14,
-    color: colors.gray300,
-  },
-  editButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(245, 158, 11, 0.3)",
-  },
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: colors.white,
-    marginBottom: 12,
-    letterSpacing: 1,
-    opacity: 0.8,
-  },
-  sectionCard: {
-    borderRadius: 20,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-  },
-  sectionContent: {
-    padding: 0,
-  },
-  settingsItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-  },
-  settingsItemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  iconContainer: {
-    marginRight: 16,
-  },
-  iconGradient: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  settingsItemText: {
-    flex: 1,
-  },
-  settingsLabel: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: colors.white,
-    marginBottom: 2,
-  },
-  settingsValue: {
-    fontSize: 14,
-    color: colors.gray400,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    marginLeft: 72,
-  },
-  logoutButton: {
-    marginTop: 8,
-    borderRadius: 20,
-    overflow: "hidden",
-  },
-  logoutBlur: {
-    borderWidth: 1,
-    borderColor: "rgba(239, 68, 68, 0.3)",
-    borderRadius: 20,
-  },
-  logoutContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  logoutIconContainer: {
-    marginRight: 12,
-  },
-  logoutText: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: colors.red500,
-  },
-  footer: {
-    alignItems: "center",
-    marginTop: 32,
-    paddingTop: 24,
-    borderTopWidth: 1,
-    borderTopColor: "rgba(255, 255, 255, 0.1)",
-  },
-  footerText: {
-    fontSize: 14,
-    color: colors.gray300,
-    marginBottom: 8,
-    fontWeight: "600",
-  },
-  footerVersion: {
-    fontSize: 12,
-    color: colors.gray400,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
-  },
-  modalBlur: {
-    width: "100%",
-    maxWidth: 400,
-    borderRadius: 24,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-  },
-  modalContent: {
-    padding: 32,
-    alignItems: "center",
-  },
-  modalIconContainer: {
-    marginBottom: 20,
-  },
-  modalIconGradient: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.2)",
-  },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: "800",
-    color: colors.white,
-    marginBottom: 12,
-    textAlign: "center",
-  },
-  modalMessage: {
-    fontSize: 16,
-    color: colors.gray300,
-    textAlign: "center",
-    marginBottom: 32,
-    lineHeight: 24,
-  },
-  modalButtons: {
-    flexDirection: "row",
-    gap: 12,
-    width: "100%",
-  },
-  modalButton: {
-    flex: 1,
-  },
-  cancelButton: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: 16,
-    padding: 16,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-  },
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: colors.white,
-  },
-  confirmButtonGradient: {
-    borderRadius: 16,
-    padding: 16,
-    alignItems: "center",
-  },
-  confirmButtonText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: colors.white,
-  },
-  languageList: {
-    width: "100%",
-    gap: 12,
-    marginBottom: 24,
-  },
-  languageItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-    borderRadius: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    borderWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-  },
-  languageItemActive: {
-    backgroundColor: "rgba(245, 158, 11, 0.15)",
-    borderColor: colors.amber500,
-  },
-  languageItemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-  },
-  languageFlag: {
-    fontSize: 32,
-  },
-  languageTextContainer: {
-    gap: 4,
-  },
-  languageName: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: colors.white,
-  },
-  languageNativeName: {
-    fontSize: 14,
-    color: colors.gray400,
-  },
-  checkmarkContainer: {
-    width: 24,
-    height: 24,
-  },
-  modalCloseButton: {
-    width: "100%",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: 16,
-    padding: 16,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-  },
-  modalCloseButtonText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: colors.white,
-  },
+  container: { flex: 1 },
+  gradient: { flex: 1 },
+  circle: { position: "absolute", borderRadius: 999, opacity: 0.15 },
+  circle1: { width: 300, height: 300, top: -100, right: -100, opacity: 0.2 },
+  circle2: { width: 250, height: 250, bottom: 50, left: -75, opacity: 0.2 },
+  header: { paddingTop: 60, paddingHorizontal: 24, paddingBottom: 20 },
+  headerTitle: { fontSize: 32, fontWeight: "800", color: colors.white, marginBottom: 4 },
+  headerSubtitle: { fontSize: 16, color: colors.gray300, fontWeight: "600" },
+  scrollView: { flex: 1 },
+  scrollContent: { padding: 24, paddingBottom: 100 },
+  profileCard: { borderRadius: 20, overflow: "hidden", borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.1)", marginBottom: 24 },
+  profileContent: { flexDirection: "row", alignItems: "center", padding: 20 },
+  avatarContainer: { marginRight: 16 },
+  avatarGradient: { width: 64, height: 64, borderRadius: 32, justifyContent: "center", alignItems: "center", borderWidth: 2, borderColor: "rgba(255, 255, 255, 0.2)" },
+  avatarText: { fontSize: 28, fontWeight: "800", color: colors.white },
+  profileInfo: { flex: 1 },
+  profileName: { fontSize: 20, fontWeight: "700", color: colors.white, marginBottom: 4 },
+  profileEmail: { fontSize: 14, color: colors.gray300 },
+  section: { marginBottom: 24 },
+  sectionTitle: { fontSize: 13, fontWeight: "700", color: colors.white, marginBottom: 12, letterSpacing: 1, opacity: 0.8 },
+  sectionCard: { borderRadius: 20, overflow: "hidden", borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.1)" },
+  sectionContent: { padding: 0 },
+  settingsItem: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 16 },
+  settingsItemLeft: { flexDirection: "row", alignItems: "center", flex: 1 },
+  iconContainer: { marginRight: 16 },
+  iconGradient: { width: 40, height: 40, borderRadius: 12, justifyContent: "center", alignItems: "center" },
+  settingsItemText: { flex: 1 },
+  settingsLabel: { fontSize: 16, fontWeight: "600", color: colors.white, marginBottom: 2 },
+  settingsValue: { fontSize: 14, color: colors.gray400 },
+  divider: { height: 1, backgroundColor: "rgba(255, 255, 255, 0.1)", marginLeft: 72 },
+  logoutButton: { marginTop: 8, borderRadius: 20, overflow: "hidden" },
+  logoutBlur: { borderWidth: 1, borderColor: "rgba(239, 68, 68, 0.3)", borderRadius: 20 },
+  logoutContent: { flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 20 },
+  logoutIconContainer: { marginRight: 12 },
+  logoutText: { fontSize: 18, fontWeight: "700", color: colors.red500 },
+  modalOverlay: { flex: 1, backgroundColor: "rgba(0, 0, 0, 0.7)", justifyContent: "center", alignItems: "center", padding: 24 },
+  modalBlur: { width: "100%", maxWidth: 400, borderRadius: 24, overflow: "hidden", borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.1)" },
+  modalContent: { padding: 32, alignItems: "center" },
+  modalIconContainer: { marginBottom: 20 },
+  modalIconGradient: { width: 80, height: 80, borderRadius: 40, justifyContent: "center", alignItems: "center", borderWidth: 2, borderColor: "rgba(255, 255, 255, 0.2)" },
+  modalTitle: { fontSize: 24, fontWeight: "800", color: colors.white, marginBottom: 12, textAlign: "center" },
+  modalMessage: { fontSize: 16, color: colors.gray300, textAlign: "center", marginBottom: 32, lineHeight: 24 },
+  modalButtons: { flexDirection: "row", gap: 12, width: "100%" },
+  modalButton: { flex: 1 },
+  cancelButton: { backgroundColor: "rgba(255, 255, 255, 0.1)", borderRadius: 16, padding: 16, alignItems: "center", borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.1)" },
+  cancelButtonText: { fontSize: 16, fontWeight: "700", color: colors.white },
+  confirmButtonGradient: { borderRadius: 16, padding: 16, alignItems: "center" },
+  confirmButtonText: { fontSize: 16, fontWeight: "700", color: colors.white },
+  languageList: { width: "100%", gap: 12, marginBottom: 24 },
+  languageItem: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 16, borderRadius: 16, backgroundColor: "rgba(255, 255, 255, 0.05)", borderWidth: 2, borderColor: "rgba(255, 255, 255, 0.1)" },
+  languageItemActive: { backgroundColor: "rgba(245, 158, 11, 0.15)", borderColor: colors.amber500 },
+  languageItemLeft: { flexDirection: "row", alignItems: "center", gap: 16 },
+  languageFlag: { fontSize: 32 },
+  languageTextContainer: { gap: 4 },
+  languageName: { fontSize: 18, fontWeight: "700", color: colors.white },
+  languageNativeName: { fontSize: 14, color: colors.gray400 },
+  checkmarkContainer: { width: 24, height: 24 },
+  modalCloseButton: { width: "100%", backgroundColor: "rgba(255, 255, 255, 0.1)", borderRadius: 16, padding: 16, alignItems: "center", borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.1)" },
+  modalCloseButtonText: { fontSize: 16, fontWeight: "700", color: colors.white },
 });
