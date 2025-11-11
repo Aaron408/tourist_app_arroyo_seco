@@ -31,11 +31,11 @@ const TermsAndConditions = () => {
             <p className="text-gray-700 leading-relaxed">
               La plataforma digital "Ruta del Sabor" es desarrollada y operada por <strong>Victics</strong>, 
               un proyecto de desarrollo tecnológico orientado a promover el patrimonio cultural y gastronómico 
-              de Querétaro, Querétaro, México.
+              de Arroyo Seco, Querétaro, México.
             </p>
             <div className="bg-gray-100 p-4 rounded-lg mt-3">
-              <p className="text-sm"><strong>Correo electrónico:</strong> ratonrangelmejia+2@gmail.com</p>
-              <p className="text-sm"><strong>Domicilio:</strong> Querétaro, Querétaro, México</p>
+              <p className="text-sm"><strong>Correo electrónico:</strong> example@victics.com</p>
+              <p className="text-sm"><strong>Domicilio:</strong> Arroyo Seco, Querétaro, México</p>
             </div>
 
             <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-2">1.2 Aceptación de los Términos</h3>
@@ -182,8 +182,8 @@ const TermsAndConditions = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">12. INFORMACIÓN DE CONTACTO</h2>
             <div className="bg-gray-100 p-6 rounded-lg">
-              <p className="text-gray-700 mb-2"><strong>Correo electrónico:</strong> ratonrangelmejia+2@gmail.com</p>
-              <p className="text-gray-700 mb-2"><strong>Domicilio:</strong> Querétaro, Querétaro, México</p>
+              <p className="text-gray-700 mb-2"><strong>Correo electrónico:</strong> example@victics.com</p>
+              <p className="text-gray-700 mb-2"><strong>Domicilio:</strong> Arroyo Seco, Querétaro, México</p>
               <p className="text-gray-700"><strong>Plataforma:</strong> Ruta del Sabor</p>
             </div>
           </section>
@@ -198,7 +198,7 @@ const TermsAndConditions = () => {
           <p className="text-sm text-gray-600 mt-2 font-semibold">
             VICTICS - Desarrollo y Operación de la Plataforma "Ruta del Sabor"
           </p>
-          <p className="text-sm text-gray-500">Querétaro, Querétaro, México</p>
+          <p className="text-sm text-gray-500">Arroyo Seco, Querétaro, México</p>
         </div>
       </div>
     </div>

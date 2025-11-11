@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     
     try {
-      const response = await authAPI.login({ email, password });
+      const response = await authAPI.login({ email, password, origin: 'web' });
 
       if (response.success && response.data) {
         const { user, token } = response.data;

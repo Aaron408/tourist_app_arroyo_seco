@@ -12,13 +12,13 @@ const ContactSection = () => (
 
     <div className="bg-gray-100 p-6 rounded-lg">
       <p className="text-gray-800 mb-2">
-        <strong>Correo electrónico:</strong> ratonrangelmejia+2@gmail.com
+        <strong>Correo electrónico:</strong> example@victics.com
       </p>
       <p className="text-gray-800 mb-2">
         <strong>Asunto:</strong> "Privacidad - Datos Personales"
       </p>
       <p className="text-gray-800">
-        <strong>Domicilio:</strong> Querétaro, Querétaro, México
+        <strong>Domicilio:</strong> Arroyo Seco, Querétaro, México
       </p>
     </div>
 

@@ -7,7 +7,6 @@ import SearchAndFilters from "./components/SearchAndFilters";
 import { useLanguageStore } from "../../stores/languageStore";
 import {
   MAP_CONFIG,
-  API_BASE_URL,
   LOCATION_TYPES,
 } from "../../utils/constants";
 import L from "leaflet";

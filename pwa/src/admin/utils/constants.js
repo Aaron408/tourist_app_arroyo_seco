@@ -10,24 +10,20 @@ export const ROUTES = {
   // Admin Routes (dashboard / subdomain)
   DASHBOARD: '', // index route
 
-  // Catalogs
-  ADMIN_CATALOGS: 'catalogos',
-  ADMIN_RECIPES: 'catalogos/recetas',
-  ADMIN_INGREDIENTS: 'catalogos/ingredientes',
-  ADMIN_TECHNIQUES: 'catalogos/tecnicas',
-  ADMIN_TOOLS: 'catalogos/herramientas',
-  ADMIN_LOCATIONS: 'catalogos/ubicaciones',
+  // Gastronomy (Admin)
+  ADMIN_RECIPES: 'gastronomia/recetas',
+  ADMIN_INGREDIENTS: 'gastronomia/ingredientes',
+  ADMIN_TECHNIQUES: 'gastronomia/tecnicas',
+  ADMIN_TOOLS: 'gastronomia/utensilios',
 
-  // Admin Events
-  ADMIN_EVENTS: 'eventos',
-  ADMIN_WORKSHOPS: 'eventos/talleres',
-  ADMIN_ROUTES: 'eventos/rutas',
+  // Locations (Admin)
+  ADMIN_LOCATIONS: 'ubicaciones',
 
-  // Others
-  ADMIN_TRANSLATIONS: 'traducciones',
-  ADMIN_FEEDBACK: 'feedback',
+  // Workshops (Admin)
+  ADMIN_WORKSHOPS: 'talleres',
+
+  // Users (Admin)
   ADMIN_USERS: 'usuarios',
-  ADMIN_MONITORING: 'estadisticas',
 
   // Gastronomy (landing / public)
   GASTRONOMY: '/gastronomia',
@@ -40,7 +36,7 @@ export const ROUTES = {
   TOOLS: '/gastronomia/herramientas',
   REFERENCE_RESTAURANTS: '/gastronomia/restaurantes',
 
-  // Locations
+  // Locations (Public)
   LOCATIONS: '/ubicaciones',
   EMBLEMATIC_PLACES: '/ubicaciones/lugares',
   ROUTE_RESTAURANTS: '/ubicaciones/restaurantes',
@@ -49,7 +45,7 @@ export const ROUTES = {
   CATEGORY_SEARCH: '/ubicaciones/busqueda',
   GOOGLE_MAPS_REDIRECT: '/ubicaciones/mapa',
 
-  // Events
+  // Events (Public)
   EVENTS: '/eventos',
   WORKSHOPS: '/eventos/talleres',
   GUIDED_ROUTES: '/eventos/rutas',
@@ -81,4 +77,59 @@ export const MESSAGES = {
 export const PAGINATION = {
   DEFAULT_PAGE_SIZE: 10,
   DEFAULT_PAGE: 1,
+};
+
+/**
+ * Form Constants and Enums
+ */
+
+// Languages
+export const LANGUAGES = [
+  { code: 'es-MX', name: 'Español (México)', flag: '🇲🇽' },
+  { code: 'en-US', name: 'English (US)', flag: '🇺🇸' },
+];
+
+// Recipe Difficulty Levels
+export const DIFFICULTY_LEVELS = [
+  { value: 1, label: 'Fácil', color: 'green' },
+  { value: 2, label: 'Media', color: 'yellow' },
+  { value: 3, label: 'Difícil', color: 'red' },
+];
+
+// Measurement Units
+export const MEASUREMENT_UNITS = [
+  { value: 'gramos', label: 'Gramos (g)' },
+  { value: 'kilogramos', label: 'Kilogramos (kg)' },
+  { value: 'miligramos', label: 'Miligramos (mg)' },
+  { value: 'litros', label: 'Litros (L)' },
+  { value: 'mililitros', label: 'Mililitros (ml)' },
+  { value: 'tazas', label: 'Tazas' },
+  { value: 'cucharadas', label: 'Cucharadas' },
+  { value: 'cucharaditas', label: 'Cucharaditas' },
+  { value: 'piezas', label: 'Piezas' },
+  { value: 'unidades', label: 'Unidades' },
+  { value: 'rebanadas', label: 'Rebanadas' },
+  { value: 'onzas', label: 'Onzas (oz)' },
+  { value: 'libras', label: 'Libras (lb)' },
+  { value: 'pizca', label: 'Pizca' },
+  { value: 'al gusto', label: 'Al gusto' },
+];
+
+/**
+ * Helper functions
+ */
+export const getDifficultyLabel = (value) => {
+  return DIFFICULTY_LEVELS.find(d => d.value === value)?.label || 'Desconocido';
+};
+
+export const getDifficultyColor = (value) => {
+  return DIFFICULTY_LEVELS.find(d => d.value === value)?.color || 'gray';
+};
+
+export const getLanguageName = (code) => {
+  return LANGUAGES.find(l => l.code === code)?.name || code;
+};
+
+export const getLanguageFlag = (code) => {
+  return LANGUAGES.find(l => l.code === code)?.flag || '🌐';
 };

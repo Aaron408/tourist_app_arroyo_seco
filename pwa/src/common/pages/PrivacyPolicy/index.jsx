@@ -55,7 +55,7 @@ const PrivacyPolicy = () => {
             </p>
             <p className="text-sm text-gray-600">Plataforma "Ruta del Sabor"</p>
             <p className="text-sm text-gray-500 mt-2">
-              Querétaro, Querétaro, México
+              Arroyo Seco, Querétaro, México
             </p>
             <p className="text-xs text-gray-400 mt-4">
               Este Aviso de Privacidad se emite en cumplimiento de la Ley Federal de
