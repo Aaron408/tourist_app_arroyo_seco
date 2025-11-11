@@ -15,6 +15,7 @@ import { useRouter } from "expo-router";
 import { useLanguage } from "@/contexts/languageProvider";
 
 const { width } = Dimensions.get("window");
+import { Image } from 'react-native';
 
 const colors = {
   gray900: "#111827",
@@ -195,7 +196,11 @@ export default function HomeScreen() {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Text style={styles.logoEmoji}>🏛️</Text>
+               <Image
+                 source={require('../../assets/images/icon.png')}
+                 style={styles.logoImage}
+                 resizeMode="cover"
+               />
               </LinearGradient>
             </View>
             <Text style={styles.title}>{t.index.title}</Text>
@@ -349,6 +354,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 16,
     elevation: 10,
+  },
+  logoImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 100,
+    transform: [{ scale: 1.15 }],
   },
   logoEmoji: {
     fontSize: 48,

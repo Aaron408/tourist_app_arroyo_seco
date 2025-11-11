@@ -3,8 +3,8 @@
     "name": "Xiao Gourmet",
     "description": "Plataforma turística cultural que preserva y comparte el conocimiento gastronómico tradicional de Xiao Gourmet, Querétaro",
     "slug": "tourist-app-xiao-gourmet",
-    "version": "1.0.5",
-    "runtimeVersion": "1.0.5",
+    "version": "1.0.6",
+    "runtimeVersion": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "touristappxiao",
@@ -33,7 +33,7 @@
     
     "android": {
       "package": "com.xiaogourmet.touristapp",
-      "versionCode": 5,
+      "versionCode": 6,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

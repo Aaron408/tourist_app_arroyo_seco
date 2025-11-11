@@ -16,7 +16,8 @@ import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useLanguage } from '@/contexts/languageProvider';
-import { useAuth } from '@/contexts/AuthContext'; // ← AÑADIR ESTA IMPORTACIÓN
+import { useAuth } from '@/contexts/AuthContext';
+import Constants from "expo-constants";
 
 const colors = {
   gray900: "#111827",
@@ -265,30 +266,36 @@ export default function SettingsScreen() {
                 <SettingsItem
                   icon="code-slash"
                   label={t.Settings?.about?.version || 'Versión'}
-                  value="1.0.0"
+                  value={Constants.expoConfig?.version || '—'}
                   showArrow={false}
                 />
                 <View style={styles.divider} />
                 <SettingsItem
                   icon="document-text"
                   label={t.Settings?.about?.terms || 'Términos y condiciones'}
-                  onPress={() =>
-                    Alert.alert(
-                      t.Settings?.alerts?.terms || "Términos", 
-                      t.Settings?.alerts?.inDevelopment || "Función en desarrollo"
-                    )
-                  }
+                  onPress={() => {
+                    const url = 'https://vps-master.duckdns.org/terminos-y-condiciones';
+                    Linking.openURL(url).catch(() => {
+                      Alert.alert(
+                        t.Settings?.alerts?.error || 'Error',
+                        t.Settings?.alerts?.linkNotAvailable || 'No se pudo abrir el enlace.'
+                      );
+                    });
+                  }}
                 />
                 <View style={styles.divider} />
                 <SettingsItem
                   icon="shield-checkmark"
-                  label={t.Settings?.about?.privacy || 'Política de privacidad'}
-                  onPress={() =>
-                    Alert.alert(
-                      t.Settings?.alerts?.privacy || "Privacidad", 
-                      t.Settings?.alerts?.inDevelopment || "Función en desarrollo"
-                    )
-                  }
+                  label={t.Settings?.about?.privacy || 'Aviso de privacidad'}
+                  onPress={() => {
+                    const url = 'https://vps-master.duckdns.org/aviso-de-privacidad';
+                    Linking.openURL(url).catch(() => {
+                      Alert.alert(
+                        t.Settings?.alerts?.error || 'Error',
+                        t.Settings?.alerts?.linkNotAvailable || 'No se pudo abrir el enlace.'
+                      );
+                    });
+                  }}
                 />
               </View>
             </BlurView>

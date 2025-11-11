@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
+import { Image } from 'react-native';
 
 const { width, height } = Dimensions.get("window");
 
@@ -237,12 +238,16 @@ export default function SplashScreen() {
               <View style={styles.logoInner}>
                 <LinearGradient
                   colors={[colors.amber500, colors.orange600]}
-                  style={styles.logoInnerGradient}
+                  style={styles.logoGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <Text style={styles.logoEmoji}>🏛️</Text>
-                </LinearGradient>
+                 <Image
+                   source={require('../assets/images/icon.png')}
+                   style={styles.logoImage}
+                   resizeMode="cover"
+                 />
+                  </LinearGradient>
               </View>
             </LinearGradient>
           </Animated.View>
@@ -348,16 +353,25 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginBottom: 40,
   },
-  logoGradient: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    padding: 6,
+logoGradient: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 3,
+    borderColor: "rgba(255, 255, 255, 0.2)",
     shadowColor: colors.amber500,
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.6,
-    shadowRadius: 24,
-    elevation: 15,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  logoImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 100,
+    transform: [{ scale: 1.15 }],
   },
   logoInner: {
     flex: 1,
