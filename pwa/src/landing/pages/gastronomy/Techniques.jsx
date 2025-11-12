@@ -1,237 +1,103 @@
 import { useState, useEffect } from 'react';
-import { ChefHat, Clock, BookOpen, Sparkles } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
-import Header from './components/Header';
-import Filters from './components/Filters';
-import { gastronomyAPI } from '../../../common/api';
+import GastronomyHeader from '../../components/GastronomyHeader';
+import GastronomyFilters from '../../components/GastronomyFilters';
+import GastronomyCard from '../../components/GastronomyCard';
+import Loading from '../../../common/components/Loading';
+import { useTechniques } from '../../hooks/useTechniques';
 
 const Techniques = () => {
-  const { getTranslations } = useLanguageStore();
+  const { getTranslations, currentLanguage } = useLanguageStore();
   const t = getTranslations();
 
-  const [techniques, setTechniques] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { techniques, loading, error, fetchTechniques } = useTechniques();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-  const categories = ['preparation', 'grinding', 'cooking', 'fermentation', 'preservation'];
-
-  const getCategoryColor = (category) => {
-    const colors = {
-      'preparation': 'bg-blue-100 text-blue-700',
-      'grinding': 'bg-purple-100 text-purple-700',
-      'cooking': 'bg-orange-100 text-orange-700',
-      'fermentation': 'bg-green-100 text-green-700',
-      'preservation': 'bg-amber-100 text-amber-700',
-    };
-    return colors[category] || 'bg-gray-100 text-gray-700';
-  };
 
   // ==============================
   // Fetch techniques from API
   // ==============================
-  const fetchTechniques = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const language = t.languageCode || 'es';
-      const response = await gastronomyAPI.techniques.getAll({ language });
-      
-      const formattedTechniques = response.data.map(technique => {
-        const translation = technique.translations?.[0] || {};
-        return {
-          id: technique.id,
-          name: translation.name || 'No name',
-          description: translation.description || '',
-          image: technique.image || 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800&q=80',
-          category: technique.category || 'preparation',
-          time: technique.time || 'N/A',
-          difficulty: technique.difficulty || 'medium',
-          steps: technique.steps || 0,
-          tools: technique.tools || [],
-        };
-      });
-
-      setTechniques(formattedTechniques);
-    } catch (err) {
-      console.error(err);
-      setError(t.gastronomyPage.techniques.fetchError || 'Error fetching techniques');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchTechniques();
-  }, [t.languageCode]);
+    const language = currentLanguage || 'es-MX';
+    fetchTechniques(language);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLanguage]);
 
   // ==============================
   // Filters
   // ==============================
   const filteredTechniques = techniques.filter(technique => {
-    const matchesSearch = technique.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         technique.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = !selectedCategory || technique.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-
-  const categoryLabels = {};
-  categories.forEach(category => {
-    categoryLabels[category] = t.gastronomyPage.techniques.categories[category];
+    const translation = technique.translations?.[0] || {};
+    const matchesSearch =
+      translation.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      translation.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
   });
 
   // ==============================
   // Render
   // ==============================
-  if (loading) return <div className="text-center py-20">{t.gastronomyPage.techniques.loading || 'Loading...'}</div>;
   if (error) return <div className="text-center py-20 text-red-600">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 via-pink-50 to-white">
-      <Header
-        Icon={ChefHat}
-        title={t.gastronomyPage.techniques.title}
-        subtitle={t.gastronomyPage.techniques.subtitle}
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 via-indigo-50 to-white">
+      <GastronomyHeader
+        Icon={BookOpen}
+        title={t.gastronomyPage?.techniques?.title || 'Técnicas Culinarias'}
+        subtitle={t.gastronomyPage?.techniques?.subtitle || 'Descubre técnicas tradicionales'}
         gradientFrom="from-purple-600"
-        gradientTo="to-pink-600"
+        gradientTo="to-indigo-600"
       />
 
-      <Filters
+      <GastronomyFilters
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        searchPlaceholder={t.gastronomyPage.techniques.search}
-        selectedFilter={selectedCategory}
-        setSelectedFilter={setSelectedCategory}
-        filters={categories}
-        filterLabels={categoryLabels}
-        allLabel={t.gastronomyPage.techniques.all}
+        searchPlaceholder={t.gastronomyPage?.techniques?.search || 'Buscar técnicas...'}
+        showFilters={false}
         primaryColor="purple"
       />
 
-      {/* Techniques Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            {filteredTechniques.length} {filteredTechniques.length === 1 ? t.gastronomyPage.techniques.techniqueFound : t.gastronomyPage.techniques.techniquesFound}
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredTechniques.map((technique) => (
-            <div
-              key={technique.id}
-              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
-            >
-              {/* Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={technique.image}
-                  alt={technique.name}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                
-                {/* Category Badge */}
-                <div className="absolute top-4 right-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(technique.category)}`}>
-                    {t.gastronomyPage.techniques.categories[technique.category]}
-                  </span>
-                </div>
-
-                {/* Name on Image */}
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-2xl font-bold text-white drop-shadow-lg">
-                    {technique.name}
-                  </h3>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                <p className="text-gray-600 text-sm mb-4">
-                  {technique.description}
-                </p>
-
-                {/* Meta Info */}
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Clock className="w-4 h-4 text-purple-600" />
-                    <span className="font-medium">{t.gastronomyPage.techniques.time}:</span>
-                    <span>{technique.time}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <BookOpen className="w-4 h-4 text-purple-600" />
-                    <span className="font-medium">{technique.steps} {t.gastronomyPage.techniques.steps}</span>
-                  </div>
-                </div>
-
-                {/* Tools */}
-                {technique.tools.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-xs font-semibold text-gray-500 uppercase mb-2">
-                      {t.gastronomyPage.techniques.toolsNeeded}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {technique.tools.map((tool, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium"
-                        >
-                          {tool}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all">
-                  {t.gastronomyPage.techniques.seeTutorial} →
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {filteredTechniques.length === 0 && (
-          <div className="text-center py-20">
-            <ChefHat className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              {t.gastronomyPage.techniques.noTechniquesFound}
-            </h3>
-            <p className="text-gray-600">{t.gastronomyPage.recipes.tryOtherTerms}</p>
+        {!loading && (
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              {filteredTechniques.length} {filteredTechniques.length === 1 ? 'técnica encontrada' : 'técnicas encontradas'}
+            </h2>
           </div>
         )}
-      </section>
 
-      {/* Info Section */}
-      <section className="bg-gradient-to-br from-purple-50 to-pink-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6">
-              <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="font-bold text-gray-900 mb-2">{t.gastronomyPage.techniques.videoTutorials}</h3>
-              <p className="text-gray-600 text-sm">Aprende con guías visuales detalladas</p>
-            </div>
-            <div className="text-center p-6">
-              <div className="bg-pink-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-pink-600" />
-              </div>
-              <h3 className="font-bold text-gray-900 mb-2">{t.gastronomyPage.techniques.expertTips}</h3>
-              <p className="text-gray-600 text-sm">Conocimientos de maestros artesanos</p>
-            </div>
-            <div className="text-center p-6">
-              <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <ChefHat className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="font-bold text-gray-900 mb-2">{t.gastronomyPage.techniques.culturalContext}</h3>
-              <p className="text-gray-600 text-sm">Descubre el origen de cada técnica</p>
-            </div>
+        {loading ? (
+          <Loading variant="grid" />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredTechniques.map((technique) => {
+            const translation = technique.translations?.[0] || {};
+            return (
+              <GastronomyCard
+                key={technique.id}
+                id={technique.id}
+                image={technique.banner_image}
+                title={translation.name || 'Sin nombre'}
+                description={translation.description || 'Sin descripción'}
+                buttonText={t.gastronomyPage?.techniques?.seeMore || 'Ver detalles'}
+                detailPath={`/gastronomia/tecnicas/${technique.id}`}
+                gradientColor="purple"
+              />
+            );
+          })}
           </div>
-        </div>
+        )}
+
+        {!loading && filteredTechniques.length === 0 && (
+          <div className="text-center py-20">
+            <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              {t.gastronomyPage?.techniques?.noTechniquesFound || 'No se encontraron técnicas'}
+            </h3>
+            <p className="text-gray-600">{t.gastronomyPage?.techniques?.tryOtherTerms || 'Intenta con otros términos'}</p>
+          </div>
+        )}
       </section>
     </div>
   );

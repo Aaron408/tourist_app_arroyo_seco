@@ -17,8 +17,9 @@ const Ingredients = () => {
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, id: null });
 
   useEffect(() => {
-    fetchIngredients({ language: currentLanguage });
-  }, [currentLanguage]);
+    // Admin needs all translations, don't filter by language
+    fetchIngredients();
+  }, []);
 
   const showToast = (message, type) => {
     setToast({ message, type });
@@ -65,7 +66,8 @@ const Ingredients = () => {
   };
 
   const filteredIngredients = ingredients.filter(ingredient => {
-    const translation = ingredient.translations?.find(t => t.language_code === currentLanguage) || ingredient.translations?.[0];
+    // In admin, always prefer Spanish (es-MX) by default, then fallback to first available
+    const translation = ingredient.translations?.find(t => t.language_code === 'es-MX') || ingredient.translations?.[0];
     return translation?.name?.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -154,7 +156,8 @@ const Ingredients = () => {
                   </tr>
                 ) : (
                   filteredIngredients.map((ingredient) => {
-                    const translation = ingredient.translations?.find(t => t.language_code === currentLanguage) || ingredient.translations?.[0];
+                    // In admin, always prefer Spanish (es-MX) by default, then fallback to first available
+                    const translation = ingredient.translations?.find(t => t.language_code === 'es-MX') || ingredient.translations?.[0];
                     return (
                       <tr key={ingredient.id} className="hover:bg-orange-50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ingredient.id}</td>

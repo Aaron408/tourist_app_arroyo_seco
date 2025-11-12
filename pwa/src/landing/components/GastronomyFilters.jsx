@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react';
 
-const Filters = ({
+const GastronomyFilters = ({
   searchQuery,
   setSearchQuery,
   searchPlaceholder = 'Buscar...',
@@ -101,4 +101,4 @@ const Filters = ({
   );
 };
 
-export default Filters;
+export default GastronomyFilters;

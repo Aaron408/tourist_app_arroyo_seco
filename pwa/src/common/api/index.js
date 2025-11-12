@@ -16,6 +16,85 @@ const authClient = new HttpClient(AUTH_API_URL);
 const gastronomyClient = new HttpClient(GASTRONOMY_API_URL);
 
 // ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+/**
+ * Convert data to FormData if it contains files (banner_image or multimedia)
+ * @param {Object} data - Data object that may contain files
+ * @returns {FormData|Object} - FormData if files exist, otherwise original data
+ */
+const prepareGastronomyData = (data) => {
+  const hasBannerImage = data.banner_image && data.banner_image instanceof File;
+  const hasMultimediaFiles = data.multimedia?.some(media => media.file instanceof File);
+
+  // Check if we have any files to upload
+  if (hasBannerImage || hasMultimediaFiles) {
+    // Create FormData for multipart/form-data submission
+    const formData = new FormData();
+
+    // Add the banner image file if exists
+    if (hasBannerImage) {
+      formData.append('file', data.banner_image);
+    }
+
+    // Add multimedia files
+    if (data.multimedia && data.multimedia.length > 0) {
+      const multimediaTypes = [];
+
+      data.multimedia.forEach((media, index) => {
+        if (media.file instanceof File) {
+          // Append file
+          formData.append(`multimedia_files`, media.file);
+          // Collect types to send as JSON array
+          multimediaTypes.push(media.type);
+        }
+      });
+
+      // Send types as JSON array
+      if (multimediaTypes.length > 0) {
+        formData.append('multimedia_types', JSON.stringify(multimediaTypes));
+      }
+
+      // Send existing multimedia URLs separately (those that don't have file)
+      const existingMultimedia = data.multimedia
+        .filter(media => !media.file && media.existingUrl)
+        .map(media => ({ type: media.type, url: media.existingUrl }));
+
+      if (existingMultimedia.length > 0) {
+        formData.append('existing_multimedia', JSON.stringify(existingMultimedia));
+      }
+    }
+
+    // Add all other fields as JSON strings (backend expects this format)
+    Object.keys(data).forEach(key => {
+      if (key !== 'banner_image' && key !== 'multimedia') {
+        const value = data[key];
+        // Send arrays and objects as JSON strings
+        if (typeof value === 'object' && value !== null) {
+          formData.append(key, JSON.stringify(value));
+        } else if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      }
+    });
+
+    return formData;
+  }
+
+  // No files - send as JSON, removing file-related fields
+  const { banner_image, multimedia, ...restData } = data;
+
+  // If multimedia exists but has no files, include only existing URLs
+  if (multimedia && multimedia.length > 0) {
+    restData.multimedia = multimedia
+      .filter(media => media.existingUrl)
+      .map(media => ({ type: media.type, url: media.existingUrl }));
+  }
+
+  return restData;
+};
+
+// ============================================================================
 // AUTHENTICATION API
 // ============================================================================
 export const authAPI = {
@@ -92,11 +171,13 @@ export const gastronomyAPI = {
     },
 
     create: async (recipeData) => {
-      return gastronomyClient.post('/recipes', recipeData);
+      const preparedData = prepareGastronomyData(recipeData);
+      return gastronomyClient.post('/recipes', preparedData);
     },
 
     update: async (id, recipeData) => {
-      return gastronomyClient.put(`/recipes/${id}`, recipeData);
+      const preparedData = prepareGastronomyData(recipeData);
+      return gastronomyClient.put(`/recipes/${id}`, preparedData);
     },
 
     delete: async (id) => {
@@ -116,11 +197,13 @@ export const gastronomyAPI = {
     },
 
     create: async (ingredientData) => {
-      return gastronomyClient.post('/ingredients', ingredientData);
+      const preparedData = prepareGastronomyData(ingredientData);
+      return gastronomyClient.post('/ingredients', preparedData);
     },
 
     update: async (id, ingredientData) => {
-      return gastronomyClient.put(`/ingredients/${id}`, ingredientData);
+      const preparedData = prepareGastronomyData(ingredientData);
+      return gastronomyClient.put(`/ingredients/${id}`, preparedData);
     },
 
     delete: async (id) => {
@@ -140,11 +223,13 @@ export const gastronomyAPI = {
     },
 
     create: async (techniqueData) => {
-      return gastronomyClient.post('/techniques', techniqueData);
+      const preparedData = prepareGastronomyData(techniqueData);
+      return gastronomyClient.post('/techniques', preparedData);
     },
 
     update: async (id, techniqueData) => {
-      return gastronomyClient.put(`/techniques/${id}`, techniqueData);
+      const preparedData = prepareGastronomyData(techniqueData);
+      return gastronomyClient.put(`/techniques/${id}`, preparedData);
     },
 
     delete: async (id) => {
@@ -164,11 +249,13 @@ export const gastronomyAPI = {
     },
 
     create: async (toolData) => {
-      return gastronomyClient.post('/tools', toolData);
+      const preparedData = prepareGastronomyData(toolData);
+      return gastronomyClient.post('/tools', preparedData);
     },
 
     update: async (id, toolData) => {
-      return gastronomyClient.put(`/tools/${id}`, toolData);
+      const preparedData = prepareGastronomyData(toolData);
+      return gastronomyClient.put(`/tools/${id}`, preparedData);
     },
 
     delete: async (id) => {

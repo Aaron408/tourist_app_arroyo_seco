@@ -9,6 +9,13 @@ const RecipesPage = lazy(() => import('../pages/gastronomy/Recipes.jsx'));
 const IngredientsPage = lazy(() => import('../pages/gastronomy/Ingredients.jsx'));
 const TechniquesPage = lazy(() => import('../pages/gastronomy/Techniques.jsx'));
 const ToolsPage = lazy(() => import('../pages/gastronomy/Tools.jsx'));
+
+// Gastronomy Details
+const RecipeDetailPage = lazy(() => import('../pages/gastronomy/details/RecipeDetail.jsx'));
+const IngredientDetailPage = lazy(() => import('../pages/gastronomy/details/IngredientDetail.jsx'));
+const TechniqueDetailPage = lazy(() => import('../pages/gastronomy/details/TechniqueDetail.jsx'));
+const ToolDetailPage = lazy(() => import('../pages/gastronomy/details/ToolDetail.jsx'));
+
 const LocationsPage = lazy(() => import('../pages/locations/Locations.jsx'));
 // const PlacesPage = lazy(() => import('../pages/locations/Places.jsx'));
 // const RouteRestaurantsPage = lazy(() => import('../pages/locations/RouteRestaurants.jsx'));
@@ -39,6 +46,12 @@ export const landingRoutes = [
       { path: ROUTES.INGREDIENTS, element: <Suspense fallback={<LoadingFallback />}><IngredientsPage /></Suspense> },
       { path: ROUTES.CULINARY_TECHNIQUES, element: <Suspense fallback={<LoadingFallback />}><TechniquesPage /></Suspense> },
       { path: ROUTES.TOOLS, element: <Suspense fallback={<LoadingFallback />}><ToolsPage /></Suspense> },
+
+      // Gastronomía - Detalles
+      { path: '/gastronomia/recetas/:id', element: <Suspense fallback={<LoadingFallback />}><RecipeDetailPage /></Suspense> },
+      { path: '/gastronomia/ingredientes/:id', element: <Suspense fallback={<LoadingFallback />}><IngredientDetailPage /></Suspense> },
+      { path: '/gastronomia/tecnicas/:id', element: <Suspense fallback={<LoadingFallback />}><TechniqueDetailPage /></Suspense> },
+      { path: '/gastronomia/herramientas/:id', element: <Suspense fallback={<LoadingFallback />}><ToolDetailPage /></Suspense> },
 
       // Ubicaciones
       { path: ROUTES.LOCATIONS, element: <Suspense fallback={<LoadingFallback />}><LocationsPage /></Suspense> },

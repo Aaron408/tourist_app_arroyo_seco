@@ -30,8 +30,8 @@ const LandingLayout = () => {
     };
   }, [isMobileMenuOpen]);
 
-  const toggleLanguage = () => {
-    setLanguage(currentLanguage === 'es-MX' ? 'en-US' : 'es-MX');
+  const handleLanguageChange = (languageCode) => {
+    setLanguage(languageCode);
   };
 
   const toggleMobileMenu = () => {
@@ -108,7 +108,7 @@ const LandingLayout = () => {
         toggleMobileMenu={toggleMobileMenu}
         navigationMenus={navigationMenus}
         currentLanguage={currentLanguage}
-        toggleLanguage={toggleLanguage}
+        handleLanguageChange={handleLanguageChange}
         t={t}
         closeMobileMenu={closeMobileMenu}
       />
@@ -120,7 +120,7 @@ const LandingLayout = () => {
         openSubmenu={openSubmenu}
         toggleSubmenu={toggleSubmenu}
         currentLanguage={currentLanguage}
-        toggleLanguage={toggleLanguage}
+        handleLanguageChange={handleLanguageChange}
         t={t}
       />
 

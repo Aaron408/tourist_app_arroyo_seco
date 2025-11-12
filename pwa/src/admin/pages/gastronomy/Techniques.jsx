@@ -17,8 +17,9 @@ const Techniques = () => {
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, id: null });
 
   useEffect(() => {
-    fetchTechniques({ language: currentLanguage });
-  }, [currentLanguage]);
+    // Admin needs all translations, don't filter by language
+    fetchTechniques();
+  }, []);
 
   const showToast = (message, type) => {
     setToast({ message, type });
@@ -65,7 +66,8 @@ const Techniques = () => {
   };
 
   const filteredTechniques = techniques.filter(technique => {
-    const translation = technique.translations?.find(t => t.language_code === currentLanguage) || technique.translations?.[0];
+    // In admin, always prefer Spanish (es-MX) by default, then fallback to first available
+    const translation = technique.translations?.find(t => t.language_code === 'es-MX') || technique.translations?.[0];
     return translation?.name?.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -153,7 +155,8 @@ const Techniques = () => {
                   </tr>
                 ) : (
                   filteredTechniques.map((technique) => {
-                    const translation = technique.translations?.find(t => t.language_code === currentLanguage) || technique.translations?.[0];
+                    // In admin, always prefer Spanish (es-MX) by default, then fallback to first available
+                    const translation = technique.translations?.find(t => t.language_code === 'es-MX') || technique.translations?.[0];
                     return (
                       <tr key={technique.id} className="hover:bg-orange-50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{technique.id}</td>

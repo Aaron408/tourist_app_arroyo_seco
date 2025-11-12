@@ -52,7 +52,7 @@ const Header = () => {
               className="flex items-center px-3 py-1 rounded hover:bg-blue-600"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {currentLanguage === 'es-MX' ? 'ES' : 'EN'}
+              {currentLanguage === 'es-MX' ? 'es-MX' : 'en-MX'}
               <svg
                 className="w-4 h-4 ml-1"
                 fill="none"
@@ -164,7 +164,7 @@ const Header = () => {
                         : 'bg-blue-700 text-white'
                     }`}
                   >
-                    {lang.code === 'es-MX' ? 'ES' : 'EN'}
+                    {lang.code === 'es-MX' ? 'es-MX' : 'en-MX'}
                   </button>
                 ))}
               </div>

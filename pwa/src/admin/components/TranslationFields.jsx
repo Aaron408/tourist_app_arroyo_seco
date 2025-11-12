@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Trash2, Globe } from 'lucide-react';
 import { LANGUAGES } from '../utils/constants';
 
@@ -7,19 +7,30 @@ const TranslationFields = ({ translations, onChange, fields = ['name', 'descript
     translations.map(t => t.language_code)
   );
 
+  // Sync selectedLanguages when translations prop changes (e.g., when editing)
+  useEffect(() => {
+    setSelectedLanguages(translations.map(t => t.language_code));
+  }, [translations]);
+
   const addLanguage = (langCode) => {
-    if (!selectedLanguages.includes(langCode)) {
-      const newTranslation = { language_code: langCode };
-      fields.forEach(field => newTranslation[field] = '');
-      
-      onChange([...translations, newTranslation]);
-      setSelectedLanguages([...selectedLanguages, langCode]);
+    // Double-check: prevent adding duplicate languages
+    const alreadyExists = translations.some(t => t.language_code === langCode);
+    if (alreadyExists) {
+      return; // Language already exists, do nothing
     }
+
+    const newTranslation = { language_code: langCode };
+    fields.forEach(field => newTranslation[field] = '');
+
+    const updatedTranslations = [...translations, newTranslation];
+    onChange(updatedTranslations);
+    setSelectedLanguages(updatedTranslations.map(t => t.language_code));
   };
 
   const removeLanguage = (langCode) => {
-    onChange(translations.filter(t => t.language_code !== langCode));
-    setSelectedLanguages(selectedLanguages.filter(l => l !== langCode));
+    const updatedTranslations = translations.filter(t => t.language_code !== langCode);
+    onChange(updatedTranslations);
+    setSelectedLanguages(updatedTranslations.map(t => t.language_code));
   };
 
   const updateTranslation = (langCode, field, value) => {
