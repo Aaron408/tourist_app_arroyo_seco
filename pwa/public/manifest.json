@@ -1,11 +1,11 @@
 {
-  "name": "Arroyo Seco Tourist App",
-  "short_name": "Tourist App",
+  "name": "Xiao Gourmet - Arroyo Seco",
+  "short_name": "Xiao Gourmet",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#4285F4",
-  "description": "Descubre y explora Arroyo Seco con nuestra guía turística interactiva",
+  "theme_color": "#f97316",
+  "description": "Descubre la gastronomía y cultura de Arroyo Seco con Xiao Gourmet",
   "icons": [
     {
       "src": "/icons/favicon.png",

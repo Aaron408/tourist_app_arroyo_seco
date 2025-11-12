@@ -42,8 +42,8 @@ const MobileMenu = ({
                 <span className="text-white font-bold text-xl">🍽️</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold text-gray-900">Arroyo Seco</span>
-                <span className="text-xs text-amber-600 font-medium">Menú</span>
+                <span className="text-lg font-bold text-gray-900">Xiao Gourmet</span>
+                <span className="text-xs text-amber-600 font-medium">Arroyo Seco</span>
               </div>
             </div>
             <button

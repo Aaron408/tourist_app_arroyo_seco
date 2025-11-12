@@ -45,10 +45,10 @@ const Header = ({
             </div>
             <div className="flex flex-col">
               <span className="text-lg md:text-xl font-bold text-gray-900">
-                Arroyo Seco
+                Xiao Gourmet
               </span>
               <span className="text-xs text-amber-600 font-medium hidden sm:block">
-                {t.navigation.gastronomy.title}
+                Arroyo Seco
               </span>
             </div>
           </Link>
