@@ -17,8 +17,9 @@ const Recipes = () => {
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, id: null });
 
   useEffect(() => {
-    fetchRecipes({ language: currentLanguage });
-  }, [currentLanguage]);
+    // Admin needs all translations, don't filter by language
+    fetchRecipes();
+  }, []);
 
   const showToast = (message, type) => {
     setToast({ message, type });
@@ -65,7 +66,8 @@ const Recipes = () => {
   };
 
   const filteredRecipes = recipes.filter(recipe => {
-    const translation = recipe.translations?.find(t => t.language_code === currentLanguage) || recipe.translations?.[0];
+    // In admin, always prefer Spanish (es-MX) by default, then fallback to first available
+    const translation = recipe.translations?.find(t => t.language_code === 'es-MX') || recipe.translations?.[0];
     return translation?.name?.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -155,7 +157,8 @@ const Recipes = () => {
                   </tr>
                 ) : (
                   filteredRecipes.map((recipe) => {
-                    const translation = recipe.translations?.find(t => t.language_code === currentLanguage) || recipe.translations?.[0];
+                    // In admin, always prefer Spanish (es-MX) by default, then fallback to first available
+                    const translation = recipe.translations?.find(t => t.language_code === 'es-MX') || recipe.translations?.[0];
                     return (
                       <tr key={recipe.id} className="hover:bg-orange-50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{recipe.id}</td>
@@ -203,6 +206,27 @@ const Recipes = () => {
           }}
           title={editingRecipe ? 'Editar Receta' : 'Nueva Receta'}
           size="lg"
+          footer={
+            <div className="flex justify-end space-x-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setEditingRecipe(null);
+                }}
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                form="recipe-form"
+                className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:from-orange-600 hover:to-red-700 transition-all shadow-md flex items-center gap-2"
+              >
+                {editingRecipe ? 'Actualizar' : 'Crear'}
+              </button>
+            </div>
+          }
         >
           <RecipeForm
             initialData={editingRecipe}

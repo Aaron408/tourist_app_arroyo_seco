@@ -1,16 +1,17 @@
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '../../utils/constants';
 import { useLanguageStore } from '../../stores/languageStore';
-import { 
-  LayoutDashboard, 
-  Utensils, 
-  Beef, 
-  ChefHat, 
-  UtensilsCrossed, 
-  MapPin, 
+import {
+  LayoutDashboard,
+  Utensils,
+  Beef,
+  ChefHat,
+  UtensilsCrossed,
+  MapPin,
   GraduationCap,
   Users,
-  ChevronRight
+  ChevronRight,
+  X
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -85,8 +86,9 @@ const Sidebar = ({ isOpen, onClose }) => {
     <>
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
+        <div
+          className="fixed inset-0 z-20 lg:hidden"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.15)' }}
           onClick={onClose}
         />
       )}
@@ -94,14 +96,23 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Sidebar */}
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-30
-        w-64 bg-white border-r border-gray-200 
+        w-64 bg-white border-r border-gray-200
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         flex flex-col
       `}>
         {/* Mobile Header */}
         <div className="lg:hidden p-4 border-b border-gray-200 bg-gradient-to-r from-orange-500 to-red-600">
-          <h2 className="text-white font-bold text-lg">Menú</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-white font-bold text-lg">Menú Admin</h2>
+            <button
+              onClick={onClose}
+              className="p-1.5 text-white hover:bg-white/20 rounded-lg transition-colors"
+              aria-label="Cerrar menú"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Navigation */}

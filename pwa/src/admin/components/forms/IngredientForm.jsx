@@ -6,8 +6,14 @@ import { MEASUREMENT_UNITS } from '../../utils/constants';
 const IngredientForm = ({ initialData = null, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     unit: '',
+    harvest_start_month: '',
+    harvest_start_day: '',
+    harvest_end_month: '',
+    harvest_end_day: '',
+    banner_image: null,
     translations: [{ language_code: 'es-MX', name: '', description: '' }]
   });
+  const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState(null);
 
@@ -15,13 +21,53 @@ const IngredientForm = ({ initialData = null, onSubmit, onCancel }) => {
     if (initialData) {
       setFormData({
         unit: initialData.unit || '',
+        harvest_start_month: initialData.harvest_start_month || '',
+        harvest_start_day: initialData.harvest_start_day || '',
+        harvest_end_month: initialData.harvest_end_month || '',
+        harvest_end_day: initialData.harvest_end_day || '',
+        banner_image: null,
         translations: initialData.translations || [{ language_code: 'es-MX', name: '', description: '' }]
       });
+      // Set existing image preview if available
+      if (initialData.banner_image) {
+        setImagePreview(initialData.banner_image);
+      }
     }
   }, [initialData]);
 
   const showToast = (message, type) => {
     setToast({ message, type });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showToast('Por favor selecciona una imagen válida', 'error');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('La imagen no debe superar los 5MB', 'error');
+        return;
+      }
+
+      setFormData({ ...formData, banner_image: file });
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setFormData({ ...formData, banner_image: null });
+    setImagePreview(null);
   };
 
   const handleSubmit = async (e) => {
@@ -69,6 +115,55 @@ const IngredientForm = ({ initialData = null, onSubmit, onCancel }) => {
           fields={['name', 'description']}
         />
 
+        {/* Banner Image */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Imagen Banner
+          </label>
+          {imagePreview ? (
+            <div className="relative">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-full h-48 object-cover rounded-lg border border-gray-300"
+              />
+              <button
+                type="button"
+                onClick={handleRemoveImage}
+                disabled={isSubmitting}
+                className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors disabled:opacity-50"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          ) : (
+            <div className="mt-1">
+              <label className="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:border-orange-500 transition-colors">
+                <div className="space-y-1 text-center">
+                  <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <div className="text-sm text-gray-600">
+                    <span className="font-medium text-orange-600 hover:text-orange-500">
+                      Selecciona una imagen
+                    </span> o arrastra aquí
+                  </div>
+                  <p className="text-xs text-gray-500">PNG, JPG, GIF hasta 5MB</p>
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  disabled={isSubmitting}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          )}
+        </div>
+
         {/* Unit */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -87,6 +182,95 @@ const IngredientForm = ({ initialData = null, onSubmit, onCancel }) => {
               </option>
             ))}
           </select>
+        </div>
+
+        {/* Harvest Dates */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Inicio de Cosecha
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <select
+                  value={formData.harvest_start_month}
+                  onChange={(e) => setFormData({ ...formData, harvest_start_month: e.target.value })}
+                  disabled={isSubmitting}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                >
+                  <option value="">Mes...</option>
+                  <option value="1">Enero</option>
+                  <option value="2">Febrero</option>
+                  <option value="3">Marzo</option>
+                  <option value="4">Abril</option>
+                  <option value="5">Mayo</option>
+                  <option value="6">Junio</option>
+                  <option value="7">Julio</option>
+                  <option value="8">Agosto</option>
+                  <option value="9">Septiembre</option>
+                  <option value="10">Octubre</option>
+                  <option value="11">Noviembre</option>
+                  <option value="12">Diciembre</option>
+                </select>
+              </div>
+              <div>
+                <input
+                  type="number"
+                  min="1"
+                  max="31"
+                  placeholder="Día"
+                  value={formData.harvest_start_day}
+                  onChange={(e) => setFormData({ ...formData, harvest_start_day: e.target.value })}
+                  disabled={isSubmitting}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                />
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Fecha de inicio de la temporada de cosecha</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Fin de Cosecha
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <select
+                  value={formData.harvest_end_month}
+                  onChange={(e) => setFormData({ ...formData, harvest_end_month: e.target.value })}
+                  disabled={isSubmitting}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                >
+                  <option value="">Mes...</option>
+                  <option value="1">Enero</option>
+                  <option value="2">Febrero</option>
+                  <option value="3">Marzo</option>
+                  <option value="4">Abril</option>
+                  <option value="5">Mayo</option>
+                  <option value="6">Junio</option>
+                  <option value="7">Julio</option>
+                  <option value="8">Agosto</option>
+                  <option value="9">Septiembre</option>
+                  <option value="10">Octubre</option>
+                  <option value="11">Noviembre</option>
+                  <option value="12">Diciembre</option>
+                </select>
+              </div>
+              <div>
+                <input
+                  type="number"
+                  min="1"
+                  max="31"
+                  placeholder="Día"
+                  value={formData.harvest_end_day}
+                  onChange={(e) => setFormData({ ...formData, harvest_end_day: e.target.value })}
+                  disabled={isSubmitting}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                />
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Fecha de fin de la temporada de cosecha</p>
+          </div>
         </div>
 
         {/* Buttons */}

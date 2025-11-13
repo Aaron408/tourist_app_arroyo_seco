@@ -1,9 +1,9 @@
 import { ChefHat } from 'lucide-react';
 
-const Header = ({ 
-  title, 
-  subtitle, 
-  icon: Icon = ChefHat,
+const GastronomyHeader = ({
+  title,
+  subtitle,
+  Icon = ChefHat,
   gradientFrom = 'from-orange-600',
   gradientTo = 'to-red-600'
 }) => {
@@ -24,4 +24,4 @@ const Header = ({
   );
 };
 
-export default Header;
+export default GastronomyHeader;

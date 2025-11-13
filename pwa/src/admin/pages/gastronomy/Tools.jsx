@@ -17,8 +17,9 @@ const Tools = () => {
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, id: null });
 
   useEffect(() => {
-    fetchTools({ language: currentLanguage });
-  }, [currentLanguage]);
+    // Admin needs all translations, don't filter by language
+    fetchTools();
+  }, []);
 
   const showToast = (message, type) => {
     setToast({ message, type });
@@ -65,7 +66,8 @@ const Tools = () => {
   };
 
   const filteredTools = tools.filter(tool => {
-    const translation = tool.translations?.find(t => t.language_code === currentLanguage) || tool.translations?.[0];
+    // In admin, always prefer Spanish (es-MX) by default, then fallback to first available
+    const translation = tool.translations?.find(t => t.language_code === 'es-MX') || tool.translations?.[0];
     return translation?.name?.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -153,7 +155,8 @@ const Tools = () => {
                   </tr>
                 ) : (
                   filteredTools.map((tool) => {
-                    const translation = tool.translations?.find(t => t.language_code === currentLanguage) || tool.translations?.[0];
+                    // In admin, always prefer Spanish (es-MX) by default, then fallback to first available
+                    const translation = tool.translations?.find(t => t.language_code === 'es-MX') || tool.translations?.[0];
                     return (
                       <tr key={tool.id} className="hover:bg-orange-50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{tool.id}</td>
