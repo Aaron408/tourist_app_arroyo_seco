@@ -4,7 +4,7 @@ import { useLanguageStore } from '../../stores/languageStore';
 import { Plus, Edit, Trash2, Search } from 'lucide-react';
 import Modal from '../../components/Modal';
 import Toast from '../../components/Toast';
-import ConfirmDialog from '../../../components/ConfirmDialog';
+import ConfirmDialog from '../../components/ConfirmDialog';
 import RecipeForm from '../../components/forms/RecipeForm';
 
 const Recipes = () => {
