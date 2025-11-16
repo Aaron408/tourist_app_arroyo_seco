@@ -5,12 +5,21 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import { useLanguageStore } from "@/stores/languageStore";
+import {
+  gastronomyService,
+  Recipe,
+  Ingredient,
+  Technique,
+  Tool,
+} from "@/services/gastronomyService";
 
 const colors = {
   gray900: "#111827",
@@ -33,107 +42,158 @@ const colors = {
   red400: "#F87171",
 };
 
-type TabType = "recipes" | "ingredients" | "techniques";
+type TabType = "recipes" | "ingredients" | "techniques" | "tools";
 
-const mockRecipes = [
-  {
-    id: 1,
-    title: "Mole Queretano",
-    description: "Receta tradicional de mole con ingredientes locales",
-    difficulty: "Intermedio",
-    time: "3 horas",
-    icon: "🍲",
-  },
-  {
-    id: 2,
-    title: "Gorditas de Frijol",
-    description: "Antojito tradicional hecho con masa de maíz",
-    difficulty: "Fácil",
-    time: "45 min",
-    icon: "🫔",
-  },
-  {
-    id: 3,
-    title: "Atole de Pinole",
-    description: "Bebida caliente preparada con maíz tostado",
-    difficulty: "Fácil",
-    time: "30 min",
-    icon: "☕",
-  },
-];
+// Helper to convert language code to API format
+const getLanguageCode = (lang: string): string => {
+  return lang === 'es' ? 'es-MX' : 'en-US';
+};
 
-const mockIngredients = [
-  {
-    id: 1,
-    name: "Chile Serrano",
-    description: "Chile picante cultivado en la región",
-    season: "Todo el año",
-    icon: "🌶️",
-  },
-  {
-    id: 2,
-    name: "Maíz Criollo",
-    description: "Variedad local de maíz tradicional",
-    season: "Agosto - Octubre",
-    icon: "🌽",
-  },
-  {
-    id: 3,
-    name: "Nopal",
-    description: "Cactus comestible rico en fibra",
-    season: "Primavera",
-    icon: "🌵",
-  },
-  {
-    id: 4,
-    name: "Frijol Negro",
-    description: "Leguminosa básica en la dieta regional",
-    season: "Julio - Septiembre",
-    icon: "🫘",
-  },
-];
-
-const mockTechniques = [
-  {
-    id: 1,
-    name: "Nixtamalización",
-    description: "Proceso ancestral de preparación del maíz",
-    difficulty: "Avanzado",
-    icon: "🫕",
-  },
-  {
-    id: 2,
-    name: "Molienda en Metate",
-    description: "Técnica tradicional para moler ingredientes",
-    difficulty: "Intermedio",
-    icon: "🪨",
-  },
-  {
-    id: 3,
-    name: "Cocción en Comal",
-    description: "Método de cocción sobre superficie caliente",
-    difficulty: "Fácil",
-    icon: "🔥",
-  },
-];
+// Default emojis for items without banner images
+const DEFAULT_EMOJIS = {
+  recipes: ['🍲', '🫔', '☕', '🌮', '🥘', '🍜'],
+  ingredients: ['🌶️', '🌽', '🌵', '🫘', '🥑', '🍅', '🧅', '🧄'],
+  techniques: ['🫕', '🪨', '🔥', '👨‍🍳', '🔪', '🥄'],
+  tools: ['🔪', '🍳', '🥘', '🥄', '🔥', '⚗️', '🫕'],
+};
 
 export default function GastronomyScreen() {
   const params = useLocalSearchParams<{ initialTab?: string }>();
   const [activeTab, setActiveTab] = useState<TabType>("recipes");
   const router = useRouter();
+  const { currentLanguage } = useLanguageStore();
+
+  // Data states
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [techniques, setTechniques] = useState<Technique[]>([]);
+  const [tools, setTools] = useState<Tool[]>([]);
+
+  // Loading states
+  const [loadingRecipes, setLoadingRecipes] = useState(false);
+  const [loadingIngredients, setLoadingIngredients] = useState(false);
+  const [loadingTechniques, setLoadingTechniques] = useState(false);
+  const [loadingTools, setLoadingTools] = useState(false);
+
+  // Error states
+  const [errorRecipes, setErrorRecipes] = useState<string | null>(null);
+  const [errorIngredients, setErrorIngredients] = useState<string | null>(null);
+  const [errorTechniques, setErrorTechniques] = useState<string | null>(null);
+  const [errorTools, setErrorTools] = useState<string | null>(null);
 
   // Set initial tab from navigation params
   useEffect(() => {
-    if (params.initialTab && 
-        (params.initialTab === "recipes" || params.initialTab === "ingredients" || params.initialTab === "techniques")) {
+    if (params.initialTab &&
+        (params.initialTab === "recipes" || params.initialTab === "ingredients" || params.initialTab === "techniques" || params.initialTab === "tools")) {
       setActiveTab(params.initialTab as TabType);
     }
   }, [params.initialTab]);
+
+  // Fetch recipes
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      setLoadingRecipes(true);
+      setErrorRecipes(null);
+      try {
+        const language = getLanguageCode(currentLanguage);
+        const data = await gastronomyService.getAllRecipes(language);
+        setRecipes(data);
+      } catch (error) {
+        console.error('Error fetching recipes:', error);
+        setErrorRecipes('No se pudieron cargar las recetas');
+      } finally {
+        setLoadingRecipes(false);
+      }
+    };
+
+    fetchRecipes();
+  }, [currentLanguage]);
+
+  // Fetch ingredients
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      setLoadingIngredients(true);
+      setErrorIngredients(null);
+      try {
+        const language = getLanguageCode(currentLanguage);
+        const data = await gastronomyService.getAllIngredients(language);
+        setIngredients(data);
+      } catch (error) {
+        console.error('Error fetching ingredients:', error);
+        setErrorIngredients('No se pudieron cargar los ingredientes');
+      } finally {
+        setLoadingIngredients(false);
+      }
+    };
+
+    fetchIngredients();
+  }, [currentLanguage]);
+
+  // Fetch techniques
+  useEffect(() => {
+    const fetchTechniques = async () => {
+      setLoadingTechniques(true);
+      setErrorTechniques(null);
+      try {
+        const language = getLanguageCode(currentLanguage);
+        const data = await gastronomyService.getAllTechniques(language);
+        setTechniques(data);
+      } catch (error) {
+        console.error('Error fetching techniques:', error);
+        setErrorTechniques('No se pudieron cargar las técnicas');
+      } finally {
+        setLoadingTechniques(false);
+      }
+    };
+
+    fetchTechniques();
+  }, [currentLanguage]);
+
+  // Fetch tools
+  useEffect(() => {
+    const fetchTools = async () => {
+      setLoadingTools(true);
+      setErrorTools(null);
+      try {
+        const language = getLanguageCode(currentLanguage);
+        const data = await gastronomyService.getAllTools(language);
+        setTools(data);
+      } catch (error) {
+        console.error('Error fetching tools:', error);
+        setErrorTools('No se pudieron cargar las herramientas');
+      } finally {
+        setLoadingTools(false);
+      }
+    };
+
+    fetchTools();
+  }, [currentLanguage]);
 
   const handleRecipePress = (recipeId: number) => {
     router.push({
       pathname: '/screens/recipe-detail',
       params: { id: recipeId.toString() },
+    });
+  };
+
+  const handleIngredientPress = (ingredientId: number) => {
+    router.push({
+      pathname: '/screens/ingredient-detail',
+      params: { id: ingredientId.toString() },
+    });
+  };
+
+  const handleTechniquePress = (techniqueId: number) => {
+    router.push({
+      pathname: '/screens/technique-detail',
+      params: { id: techniqueId.toString() },
+    });
+  };
+
+  const handleToolPress = (toolId: number) => {
+    router.push({
+      pathname: '/screens/tool-detail',
+      params: { id: toolId.toString() },
     });
   };
 
@@ -161,133 +221,226 @@ export default function GastronomyScreen() {
     );
   };
 
-  const RecipeCard = ({ recipe }: { recipe: (typeof mockRecipes)[0] }) => (
-    <TouchableOpacity 
-      activeOpacity={0.9}
-      onPress={() => handleRecipePress(recipe.id)}
-    >
-      <BlurView intensity={80} tint="dark" style={styles.card}>
-        <View style={styles.cardContent}>
-          <View style={styles.cardHeader}>
-            <View style={styles.cardIconContainer}>
-              <LinearGradient
-                colors={[colors.amber500, colors.orange600]}
-                style={styles.cardIconGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.cardIcon}>{recipe.icon}</Text>
-              </LinearGradient>
+  const RecipeCard = ({ recipe, index }: { recipe: Recipe; index: number }) => {
+    const language = getLanguageCode(currentLanguage);
+    const translation = gastronomyService.getTranslation(recipe.translations, language);
+
+    if (!translation) return null;
+
+    const difficultyLabel = gastronomyService.getDifficultyLabel(recipe.difficulty);
+    const duration = gastronomyService.formatDuration(recipe.duration);
+    const emoji = DEFAULT_EMOJIS.recipes[index % DEFAULT_EMOJIS.recipes.length];
+
+    return (
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => handleRecipePress(recipe.id)}
+      >
+        <BlurView intensity={80} tint="dark" style={styles.card}>
+          <View style={styles.cardContent}>
+            <View style={styles.cardHeader}>
+              <View style={styles.cardIconContainer}>
+                <LinearGradient
+                  colors={[colors.amber500, colors.orange600]}
+                  style={styles.cardIconGradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.cardIcon}>{emoji}</Text>
+                </LinearGradient>
+              </View>
+              <View style={styles.difficultyBadge}>
+                <Text style={styles.difficultyText}>{difficultyLabel}</Text>
+              </View>
             </View>
-            <View style={styles.difficultyBadge}>
-              <Text style={styles.difficultyText}>{recipe.difficulty}</Text>
+
+            <Text style={styles.cardTitle}>{translation.name}</Text>
+            <Text style={styles.cardDescription} numberOfLines={2}>
+              {translation.description}
+            </Text>
+
+            <View style={styles.cardFooter}>
+              <View style={styles.timeContainer}>
+                <Ionicons name="time" size={16} color={colors.amber500} />
+                <Text style={styles.timeText}>{duration}</Text>
+              </View>
+              <View style={styles.viewButton}>
+                <Text style={styles.viewButtonText}>Ver receta</Text>
+                <Ionicons
+                  name="arrow-forward"
+                  size={14}
+                  color={colors.amber500}
+                />
+              </View>
             </View>
           </View>
-
-          <Text style={styles.cardTitle}>{recipe.title}</Text>
-          <Text style={styles.cardDescription}>{recipe.description}</Text>
-
-          <View style={styles.cardFooter}>
-            <View style={styles.timeContainer}>
-              <Ionicons name="time" size={16} color={colors.amber500} />
-              <Text style={styles.timeText}>{recipe.time}</Text>
-            </View>
-            <TouchableOpacity 
-              style={styles.viewButton} 
-              activeOpacity={0.8}
-              onPress={() => handleRecipePress(recipe.id)}
-            >
-              <Text style={styles.viewButtonText}>Ver receta</Text>
-              <Ionicons
-                name="arrow-forward"
-                size={14}
-                color={colors.amber500}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </BlurView>
-    </TouchableOpacity>
-  );
+        </BlurView>
+      </TouchableOpacity>
+    );
+  };
 
   const IngredientCard = ({
     ingredient,
+    index,
   }: {
-    ingredient: (typeof mockIngredients)[0];
-  }) => (
-    <TouchableOpacity activeOpacity={0.9}>
-      <BlurView intensity={80} tint="dark" style={styles.card}>
-        <View style={styles.cardContent}>
-          <View style={styles.cardHeader}>
-            <View style={styles.cardIconContainer}>
-              <LinearGradient
-                colors={[colors.amber500, colors.orange600]}
-                style={styles.cardIconGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.cardIcon}>{ingredient.icon}</Text>
-              </LinearGradient>
+    ingredient: Ingredient;
+    index: number;
+  }) => {
+    const language = getLanguageCode(currentLanguage);
+    const translation = gastronomyService.getTranslation(ingredient.translations, language);
+
+    if (!translation) return null;
+
+    const season = gastronomyService.getHarvestSeason(
+      ingredient.harvest_start_month,
+      ingredient.harvest_end_month
+    );
+    const isInSeason = gastronomyService.isInSeason(
+      ingredient.harvest_start_month,
+      ingredient.harvest_start_day,
+      ingredient.harvest_end_month,
+      ingredient.harvest_end_day
+    );
+    const emoji = DEFAULT_EMOJIS.ingredients[index % DEFAULT_EMOJIS.ingredients.length];
+
+    return (
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => handleIngredientPress(ingredient.id)}
+      >
+        <BlurView intensity={80} tint="dark" style={styles.card}>
+          <View style={styles.cardContent}>
+            <View style={styles.cardHeader}>
+              <View style={styles.cardIconContainer}>
+                <LinearGradient
+                  colors={[colors.amber500, colors.orange600]}
+                  style={styles.cardIconGradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.cardIcon}>{emoji}</Text>
+                </LinearGradient>
+              </View>
+              <View style={[styles.seasonBadge, isInSeason && styles.seasonBadgeActive]}>
+                <Ionicons name="leaf" size={12} color={isInSeason ? colors.amber500 : colors.gray400} />
+                <Text style={[styles.seasonText, isInSeason && styles.seasonTextActive]}>
+                  {season}
+                </Text>
+              </View>
             </View>
-            <View style={styles.seasonBadge}>
-              <Ionicons name="leaf" size={12} color={colors.amber500} />
-              <Text style={styles.seasonText}>{ingredient.season}</Text>
+
+            <Text style={styles.cardTitle}>{translation.name}</Text>
+            <Text style={styles.cardDescription} numberOfLines={2}>
+              {translation.description}
+            </Text>
+
+            <View style={styles.learnMoreButton}>
+              <Text style={styles.learnMoreText}>Más información</Text>
+              <Ionicons name="chevron-forward" size={16} color={colors.gray400} />
             </View>
           </View>
-
-          <Text style={styles.cardTitle}>{ingredient.name}</Text>
-          <Text style={styles.cardDescription}>{ingredient.description}</Text>
-
-          <TouchableOpacity style={styles.learnMoreButton} activeOpacity={0.8}>
-            <Text style={styles.learnMoreText}>Más información</Text>
-            <Ionicons name="chevron-forward" size={16} color={colors.gray400} />
-          </TouchableOpacity>
-        </View>
-      </BlurView>
-    </TouchableOpacity>
-  );
+        </BlurView>
+      </TouchableOpacity>
+    );
+  };
 
   const TechniqueCard = ({
     technique,
+    index,
   }: {
-    technique: (typeof mockTechniques)[0];
-  }) => (
-    <TouchableOpacity activeOpacity={0.9}>
-      <BlurView intensity={80} tint="dark" style={styles.card}>
-        <View style={styles.cardContent}>
-          <View style={styles.cardHeader}>
-            <View style={styles.cardIconContainer}>
-              <LinearGradient
-                colors={[colors.amber500, colors.orange600]}
-                style={styles.cardIconGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.cardIcon}>{technique.icon}</Text>
-              </LinearGradient>
+    technique: Technique;
+    index: number;
+  }) => {
+    const language = getLanguageCode(currentLanguage);
+    const translation = gastronomyService.getTranslation(technique.translations, language);
+
+    if (!translation) return null;
+
+    const emoji = DEFAULT_EMOJIS.techniques[index % DEFAULT_EMOJIS.techniques.length];
+
+    return (
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => handleTechniquePress(technique.id)}
+      >
+        <BlurView intensity={80} tint="dark" style={styles.card}>
+          <View style={styles.cardContent}>
+            <View style={styles.cardHeader}>
+              <View style={styles.cardIconContainer}>
+                <LinearGradient
+                  colors={[colors.amber500, colors.orange600]}
+                  style={styles.cardIconGradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.cardIcon}>{emoji}</Text>
+                </LinearGradient>
+              </View>
             </View>
-            <View style={styles.difficultyBadge}>
-              <Text style={styles.difficultyText}>{technique.difficulty}</Text>
+
+            <Text style={styles.cardTitle}>{translation.name}</Text>
+            <Text style={styles.cardDescription} numberOfLines={3}>
+              {translation.description}
+            </Text>
+
+            <View style={styles.cardFooter}>
+              <Text style={styles.exploreFooterText}>Explorar técnica</Text>
+              <Ionicons name="arrow-forward" size={14} color={colors.amber500} />
             </View>
           </View>
+        </BlurView>
+      </TouchableOpacity>
+    );
+  };
 
-          <Text style={styles.cardTitle}>{technique.name}</Text>
-          <Text style={styles.cardDescription}>{technique.description}</Text>
+  const ToolCard = ({
+    tool,
+    index,
+  }: {
+    tool: Tool;
+    index: number;
+  }) => {
+    const language = getLanguageCode(currentLanguage);
+    const translation = gastronomyService.getTranslation(tool.translations, language);
 
-          <TouchableOpacity style={styles.exploreButton} activeOpacity={0.9}>
-            <LinearGradient
-              colors={[colors.amber600, colors.orange600]}
-              style={styles.exploreGradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-            >
-              <Text style={styles.exploreText}>Explorar técnica</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
-      </BlurView>
-    </TouchableOpacity>
-  );
+    if (!translation) return null;
+
+    const emoji = DEFAULT_EMOJIS.tools[index % DEFAULT_EMOJIS.tools.length];
+
+    return (
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => handleToolPress(tool.id)}
+      >
+        <BlurView intensity={80} tint="dark" style={styles.card}>
+          <View style={styles.cardContent}>
+            <View style={styles.cardHeader}>
+              <View style={styles.cardIconContainer}>
+                <LinearGradient
+                  colors={[colors.amber500, colors.orange600]}
+                  style={styles.cardIconGradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.cardIcon}>{emoji}</Text>
+                </LinearGradient>
+              </View>
+            </View>
+
+            <Text style={styles.cardTitle}>{translation.name}</Text>
+            <Text style={styles.cardDescription} numberOfLines={3}>
+              {translation.description}
+            </Text>
+
+            <View style={styles.cardFooter}>
+              <Text style={styles.exploreFooterText}>Ver herramienta</Text>
+              <Ionicons name="arrow-forward" size={14} color={colors.amber500} />
+            </View>
+          </View>
+        </BlurView>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -341,6 +494,7 @@ export default function GastronomyScreen() {
               <TabButton tab="recipes" label="Recetas" icon="🍲" />
               <TabButton tab="ingredients" label="Ingredientes" icon="🌱" />
               <TabButton tab="techniques" label="Técnicas" icon="👨‍🍳" />
+              <TabButton tab="tools" label="Herramientas" icon="🔪" />
             </ScrollView>
           </BlurView>
         </View>
@@ -354,27 +508,100 @@ export default function GastronomyScreen() {
           {activeTab === "recipes" && (
             <View style={styles.grid}>
               <Text style={styles.sectionTitle}>Recetas Tradicionales</Text>
-              {mockRecipes.map((recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe} />
-              ))}
+              {loadingRecipes ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color={colors.amber500} />
+                  <Text style={styles.loadingText}>Cargando recetas...</Text>
+                </View>
+              ) : errorRecipes ? (
+                <View style={styles.errorContainer}>
+                  <Ionicons name="alert-circle" size={48} color={colors.red400} />
+                  <Text style={styles.errorText}>{errorRecipes}</Text>
+                </View>
+              ) : recipes.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>No hay recetas disponibles</Text>
+                </View>
+              ) : (
+                recipes.map((recipe, index) => (
+                  <RecipeCard key={recipe.id} recipe={recipe} index={index} />
+                ))
+              )}
             </View>
           )}
 
           {activeTab === "ingredients" && (
             <View style={styles.grid}>
               <Text style={styles.sectionTitle}>Ingredientes Locales</Text>
-              {mockIngredients.map((ingredient) => (
-                <IngredientCard key={ingredient.id} ingredient={ingredient} />
-              ))}
+              {loadingIngredients ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color={colors.amber500} />
+                  <Text style={styles.loadingText}>Cargando ingredientes...</Text>
+                </View>
+              ) : errorIngredients ? (
+                <View style={styles.errorContainer}>
+                  <Ionicons name="alert-circle" size={48} color={colors.red400} />
+                  <Text style={styles.errorText}>{errorIngredients}</Text>
+                </View>
+              ) : ingredients.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>No hay ingredientes disponibles</Text>
+                </View>
+              ) : (
+                ingredients.map((ingredient, index) => (
+                  <IngredientCard key={ingredient.id} ingredient={ingredient} index={index} />
+                ))
+              )}
             </View>
           )}
 
           {activeTab === "techniques" && (
             <View style={styles.grid}>
               <Text style={styles.sectionTitle}>Técnicas Culinarias</Text>
-              {mockTechniques.map((technique) => (
-                <TechniqueCard key={technique.id} technique={technique} />
-              ))}
+              {loadingTechniques ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color={colors.amber500} />
+                  <Text style={styles.loadingText}>Cargando técnicas...</Text>
+                </View>
+              ) : errorTechniques ? (
+                <View style={styles.errorContainer}>
+                  <Ionicons name="alert-circle" size={48} color={colors.red400} />
+                  <Text style={styles.errorText}>{errorTechniques}</Text>
+                </View>
+              ) : techniques.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>No hay técnicas disponibles</Text>
+                </View>
+              ) : (
+                techniques.map((technique, index) => (
+                  <TechniqueCard key={technique.id} technique={technique} index={index} />
+                ))
+              )}
+            </View>
+          )}
+
+          {activeTab === "tools" && (
+            <View style={styles.grid}>
+              <Text style={styles.sectionTitle}>Herramientas de Cocina</Text>
+              {loadingTools ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color={colors.amber500} />
+                  <Text style={styles.loadingText}>Cargando herramientas...</Text>
+                </View>
+              ) : errorTools ? (
+                <View style={styles.errorContainer}>
+                  <Ionicons name="alert-circle" size={48} color={colors.red400} />
+                  <Text style={styles.errorText}>{errorTools}</Text>
+                </View>
+              ) : tools.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>No hay herramientas disponibles</Text>
+                </View>
+              ) : (
+                tools.map((tool, index) => (
+                  <ToolCard key={tool.id} tool={tool} index={index} />
+                ))
+              )}
             </View>
           )}
         </ScrollView>
@@ -429,12 +656,12 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: 16,
-    color: colors.gray400,
+    color: colors.gray300,
     fontWeight: "600",
   },
   tabsContainer: {
     paddingHorizontal: 24,
-    marginBottom: 20,
+    marginBottom: 16,
   },
   tabsBlur: {
     borderRadius: 16,
@@ -480,10 +707,10 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "700",
     color: colors.white,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   card: {
     borderRadius: 20,
@@ -540,25 +767,31 @@ const styles = StyleSheet.create({
   seasonText: {
     fontSize: 11,
     fontWeight: "700",
+    color: colors.gray400,
+  },
+  seasonBadgeActive: {
+    backgroundColor: "rgba(245, 158, 11, 0.2)",
+  },
+  seasonTextActive: {
     color: colors.amber500,
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "800",
     color: colors.white,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   cardDescription: {
-    fontSize: 15,
+    fontSize: 14,
     color: colors.gray300,
-    lineHeight: 22,
-    marginBottom: 16,
+    lineHeight: 20,
+    marginBottom: 12,
   },
   cardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: 16,
+    paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: "rgba(255, 255, 255, 0.1)",
   },
@@ -586,7 +819,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 16,
+    paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: "rgba(255, 255, 255, 0.1)",
   },
@@ -595,17 +828,39 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.gray300,
   },
-  exploreButton: {
-    marginTop: 8,
+  exploreFooterText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: colors.amber500,
   },
-  exploreGradient: {
-    paddingVertical: 12,
-    borderRadius: 12,
+  loadingContainer: {
+    paddingVertical: 40,
+    alignItems: "center",
+    gap: 12,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: colors.gray300,
+    fontWeight: "600",
+  },
+  errorContainer: {
+    paddingVertical: 40,
+    alignItems: "center",
+    gap: 12,
+  },
+  errorText: {
+    fontSize: 14,
+    color: colors.red400,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  emptyContainer: {
+    paddingVertical: 40,
     alignItems: "center",
   },
-  exploreText: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: colors.white,
+  emptyText: {
+    fontSize: 14,
+    color: colors.gray400,
+    fontWeight: "600",
   },
 });

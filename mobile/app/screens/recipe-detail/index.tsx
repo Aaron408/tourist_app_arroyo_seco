@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
+  ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { Video, ResizeMode } from "expo-av";
+import { useLanguageStore } from "@/stores/languageStore";
+import { gastronomyService, Recipe } from "@/services/gastronomyService";
 
 const colors = {
   gray900: "#111827",
@@ -35,86 +38,168 @@ const colors = {
   green500: "#10B981",
 };
 
-// Mock data
-const recipeData = {
-  id: 1,
-  title: "Mole Queretano",
-  emoji: "🍲",
-  description:
-    "Receta tradicional de mole con ingredientes locales de Querétaro que ha sido transmitida por generaciones",
-  difficulty: "Intermedio",
-  time: "3 horas",
-  servings: "6-8 personas",
-  region: "Xiao Gourmet",
-  imageUrl:
-    "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=800",
-  ingredients: [
-    {
-      name: "Chiles guajillo",
-      amount: "8 piezas",
-      notes: "Desvenados y sin semillas",
-    },
-    {
-      name: "Chiles ancho",
-      amount: "4 piezas",
-      notes: "Desvenados y sin semillas",
-    },
-    { name: "Jitomate", amount: "2 piezas grandes", notes: "Maduros" },
-    {
-      name: "Cebolla blanca",
-      amount: "1/2 pieza",
-      notes: "Cortada en cuartos",
-    },
-    { name: "Ajo", amount: "4 dientes", notes: "Pelados" },
-    { name: "Almendras", amount: "1/2 taza", notes: "Peladas" },
-    { name: "Chocolate de mesa", amount: "2 tablillas", notes: "Rallado" },
-    { name: "Canela", amount: "1 rama", notes: "Entera" },
-  ],
-  steps: [
-    {
-      step: 1,
-      title: "Preparar los chiles",
-      description:
-        "Tostar los chiles en un comal caliente por 2-3 minutos de cada lado. Remojar en agua caliente por 20 minutos.",
-      time: "25 minutos",
-      tips: "No dejes que se quemen los chiles, solo que cambien ligeramente de color.",
-    },
-    {
-      step: 2,
-      title: "Tostar especias y frutos secos",
-      description:
-        "En el mismo comal, tostar las almendras, cacahuates, ajonjolí, canela, pimienta y clavo hasta que estén dorados.",
-      time: "10 minutos",
-      tips: "Tuesta cada ingrediente por separado para controlar el punto exacto.",
-    },
-    {
-      step: 3,
-      title: "Asar vegetales",
-      description:
-        "Asar los jitomates, cebolla y ajo en el comal hasta que estén suaves y ligeramente quemados.",
-      time: "15 minutos",
-      tips: "La piel quemada aporta un sabor ahumado característico.",
-    },
-    {
-      step: 4,
-      title: "Licuar y cocinar",
-      description:
-        "Licuar todos los ingredientes y cocinar a fuego lento durante 30 minutos, agregando el chocolate al final.",
-      time: "35 minutos",
-      tips: "Revuelve constantemente para evitar que se pegue.",
-    },
-  ],
+// Helper to convert language code to API format
+const getLanguageCode = (lang: string): string => {
+  return lang === 'es' ? 'es-MX' : 'en-US';
 };
+
+// Default emojis
+const DEFAULT_EMOJI = '🍲';
 
 export default function RecipeDetailScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ id: string }>();
+  const { currentLanguage } = useLanguageStore();
+
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
-  const recipe = recipeData;
+  const videoRef = useRef<Video>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  // Fetch recipe data
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      if (!params.id) {
+        setError('ID de receta no proporcionado');
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+      try {
+        const language = getLanguageCode(currentLanguage);
+        const recipeId = parseInt(params.id, 10);
+        const data = await gastronomyService.getRecipeById(recipeId, language);
+        setRecipe(data);
+      } catch (err) {
+        console.error('Error fetching recipe:', err);
+        setError('No se pudo cargar la receta');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecipe();
+  }, [params.id, currentLanguage]);
 
   const handleBack = () => {
     router.back();
   };
+
+  // Handle reference navigation
+  const handleReferencePress = (type: 'ingredient' | 'technique' | 'tool', id: number) => {
+    if (type === 'technique') {
+      router.push({
+        pathname: '/screens/technique-detail',
+        params: { id: id.toString() },
+      });
+    } else if (type === 'tool') {
+      router.push({
+        pathname: '/screens/tool-detail',
+        params: { id: id.toString() },
+      });
+    }
+    // For ingredients, we could add navigation later if needed
+  };
+
+  // Render step description with clickable references
+  const renderStepDescription = (description: string) => {
+    const segments = gastronomyService.parseStepSegments(description);
+
+    return (
+      <Text style={styles.stepDescription}>
+        {segments.map((segment, index) => {
+          if (segment.isReference && segment.referenceType && segment.referenceId) {
+            return (
+              <Text
+                key={index}
+                style={styles.stepReference}
+                onPress={() => handleReferencePress(segment.referenceType!, segment.referenceId!)}
+              >
+                {segment.text}
+              </Text>
+            );
+          }
+          return <Text key={index}>{segment.text}</Text>;
+        })}
+      </Text>
+    );
+  };
+
+  // Get translated data
+  const language = getLanguageCode(currentLanguage);
+  const translation = recipe ? gastronomyService.getTranslation(recipe.translations, language) : null;
+  const difficultyLabel = recipe ? gastronomyService.getDifficultyLabel(recipe.difficulty) : '';
+  const duration = recipe ? gastronomyService.formatDuration(recipe.duration) : '';
+
+  // Loading state
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <StatusBar style="light" />
+        <LinearGradient
+          colors={[colors.amber600, colors.orange600, colors.orange700]}
+          style={styles.gradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.white} />
+            <Text style={styles.loadingText}>Cargando receta...</Text>
+          </View>
+        </LinearGradient>
+      </View>
+    );
+  }
+
+  // Error state
+  if (error || !recipe || !translation) {
+    return (
+      <View style={styles.container}>
+        <StatusBar style="light" />
+        <LinearGradient
+          colors={[colors.amber600, colors.orange600, colors.orange700]}
+          style={styles.gradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.backButtonContainer}>
+            <TouchableOpacity
+              style={styles.backButton}
+              activeOpacity={0.8}
+              onPress={handleBack}
+            >
+              <BlurView intensity={80} tint="dark" style={styles.backButtonBlur}>
+                <Ionicons name="arrow-back" size={24} color={colors.white} />
+              </BlurView>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.errorContainer}>
+            <Ionicons name="alert-circle" size={64} color={colors.red400} />
+            <Text style={styles.errorText}>
+              {error || 'No se pudo cargar la receta'}
+            </Text>
+            <TouchableOpacity
+              style={styles.retryButton}
+              onPress={() => {
+                setLoading(true);
+                setError(null);
+              }}
+              activeOpacity={0.9}
+            >
+              <BlurView intensity={80} tint="dark" style={styles.retryButtonBlur}>
+                <Text style={styles.retryButtonText}>Reintentar</Text>
+              </BlurView>
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -167,301 +252,240 @@ export default function RecipeDetailScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          {/* Hero Image Section */}
+          {/* Hero Section - Directly on gradient */}
           <View style={styles.heroSection}>
-            <BlurView intensity={90} tint="dark" style={styles.heroCard}>
-              <View style={styles.heroContent}>
-                {/* Image or Emoji */}
-                <View style={styles.imageContainer}>
-                  <LinearGradient
-                    colors={[colors.amber500, colors.orange600]}
-                    style={styles.imageGradient}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                  >
-                    <Text style={styles.heroEmoji}>{recipe.emoji}</Text>
-                  </LinearGradient>
-                </View>
+            {/* Emoji Icon */}
+            <View style={styles.emojiContainer}>
+              <Text style={styles.heroEmoji}>{DEFAULT_EMOJI}</Text>
+            </View>
 
-                {/* Title and Meta */}
-                <Text style={styles.recipeTitle}>{recipe.title}</Text>
-                <Text style={styles.recipeRegion}>📍 {recipe.region}</Text>
+            {/* Title */}
+            <Text style={styles.recipeTitle}>{translation.name}</Text>
 
-                {/* Meta Badges */}
-                <View style={styles.metaTags}>
-                  <View style={styles.metaBadge}>
-                    <Ionicons
-                      name="bar-chart"
-                      size={14}
-                      color={colors.amber500}
-                    />
-                    <Text style={styles.metaText}>{recipe.difficulty}</Text>
-                  </View>
-                  <View style={styles.metaBadge}>
-                    <Ionicons name="time" size={14} color={colors.amber500} />
-                    <Text style={styles.metaText}>{recipe.time}</Text>
-                  </View>
-                </View>
-
-                {/* Description */}
-                <Text style={styles.recipeDescription}>
-                  {recipe.description}
-                </Text>
+            {/* Meta Row */}
+            <View style={styles.metaRow}>
+              <View style={styles.metaItem}>
+                <Ionicons name="bar-chart-outline" size={16} color="rgba(255,255,255,0.9)" />
+                <Text style={styles.metaText}>{difficultyLabel}</Text>
               </View>
-            </BlurView>
+              <View style={styles.metaDivider} />
+              <View style={styles.metaItem}>
+                <Ionicons name="time-outline" size={16} color="rgba(255,255,255,0.9)" />
+                <Text style={styles.metaText}>{duration}</Text>
+              </View>
+            </View>
+
+            {/* Description */}
+            <Text style={styles.description}>{translation.description}</Text>
           </View>
 
-          {/* Video Section */}
-          <BlurView intensity={80} tint="dark" style={styles.card}>
-            <View style={styles.cardContent}>
-              <View style={styles.cardHeader}>
-                <Text style={styles.cardTitle}>🎥 Video Tutorial</Text>
-                <TouchableOpacity
-                  style={styles.smallButton}
-                  onPress={() => setShowVideo(!showVideo)}
-                  activeOpacity={0.9}
-                >
-                  <LinearGradient
-                    colors={[colors.amber600, colors.orange600]}
-                    style={styles.smallButtonGradient}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                  >
-                    <Ionicons
-                      name={showVideo ? "eye-off" : "play"}
-                      size={14}
-                      color={colors.white}
-                    />
-                  </LinearGradient>
-                </TouchableOpacity>
+          {/* Video Section - Only if available */}
+          {recipe.multimedia && recipe.multimedia.filter((m) => m.type === 'video').length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Ionicons name="play-circle" size={20} color={colors.amber500} />
+                <Text style={styles.sectionTitle}>Video Tutorial</Text>
               </View>
-
-              {showVideo && (
-                <View style={styles.videoPlaceholder}>
-                  <Ionicons name="videocam" size={48} color={colors.amber500} />
-                  <Text style={styles.videoPlaceholderText}>
-                    Video: {recipe.title}
-                  </Text>
-                  <Text style={styles.videoNote}>Próximamente disponible</Text>
-                </View>
-              )}
+              <View style={styles.videoWrapper}>
+                <Video
+                  ref={videoRef}
+                  source={{
+                    uri: recipe.multimedia.filter((m) => m.type === 'video')[0].url
+                  }}
+                  style={styles.video}
+                  useNativeControls
+                  resizeMode={ResizeMode.CONTAIN}
+                  isLooping
+                  onPlaybackStatusUpdate={(status) => {
+                    if ('isPlaying' in status) {
+                      setIsPlaying(status.isPlaying);
+                    }
+                  }}
+                />
+              </View>
             </View>
-          </BlurView>
+          )}
 
           {/* Ingredients Section */}
-          <BlurView intensity={80} tint="dark" style={styles.card}>
-            <View style={styles.cardContent}>
-              <View style={styles.cardHeader}>
-                <Text style={styles.cardTitle}>🥄 Ingredientes</Text>
-                <View style={styles.countBadge}>
-                  <Text style={styles.countText}>
-                    {recipe.ingredients.length}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.ingredientsList}>
-                {recipe.ingredients.map((ingredient, index) => (
-                  <View key={index} style={styles.ingredientItem}>
-                    <View style={styles.ingredientDot} />
-                    <View style={styles.ingredientInfo}>
-                      <View style={styles.ingredientHeader}>
-                        <Text style={styles.ingredientName}>
-                          {ingredient.name}
-                        </Text>
-                        <View style={styles.amountBadge}>
-                          <Text style={styles.ingredientAmount}>
-                            {ingredient.amount}
-                          </Text>
-                        </View>
-                      </View>
-                      {ingredient.notes && (
-                        <Text style={styles.ingredientNotes}>
-                          {ingredient.notes}
-                        </Text>
-                      )}
-                    </View>
-                  </View>
-                ))}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="restaurant" size={20} color={colors.amber500} />
+              <Text style={styles.sectionTitle}>Ingredientes</Text>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{recipe.ingredients?.length || 0}</Text>
               </View>
             </View>
-          </BlurView>
 
-          {/* Steps Section */}
-          <BlurView intensity={80} tint="dark" style={styles.card}>
-            <View style={styles.cardContent}>
-              <View style={styles.stepsHeader}>
-                <Text style={styles.cardTitle}>👨‍🍳 Preparación</Text>
-                <View style={styles.progressBadge}>
-                  <Text style={styles.progressText}>
-                    {currentStep + 1}/{recipe.steps.length}
-                  </Text>
-                </View>
-              </View>
+            {recipe.ingredients && recipe.ingredients.length > 0 ? (
+              <View style={styles.ingredientsList}>
+                {recipe.ingredients.map((ingredient, index) => {
+                  const ingredientTranslation = gastronomyService.getTranslation(
+                    ingredient.translations,
+                    language
+                  );
+                  if (!ingredientTranslation) return null;
 
-              {/* Current Step - Highlighted */}
-              <View style={styles.currentStep}>
-                <LinearGradient
-                  colors={[colors.amber500, colors.orange600]}
-                  style={styles.stepGradient}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                >
-                  <View style={styles.stepContent}>
-                    <View style={styles.stepTop}>
-                      <View style={styles.stepNumberContainer}>
-                        <Text style={styles.stepNumber}>
-                          {recipe.steps[currentStep].step}
-                        </Text>
-                      </View>
-                      <View style={styles.stepTitleContainer}>
-                        <Text style={styles.stepTitle}>
-                          {recipe.steps[currentStep].title}
-                        </Text>
-                        <View style={styles.stepTimeBadge}>
-                          <Ionicons
-                            name="time"
-                            size={12}
-                            color={colors.white}
-                          />
-                          <Text style={styles.stepTime}>
-                            {recipe.steps[currentStep].time}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-
-                    <Text style={styles.stepDescription}>
-                      {recipe.steps[currentStep].description}
-                    </Text>
-
-                    {recipe.steps[currentStep].tips && (
-                      <View style={styles.tipsBox}>
-                        <Ionicons name="bulb" size={16} color={colors.white} />
-                        <Text style={styles.tipsText}>
-                          {recipe.steps[currentStep].tips}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                </LinearGradient>
-              </View>
-
-              {/* Navigation */}
-              <View style={styles.navigationContainer}>
-                <TouchableOpacity
-                  style={[
-                    styles.navButton,
-                    currentStep === 0 && styles.navButtonDisabled,
-                  ]}
-                  onPress={() =>
-                    currentStep > 0 && setCurrentStep(currentStep - 1)
-                  }
-                  disabled={currentStep === 0}
-                  activeOpacity={0.8}
-                >
-                  <Ionicons
-                    name="chevron-back"
-                    size={20}
-                    color={currentStep === 0 ? colors.gray500 : colors.white}
-                  />
-                  <Text
-                    style={[
-                      styles.navButtonText,
-                      currentStep === 0 && styles.navButtonTextDisabled,
-                    ]}
-                  >
-                    Anterior
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[
-                    styles.navButton,
-                    currentStep === recipe.steps.length - 1 &&
-                      styles.navButtonDisabled,
-                  ]}
-                  onPress={() =>
-                    currentStep < recipe.steps.length - 1 &&
-                    setCurrentStep(currentStep + 1)
-                  }
-                  disabled={currentStep === recipe.steps.length - 1}
-                  activeOpacity={0.8}
-                >
-                  <Text
-                    style={[
-                      styles.navButtonText,
-                      currentStep === recipe.steps.length - 1 &&
-                        styles.navButtonTextDisabled,
-                    ]}
-                  >
-                    Siguiente
-                  </Text>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={20}
-                    color={
-                      currentStep === recipe.steps.length - 1
-                        ? colors.gray500
-                        : colors.white
-                    }
-                  />
-                </TouchableOpacity>
-              </View>
-
-              {/* Step Indicators */}
-              <View style={styles.stepIndicators}>
-                {recipe.steps.map((_, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.stepIndicator,
-                      index === currentStep && styles.stepIndicatorActive,
-                      index < currentStep && styles.stepIndicatorCompleted,
-                    ]}
-                    onPress={() => setCurrentStep(index)}
-                    activeOpacity={0.7}
-                  />
-                ))}
-              </View>
-
-              {/* All Steps Overview - Collapsed */}
-              <View style={styles.allStepsContainer}>
-                <Text style={styles.allStepsTitle}>Todos los pasos:</Text>
-                {recipe.steps.map((step, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.miniStep,
-                      index === currentStep && styles.miniStepActive,
-                    ]}
-                    onPress={() => setCurrentStep(index)}
-                    activeOpacity={0.8}
-                  >
-                    <View
-                      style={[
-                        styles.miniStepNumber,
-                        index === currentStep && styles.miniStepNumberActive,
-                        index < currentStep && styles.miniStepNumberCompleted,
-                      ]}
-                    >
-                      <Text style={styles.miniStepNumberText}>
-                        {index < currentStep ? "✓" : step.step}
+                  return (
+                    <View key={ingredient.id} style={styles.ingredientRow}>
+                      <Text style={styles.ingredientName}>{ingredientTranslation.name}</Text>
+                      <Text style={styles.ingredientAmount}>
+                        {ingredient.RecipeIngredient.quantity} {ingredient.unit}
                       </Text>
                     </View>
-                    <Text
-                      style={[
-                        styles.miniStepTitle,
-                        index === currentStep && styles.miniStepTitleActive,
-                      ]}
-                    >
-                      {step.title}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                  );
+                })}
+              </View>
+            ) : (
+              <Text style={styles.emptyText}>No hay ingredientes disponibles</Text>
+            )}
+          </View>
+
+          {/* Steps Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="list" size={20} color={colors.amber500} />
+              <Text style={styles.sectionTitle}>Preparación</Text>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>
+                  {currentStep + 1}/{recipe.steps?.length || 0}
+                </Text>
               </View>
             </View>
-          </BlurView>
+
+            {recipe.steps && recipe.steps.length > 0 ? (
+              <>
+                {/* Current Step Card */}
+                <View style={styles.currentStepCard}>
+                  <View style={styles.stepNumberBadge}>
+                    <Text style={styles.stepNumberText}>
+                      {recipe.steps[currentStep].step_number}
+                    </Text>
+                  </View>
+                  {renderStepDescription(
+                    gastronomyService.getTranslation(
+                      recipe.steps[currentStep].translations,
+                      language
+                    )?.description || ''
+                  )}
+                </View>
+
+                {/* Navigation */}
+                <View style={styles.stepNavigation}>
+                  <TouchableOpacity
+                    style={[
+                      styles.stepNavButton,
+                      currentStep === 0 && styles.stepNavButtonDisabled,
+                    ]}
+                    onPress={() => currentStep > 0 && setCurrentStep(currentStep - 1)}
+                    disabled={currentStep === 0}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons
+                      name="chevron-back"
+                      size={18}
+                      color={currentStep === 0 ? colors.gray500 : colors.white}
+                    />
+                    <Text
+                      style={[
+                        styles.stepNavText,
+                        currentStep === 0 && styles.stepNavTextDisabled,
+                      ]}
+                    >
+                      Anterior
+                    </Text>
+                  </TouchableOpacity>
+
+                  <View style={styles.stepDots}>
+                    {recipe.steps.map((_, index) => (
+                      <View
+                        key={index}
+                        style={[
+                          styles.stepDot,
+                          index === currentStep && styles.stepDotActive,
+                          index < currentStep && styles.stepDotCompleted,
+                        ]}
+                      />
+                    ))}
+                  </View>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.stepNavButton,
+                      currentStep === recipe.steps.length - 1 && styles.stepNavButtonDisabled,
+                    ]}
+                    onPress={() =>
+                      currentStep < recipe.steps.length - 1 && setCurrentStep(currentStep + 1)
+                    }
+                    disabled={currentStep === recipe.steps.length - 1}
+                    activeOpacity={0.7}
+                  >
+                    <Text
+                      style={[
+                        styles.stepNavText,
+                        currentStep === recipe.steps.length - 1 && styles.stepNavTextDisabled,
+                      ]}
+                    >
+                      Siguiente
+                    </Text>
+                    <Ionicons
+                      name="chevron-forward"
+                      size={18}
+                      color={
+                        currentStep === recipe.steps.length - 1 ? colors.gray500 : colors.white
+                      }
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                {/* All Steps List */}
+                <View style={styles.allStepsList}>
+                  <Text style={styles.allStepsLabel}>Todos los pasos:</Text>
+                  {recipe.steps.map((step, index) => {
+                    const stepTranslation = gastronomyService.getTranslation(
+                      step.translations,
+                      language
+                    );
+                    if (!stepTranslation) return null;
+
+                    return (
+                      <TouchableOpacity
+                        key={step.id}
+                        style={[
+                          styles.stepListItem,
+                          index === currentStep && styles.stepListItemActive,
+                        ]}
+                        onPress={() => setCurrentStep(index)}
+                        activeOpacity={0.7}
+                      >
+                        <View
+                          style={[
+                            styles.stepListNumber,
+                            index === currentStep && styles.stepListNumberActive,
+                            index < currentStep && styles.stepListNumberCompleted,
+                          ]}
+                        >
+                          <Text style={styles.stepListNumberText}>
+                            {index < currentStep ? '✓' : step.step_number}
+                          </Text>
+                        </View>
+                        <Text
+                          style={[
+                            styles.stepListText,
+                            index === currentStep && styles.stepListTextActive,
+                          ]}
+                          numberOfLines={2}
+                        >
+                          {gastronomyService.getPlainTextFromStep(stepTranslation.description)}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </>
+            ) : (
+              <Text style={styles.emptyText}>No hay pasos de preparación disponibles</Text>
+            )}
+          </View>
 
           {/* Bottom Spacing */}
           <View style={styles.bottomSpacing} />
@@ -530,98 +554,105 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   scrollContent: {
-    paddingTop: 60,
+    paddingTop: 50,
   },
   heroSection: {
-    padding: 24,
-    paddingTop: 40,
+    padding: 20,
+    paddingTop: 30,
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    marginHorizontal: 16,
+    marginTop: 10,
+    marginBottom: 20,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.15)",
   },
   heroCard: {
-    borderRadius: 24,
+    borderRadius: 20,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",
   },
   heroContent: {
-    padding: 24,
+    padding: 20,
     alignItems: "center",
   },
   imageContainer: {
-    marginBottom: 20,
+    marginBottom: 16,
   },
   imageGradient: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 3,
     borderColor: "rgba(255, 255, 255, 0.2)",
   },
   heroEmoji: {
-    fontSize: 56,
+    fontSize: 48,
   },
   recipeTitle: {
-    fontSize: 32,
+    fontSize: 26,
     fontWeight: "800",
     color: colors.white,
     textAlign: "center",
-    marginBottom: 8,
+    marginBottom: 6,
   },
   recipeRegion: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: colors.gray300,
-    marginBottom: 16,
+    marginBottom: 12,
   },
   metaTags: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    gap: 8,
-    marginBottom: 20,
+    gap: 6,
+    marginBottom: 14,
   },
   metaBadge: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.1)",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderRadius: 8,
     gap: 4,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",
   },
   metaText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "600",
     color: colors.white,
   },
   recipeDescription: {
-    fontSize: 16,
+    fontSize: 14,
     color: colors.gray300,
-    lineHeight: 24,
+    lineHeight: 20,
     textAlign: "center",
   },
   card: {
-    marginHorizontal: 24,
-    marginBottom: 16,
-    borderRadius: 20,
+    marginHorizontal: 20,
+    marginBottom: 12,
+    borderRadius: 16,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",
   },
   cardContent: {
-    padding: 20,
+    padding: 16,
   },
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "700",
     color: colors.white,
   },
@@ -666,20 +697,37 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.gray400,
   },
+  videoContainer: {
+    borderRadius: 12,
+    overflow: "hidden",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+  },
+  video: {
+    width: "100%",
+    height: 200,
+    backgroundColor: colors.gray900,
+  },
+  videoCaption: {
+    fontSize: 12,
+    color: colors.gray300,
+    textAlign: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+  },
   ingredientsList: {
-    gap: 12,
+    gap: 10,
   },
   ingredientItem: {
     flexDirection: "row",
     alignItems: "flex-start",
   },
   ingredientDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: colors.amber500,
     marginTop: 6,
-    marginRight: 12,
+    marginRight: 10,
   },
   ingredientInfo: {
     flex: 1,
@@ -688,36 +736,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 4,
-  },
-  ingredientName: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: colors.white,
-    flex: 1,
-  },
-  amountBadge: {
-    backgroundColor: "rgba(245, 158, 11, 0.2)",
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "rgba(245, 158, 11, 0.3)",
-  },
-  ingredientAmount: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: colors.amber500,
+    marginBottom: 3,
   },
   ingredientNotes: {
-    fontSize: 13,
+    fontSize: 12,
     color: colors.gray400,
   },
   stepsHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 16,
   },
   progressBadge: {
     backgroundColor: "rgba(245, 158, 11, 0.2)",
@@ -733,29 +762,29 @@ const styles = StyleSheet.create({
     color: colors.amber500,
   },
   currentStep: {
-    marginBottom: 20,
-    borderRadius: 16,
+    marginBottom: 16,
+    borderRadius: 14,
     overflow: "hidden",
   },
   stepGradient: {
-    padding: 20,
+    padding: 16,
   },
   stepContent: {},
   stepTop: {
     flexDirection: "row",
-    marginBottom: 12,
+    marginBottom: 10,
   },
   stepNumberContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 12,
+    marginRight: 10,
   },
   stepNumber: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "800",
     color: colors.white,
   },
@@ -763,10 +792,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   stepTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "700",
     color: colors.white,
-    marginBottom: 4,
+    marginBottom: 2,
   },
   stepTimeBadge: {
     flexDirection: "row",
@@ -779,29 +808,34 @@ const styles = StyleSheet.create({
     color: "rgba(255, 255, 255, 0.9)",
   },
   stepDescription: {
-    fontSize: 15,
+    fontSize: 14,
     color: "rgba(255, 255, 255, 0.95)",
-    lineHeight: 22,
-    marginBottom: 12,
+    lineHeight: 20,
+    marginBottom: 10,
+  },
+  stepReference: {
+    color: colors.amber500,
+    fontWeight: "700",
+    textDecorationLine: "underline",
   },
   tipsBox: {
     flexDirection: "row",
     backgroundColor: "rgba(255, 255, 255, 0.15)",
-    padding: 12,
-    borderRadius: 10,
-    gap: 8,
+    padding: 10,
+    borderRadius: 8,
+    gap: 6,
     alignItems: "flex-start",
   },
   tipsText: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 12,
     color: "rgba(255, 255, 255, 0.95)",
-    lineHeight: 20,
+    lineHeight: 18,
   },
   navigationContainer: {
     flexDirection: "row",
-    gap: 12,
-    marginBottom: 16,
+    gap: 10,
+    marginBottom: 12,
   },
   navButton: {
     flex: 1,
@@ -809,9 +843,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "rgba(255, 255, 255, 0.1)",
-    paddingVertical: 12,
-    borderRadius: 12,
-    gap: 6,
+    paddingVertical: 10,
+    borderRadius: 10,
+    gap: 5,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",
   },
@@ -819,7 +853,7 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   navButtonText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "600",
     color: colors.white,
   },
@@ -829,40 +863,40 @@ const styles = StyleSheet.create({
   stepIndicators: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 8,
-    marginBottom: 20,
+    gap: 6,
+    marginBottom: 16,
   },
   stepIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
   },
   stepIndicatorActive: {
-    width: 24,
+    width: 20,
     backgroundColor: colors.amber500,
   },
   stepIndicatorCompleted: {
     backgroundColor: colors.green500,
   },
   allStepsContainer: {
-    paddingTop: 20,
+    paddingTop: 16,
     borderTopWidth: 1,
     borderTopColor: "rgba(255, 255, 255, 0.1)",
   },
   allStepsTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: colors.gray400,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   miniStep: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 12,
+    padding: 10,
     backgroundColor: "rgba(255, 255, 255, 0.03)",
-    borderRadius: 10,
-    marginBottom: 8,
+    borderRadius: 8,
+    marginBottom: 6,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.05)",
   },
@@ -871,13 +905,13 @@ const styles = StyleSheet.create({
     borderColor: "rgba(245, 158, 11, 0.3)",
   },
   miniStepNumber: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 12,
+    marginRight: 10,
   },
   miniStepNumberActive: {
     backgroundColor: colors.amber500,
@@ -886,13 +920,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.green500,
   },
   miniStepNumberText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "700",
     color: colors.white,
   },
   miniStepTitle: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "500",
     color: colors.gray300,
   },
@@ -901,7 +935,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   bottomSpacing: {
-    height: 40,
+    height: 30,
   },
   bottomBarContainer: {
     position: "absolute",
@@ -913,5 +947,288 @@ const styles = StyleSheet.create({
     height: 60,
     borderTopWidth: 1,
     borderTopColor: "rgba(255, 255, 255, 0.1)",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 16,
+  },
+  loadingText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: colors.white,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 40,
+    gap: 20,
+  },
+  errorText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: colors.white,
+    textAlign: "center",
+  },
+  retryButton: {
+    marginTop: 20,
+  },
+  retryButtonBlur: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
+  retryButtonText: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: colors.white,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: colors.gray400,
+    fontWeight: "600",
+    textAlign: "center",
+    paddingVertical: 20,
+  },
+  // New Section Styles
+  section: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.25)",
+    marginHorizontal: 16,
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: colors.white,
+    flex: 1,
+  },
+  badge: {
+    backgroundColor: "rgba(245, 158, 11, 0.2)",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "rgba(245, 158, 11, 0.3)",
+  },
+  badgeText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.amber500,
+  },
+  // Hero Styles
+  emojiContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  metaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+    marginTop: 12,
+    marginBottom: 16,
+  },
+  metaItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  metaDivider: {
+    width: 1,
+    height: 16,
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+  },
+  description: {
+    fontSize: 14,
+    color: "rgba(255, 255, 255, 0.85)",
+    lineHeight: 21,
+    textAlign: "center",
+  },
+  // Video Styles
+  videoWrapper: {
+    borderRadius: 12,
+    overflow: "hidden",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
+  // Ingredients Styles
+  ingredientsList: {
+    gap: 8,
+  },
+  ingredientRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: "rgba(0, 0, 0, 0.25)",
+    borderRadius: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.amber500,
+  },
+  ingredientName: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.white,
+    flex: 1,
+  },
+  ingredientAmount: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.amber500,
+  },
+  // Steps Styles
+  currentStepCard: {
+    backgroundColor: "rgba(0, 0, 0, 0.35)",
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: "rgba(245, 158, 11, 0.5)",
+    marginBottom: 16,
+  },
+  stepNumberBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.amber500,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  stepNumberText: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: colors.white,
+  },
+  stepNavigation: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+    marginBottom: 16,
+  },
+  stepNavButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.15)",
+  },
+  stepNavButtonDisabled: {
+    opacity: 0.3,
+  },
+  stepNavText: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: colors.white,
+  },
+  stepNavTextDisabled: {
+    color: colors.gray500,
+  },
+  stepDots: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    flex: 1,
+    justifyContent: "center",
+  },
+  stepDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+  },
+  stepDotActive: {
+    width: 18,
+    backgroundColor: colors.amber500,
+  },
+  stepDotCompleted: {
+    backgroundColor: colors.green500,
+  },
+  allStepsList: {
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(255, 255, 255, 0.1)",
+  },
+  allStepsLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: colors.gray400,
+    marginBottom: 8,
+  },
+  stepListItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    borderRadius: 8,
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
+  stepListItemActive: {
+    backgroundColor: "rgba(0, 0, 0, 0.35)",
+    borderWidth: 2,
+    borderColor: "rgba(245, 158, 11, 0.5)",
+  },
+  stepListNumber: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  stepListNumberActive: {
+    backgroundColor: colors.amber500,
+  },
+  stepListNumberCompleted: {
+    backgroundColor: colors.green500,
+  },
+  stepListNumberText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: colors.white,
+  },
+  stepListText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: "500",
+    color: colors.gray300,
+  },
+  stepListTextActive: {
+    color: colors.white,
+    fontWeight: "600",
   },
 });
