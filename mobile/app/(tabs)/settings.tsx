@@ -82,12 +82,6 @@ export default function SettingsScreen() {
       await AsyncStorage.removeItem("userToken");
       await AsyncStorage.removeItem("userData");
 
-      // Muestra mensaje de confirmación
-      Alert.alert(
-        t.Settings?.account?.logoutSuccess || "Sesión cerrada",
-        t.Settings?.account?.logoutSuccessMessage || "Has cerrado sesión correctamente"
-      );
-
       // Redirige al login (la ruta correcta depende de tu estructura de carpetas)
       // Prueba primero con "login", si no funciona usa "/(auth)/login"
       router.replace("/login");

@@ -78,7 +78,6 @@ export default function LoginScreen() {
       router.replace("/(tabs)");
     } else {
       setLocalError(result.error || "Error al iniciar sesión");
-      Alert.alert("Error", result.error || "Error al iniciar sesión");
     }
   };
 

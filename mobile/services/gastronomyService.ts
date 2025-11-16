@@ -1,4 +1,5 @@
 import api from './api';
+import { API_CONFIG } from '@/constants/config';
 
 /**
  * Translation Types
@@ -175,7 +176,7 @@ export interface ToolDetailResponse {
 /**
  * Gastronomy API Service
  */
-const GASTRONOMY_BASE_URL = 'https://vps-master.duckdns.org/gastronomyMS';
+const GASTRONOMY_BASE_URL = API_CONFIG.SERVICES.GASTRONOMY;
 
 export const gastronomyService = {
   // ============ RECIPES ============
