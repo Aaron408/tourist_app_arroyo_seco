@@ -3,7 +3,7 @@ import { ROUTES } from '../utils/constants';
 import LoadingFallback from '../components/LoadingFallback';
 
 // Lazy load legal pages
-const PrivacyPolicy = lazy(() => import('../pages/PrivacyPolicy'));
+const PrivacyPolicy = lazy(() => import('../pages/PrivacyNotice.jsx'));
 const TermsAndConditions = lazy(() => import('../pages/TermsAndConditions'));
 
 export const commonRoutes = [
