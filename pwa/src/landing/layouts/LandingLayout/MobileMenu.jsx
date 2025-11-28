@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { X, ChevronDown, ChevronRight, Globe } from 'lucide-react';
+import { useLanguageStore } from '../../stores/languageStore';
 
 const MobileMenu = ({
   isOpen,
@@ -11,12 +12,38 @@ const MobileMenu = ({
   handleLanguageChange,
   t
 }) => {
-  const languages = [
-    { code: 'es-MX', label: 'Español', flag: '🇲🇽' },
-    { code: 'en-US', label: 'English', flag: '🇺🇸' }
-  ];
+  const { supportedLanguages } = useLanguageStore();
+
+  // Mapeo de flags para cada idioma
+  const languageFlags = {
+    'es-MX': '🇲🇽',
+    'en-US': '🇺🇸',
+    'pam': '🇲🇽'
+  };
+
+  // Construir array de idiomas dinámicamente desde supportedLanguages
+  const languages = supportedLanguages.map(lang => ({
+    code: lang.code,
+    label: lang.name.split('(')[0].trim(),
+    fullName: lang.name,
+    flag: languageFlags[lang.code] || '🌐'
+  }));
 
   const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
+
+  // Detectar si un menú debería ser link directo
+  const isLinkDirectMenu = (menu) => {
+    // Si tiene items pero todos tienen isOverview, o solo tiene 1 item, es link directo
+    if (!menu.items || menu.items.length === 0) {
+      return true;
+    }
+    // Si tiene 1 item con isOverview, es link directo
+    if (menu.items.length === 1 && menu.items[0].isOverview) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <>
       {/* Mobile Sidebar Overlay */}
@@ -65,43 +92,59 @@ const MobileMenu = ({
               {t.navigation.home.title}
             </Link>
 
-            {navigationMenus.map((menu, index) => (
-              <div key={index} className="space-y-1">
-                <button
-                  onClick={() => toggleSubmenu(index)}
-                  className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg font-medium transition-colors"
-                >
-                  <span>{menu.title}</span>
-                  {openSubmenu === index ? (
-                    <ChevronDown className="w-5 h-5" />
-                  ) : (
-                    <ChevronRight className="w-5 h-5" />
-                  )}
-                </button>
+            {navigationMenus.map((menu, index) => {
+              const isDirectLink = isLinkDirectMenu(menu);
+              const targetRoute = isDirectLink && menu.items.length > 0 ? menu.items[0].route : menu.route;
 
-                {/* Submenu */}
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openSubmenu === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                  }`}
+              return isDirectLink ? (
+                // Link directo como Inicio
+                <Link
+                  key={index}
+                  to={targetRoute}
+                  onClick={onClose}
+                  className="block px-4 py-3 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg font-medium transition-colors"
                 >
-                  <div className="pl-4 space-y-1 pt-1">
-                    {menu.items.map((item, itemIndex) => (
-                      <Link
-                        key={itemIndex}
-                        to={item.route}
-                        onClick={onClose}
-                        className={`block px-4 py-2 text-sm text-gray-600 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors ${
-                          item.isOverview ? 'font-medium text-gray-700' : ''
-                        }`}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
+                  {menu.title}
+                </Link>
+              ) : (
+                // Con submenu expansible
+                <div key={index} className="space-y-1">
+                  <button
+                    onClick={() => toggleSubmenu(index)}
+                    className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg font-medium transition-colors"
+                  >
+                    <span>{menu.title}</span>
+                    {openSubmenu === index ? (
+                      <ChevronDown className="w-5 h-5" />
+                    ) : (
+                      <ChevronRight className="w-5 h-5" />
+                    )}
+                  </button>
+
+                  {/* Submenu */}
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ${
+                      openSubmenu === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                    }`}
+                  >
+                    <div className="pl-4 space-y-1 pt-1">
+                      {menu.items.map((item, itemIndex) => (
+                        <Link
+                          key={itemIndex}
+                          to={item.route}
+                          onClick={onClose}
+                          className={`block px-4 py-2 text-sm text-gray-600 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors ${
+                            item.isOverview ? 'font-medium text-gray-700' : ''
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </nav>
 
           {/* Mobile Language Selector */}

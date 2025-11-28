@@ -53,9 +53,9 @@ const Footer = ({ footerSections, t }) => {
             &copy; {new Date().getFullYear()} Arroyo Seco. {t.footer.allRightsReserved}
           </p>
           <div className="flex items-center space-x-4">
-            <span>📍 Arroyo Seco, Querétaro</span>
+            <span>Arroyo Seco, Querétaro</span>
             <span>|</span>
-            <span>🏔️ Sierra Gorda</span>
+            <span>Sierra Gorda</span>
           </div>
         </div>
       </div>

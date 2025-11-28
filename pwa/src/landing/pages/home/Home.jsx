@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLanguageStore } from '../../stores/languageStore';
 import { ROUTES } from '../../utils/constants';
 import FeatureCard from './FeatureCard';
+import MobileAppSection from './MobileAppSection';
 
 const Home = () => {
   const { getTranslations } = useLanguageStore();
@@ -149,6 +150,9 @@ const Home = () => {
           </Link>
         </div>
       </section>
+
+      {/* Mobile App Section */}
+      <MobileAppSection />
 
       {/* Stats Section */}
       <section className="py-16 bg-white">

@@ -73,8 +73,6 @@ const LandingLayout = () => {
       route: ROUTES.EVENTS,
       items: [
         { label: t.navigation.events.title, route: ROUTES.EVENTS, isOverview: true },
-        { label: t.navigation.events.workshops, route: ROUTES.WORKSHOPS },
-        { label: t.navigation.events.flavorRoute, route: ROUTES.FLAVOR_ROUTE },
       ]
     }
   ];
@@ -90,15 +88,15 @@ const LandingLayout = () => {
         { label: t.navigation.gastronomy.tools, route: ROUTES.TOOLS },
       ]
     },
-    {
-      title: t.common.explore,
-      links: [
-        { label: t.footer.emblematicPlaces, route: ROUTES.EMBLEMATIC_PLACES },
-        { label: t.navigation.events.workshops, route: ROUTES.WORKSHOPS },
-        { label: t.navigation.events.guidedTours, route: ROUTES.GUIDED_ROUTES },
-        { label: t.footer.interactiveMap, route: ROUTES.INTERACTIVE_SKETCH },
-      ]
-    }
+    // {
+    //   title: t.common.explore,
+    //   links: [
+    //     { label: t.footer.emblematicPlaces, route: ROUTES.EMBLEMATIC_PLACES },
+    //     { label: t.navigation.events.workshops, route: ROUTES.WORKSHOPS },
+    //     { label: t.navigation.events.guidedTours, route: ROUTES.GUIDED_ROUTES },
+    //     { label: t.footer.interactiveMap, route: ROUTES.INTERACTIVE_SKETCH },
+    //   ]
+    // }
   ];
 
   return (

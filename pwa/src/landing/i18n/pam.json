@@ -1,0 +1,205 @@
+{
+  "navigation": {
+    "home": {
+      "title": "Xöʔö"
+    },
+    "gastronomy": {
+      "title": "Kʼöthïʔö",
+      "recipes": "Kʼöthïʔö",
+      "ingredients": "Kʼöjmö",
+      "techniques": "Kʼöʔönä",
+      "tools": "Kʼömä"
+    },
+    "locations": {
+      "title": "Kʼöchʼä",
+      "restaurants": "Kʼöthïʔö kʼömä",
+      "landmarks": "Kʼöchʼä xöʔö",
+      "markets": "Kʼöjmö kʼömä",
+      "workshops": "Kʼöʔönä",
+      "interactiveMap": "Mapa Xöʔö"
+    },
+    "events": {
+      "title": "Kʼöjmä"
+    }
+  },
+  "homePage": {
+    "title": "Xöʔö",
+    "description": "Kʼötʼaj kʼöjmö thïʔö ja Arroyo Seco, Querétaro. Xöʔö kʼöthïʔö xöʔönä, kʼöjmö jä ja kʼöjmä jä thïʔö.",
+    "welcomeMessage": "Xöʔö kʼöthï ja Arroyo Seco",
+    "heroSubtitle": "Xöʔö kʼöjmö thïʔö ja Sierra Gorda. Kʼöthïʔö xöʔönä, kʼöjmö jä ja kʼöjmä xöʔö.",
+    "exploreGastronomy": "Xöʔö Kʼöthïʔö",
+    "viewEvents": "Xöʔö Kʼöjmä",
+    "whatWeOffer": "Kʼömä xöʔö?",
+    "offerDescription": "Kʼömä jä xöʔö kʼötʼaj kʼöjmö thïʔö ja Arroyo Seco",
+    "ctaTitle": "Jöthä xöʔö?",
+    "ctaDescription": "Kʼöjmä xöʔö kʼöthï ja Arroyo Seco xöʔö",
+    "mobileAppTitle": "Kʼöthï App Xöʔö",
+    "mobileAppDescription": "Kʼöthï kʼöjmö thïʔö ja Arroyo Seco xöʔö jä. Xöʔö kʼöthïʔö, kʼöchʼä ja kʼöjmä jä chʼä xöʔö.",
+    "mobileAppFeature1": "Xöʔö kʼöthïʔö xöʔönä",
+    "mobileAppFeature2": "Mapa Xöʔö kʼöchʼä ja kʼöthïʔö",
+    "mobileAppFeature3": "Kʼöjmä ja kʼöʔönä xöʔö",
+    "mobileAppFeature4": "Xöʔö kʼömä jä offline",
+    "downloadPlayStore": "Kʼöthï Google Play"
+  },
+  "locationsPage": {
+    "main": {
+      "title": "Kʼöchʼä ja Arroyo Seco",
+      "description": "Xöʔö kʼöthïʔö, kʼöchʼä xöʔö, kʼöjmö ja kʼöʔönä ja Sierra Gorda."
+    },
+    "mapTitle": "Mapa Xöʔö ja Arroyo Seco",
+    "mapDescription": "Xöʔö kʼöthïʔö, kʼöchʼä ja kʼöjmä ja pueblo",
+    "searchLocations": "Kʼöchʼä xöʔö...",
+    "showAll": "Xöʔö kʼömä",
+    "restaurants": "Kʼöthïʔö",
+    "landmarks": "Kʼöchʼä xöʔö",
+    "markets": "Kʼöjmö",
+    "workshops": "Kʼöʔönä",
+    "noResults": "Kʼömä jä xöʔö",
+    "viewDetails": "Xöʔö kʼömä"
+  },
+  "gastronomyPage": {
+    "main": {
+      "title": "Kʼöthïʔö",
+      "description": "Xöʔö kʼöthïʔö xöʔönä, kʼöjmö jä ja kʼöʔönä xöʔö ja region.",
+      "traditionalRecipes": "Kʼöthïʔö Xöʔönä",
+      "recipesDescription": "Jöthä kʼöthïʔö xöʔö ja Arroyo Seco kʼömä kʼöjmö jä ja kʼöʔönä xöʔö jä jmä.",
+      "exploreOurGastronomy": "Xöʔö Kʼöthïʔö",
+      "exploreSubtitle": "Kʼötʼaj kʼöjmö thïʔö ja Arroyo Seco",
+      "learnFromMasters": "Jöthä jä Kʼömä",
+      "learnFromMastersDesc": "Kʼöʔönä xöʔö jä xöʔönä jmä. Kʼömä xöʔö kʼöthï ja kʼöjmö thïʔö.",
+      "readyToStart": "Jöthä xöʔö Kʼöjmä?",
+      "readyToStartDesc": "Xöʔö kʼöthïʔö, kʼöjmö jä ja kʼöʔönä xöʔö. Kʼöthï xöʔö ja Arroyo Seco.",
+      "viewRecipes": "Xöʔö Kʼöthïʔö",
+      "viewAllRecipes": "Xöʔö Kʼömä Kʼöthïʔö",
+      "exploreMap": "Xöʔö Mapa",
+      "step1": "Kʼöthïʔö xöʔö kʼömä",
+      "step2": "Kʼömä kʼöjmö xöʔö",
+      "step3": "Kʼöʔönä xöʔönä"
+    },
+    "recipes": {
+      "title": "Kʼöthïʔö Xöʔönä",
+      "subtitle": "Xöʔö kʼöthï xöʔö ja Arroyo Seco",
+      "search": "Kʼöthïʔö xöʔö...",
+      "all": "Kʼömä",
+      "found": "Kʼöthï",
+      "recipeFound": "Kʼöthïʔö",
+      "recipesFound": "Kʼöthïʔö",
+      "noRecipesFound": "Kʼömä jä xöʔö",
+      "tryOtherTerms": "Jöthä xöʔö kʼömä",
+      "seeRecipe": "Xöʔö kʼöthïʔö",
+      "difficulty": {
+        "easy": "Xöʔö",
+        "medium": "Chʼä",
+        "hard": "Jmä"
+      }
+    },
+    "ingredients": {
+      "title": "Kʼöjmö Jä",
+      "subtitle": "Xöʔö kʼöjmö xöʔö ja kʼöthïʔö",
+      "search": "Kʼöjmö xöʔö...",
+      "all": "Kʼömä",
+      "ingredientFound": "Kʼöjmö",
+      "ingredientsFound": "Kʼöjmö",
+      "noIngredientsFound": "Kʼömä jä xöʔö",
+      "commonUses": "Kʼömä xöʔö",
+      "seeMoreDetails": "Xöʔö kʼömä",
+      "seasons": {
+        "spring": "Kʼöjmä xöʔö",
+        "summer": "Kʼöjmä chʼä",
+        "fall": "Kʼöjmä jmä",
+        "winter": "Kʼöjmä xöʔönä",
+        "yearRound": "Jmä kʼömä"
+      }
+    },
+    "techniques": {
+      "title": "Kʼöʔönä Xöʔö",
+      "subtitle": "Jöthä kʼöʔönä xöʔönä jä jmä",
+      "search": "Kʼöʔönä xöʔö...",
+      "all": "Kʼömä",
+      "techniqueFound": "Kʼöʔönä",
+      "techniquesFound": "Kʼöʔönä",
+      "noTechniquesFound": "Kʼömä jä xöʔö",
+      "seeTutorial": "Xöʔö kʼömä",
+      "time": "Kʼöjmä",
+      "steps": "xöʔö",
+      "toolsNeeded": "Kʼömä jä",
+      "videoTutorials": "Kʼömä xöʔö",
+      "expertTips": "Kʼömä jä xöʔö",
+      "culturalContext": "Kʼöjmö ja kʼömä",
+      "categories": {
+        "preparation": "Kʼöʔönä",
+        "grinding": "Kʼöjmö",
+        "cooking": "Kʼöthïʔö",
+        "fermentation": "Kʼömä",
+        "preservation": "Kʼöjmä"
+      }
+    },
+    "tools": {
+      "title": "Kʼömä Xöʔönä",
+      "subtitle": "Xöʔö kʼömä xöʔö ja kʼöthïʔö",
+      "search": "Kʼömä xöʔö...",
+      "all": "Kʼömä",
+      "toolFound": "Kʼömä",
+      "toolsFound": "Kʼömä",
+      "noToolsFound": "Kʼömä jä xöʔö",
+      "mainUses": "Kʼömä xöʔö",
+      "care": "Kʼöʔönä",
+      "history": "Kʼöjmö",
+      "culturalHeritage": "Kʼömä Thïʔö Xöʔö",
+      "culturalHeritageDesc": "Kʼömä xöʔö jä kʼömä thïʔö, jä kʼöjmö ja kʼömä xöʔönä.",
+      "millennialTradition": "Kʼöjmä Xöʔönä",
+      "millennialTraditionDesc": "Kʼömä xöʔö jä jmä kʼöthï kʼöjmö thïʔö",
+      "superiorQuality": "Kʼömä Xöʔö",
+      "superiorQualityDesc": "Kʼömä xöʔö jä kʼöthï kʼöjmö",
+      "localCrafts": "Kʼömä Jä",
+      "localCraftsDesc": "Kʼömä jä xöʔö jä kʼöʔönä xöʔönä",
+      "types": {
+        "grinding": "Kʼöjmö",
+        "cooking": "Kʼöthïʔö",
+        "mixing": "Kʼömä",
+        "preservation": "Kʼöjmä"
+      }
+    }
+  },
+  "eventsPage": {
+    "main": {
+      "title": "Kʼöjmä ja Arroyo Seco",
+      "description": "Xöʔö kʼöjmä ja kʼömä ja pueblo",
+      "subtitle": "Jöthä kʼöʔönä, kʼöjmä ja kʼömä xöʔö.",
+      "downloadAppTitle": "Kʼöthï App Xöʔö Kʼöjmä",
+      "downloadAppDescription": "Kʼömä kʼöjmä, kʼöjmä thïʔö ja kʼömä xöʔö ja Arroyo Seco xöʔö app xöʔö. Kʼöthï xöʔö jöthä kʼötʼaj kʼömä ja pueblo.",
+      "eventsInclude": "App xöʔö kʼöthï:",
+      "feature1": "Kʼöthï Kʼöjmä - Kʼöjmä xöʔö kʼöthïʔö",
+      "feature2": "Kʼöjmä thïʔö ja kʼömä xöʔö",
+      "feature3": "Kʼöʔönä horario ja kʼöʔönä",
+      "feature4": "Kʼöjmä xöʔö jä chʼä",
+      "downloadNow": "Kʼöthï Google Play",
+      "moreInfo": "Xöʔö kʼömä kʼöjmä app"
+    }
+  },
+  "common": {
+    "learnMore": "Xöʔö kʼömä →",
+    "viewInteractiveMap": "Xöʔö Mapa",
+    "recipes": "Kʼöthïʔö",
+    "tools": "Kʼömä",
+    "ingredients": "Kʼöjmö",
+    "places": "Kʼöchʼä",
+    "techniques": "Kʼöʔönä",
+    "search": "Kʼöchʼä",
+    "filter": "Kʼömä",
+    "all": "Kʼömä"
+  },
+  "footer": {
+    "description": "Xöʔö kʼöjmö thïʔö ja Arroyo Seco, Querétaro.",
+    "emblematicPlaces": "Kʼöchʼä Xöʔö",
+    "interactiveMap": "Mapa Xöʔö",
+    "allRightsReserved": "Kʼömä xöʔö jä."
+  },
+  "_meta": {
+    "languageName": "Pame",
+    "languageCode": "pam",
+    "nativeLanguage": "Pame (Ñhä)",
+    "note": "Esta es una traducción preliminar al idioma Pame. Se recomienda validación por hablantes nativos de la comunidad de Arroyo Seco para asegurar la precisión y autenticidad cultural.",
+    "credits": "Traducción preparada para el MVP de Xi'oi Gourmet"
+  }
+}

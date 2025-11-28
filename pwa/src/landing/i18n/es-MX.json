@@ -19,9 +19,7 @@
       "interactiveMap": "Mapa Interactivo"
     },
     "events": {
-      "title": "Eventos",
-      "workshops": "Talleres",
-      "flavorRoute": "Ruta del Sabor"
+      "title": "Eventos"
     }
   },
   "homePage": {
@@ -34,7 +32,14 @@
     "whatWeOffer": "¿Qué Ofrecemos?",
     "offerDescription": "Todo lo que necesitas para explorar y disfrutar la cultura gastronómica de Arroyo Seco",
     "ctaTitle": "¿Listo para Explorar?",
-    "ctaDescription": "Comienza tu viaje gastronómico por Arroyo Seco hoy mismo"
+    "ctaDescription": "Comienza tu viaje gastronómico por Arroyo Seco hoy mismo",
+    "mobileAppTitle": "Descarga Nuestra App Móvil",
+    "mobileAppDescription": "Lleva la experiencia gastronómica de Arroyo Seco contigo. Accede a recetas, ubicaciones y eventos desde tu celular en cualquier momento.",
+    "mobileAppFeature1": "Acceso a todas las recetas tradicionales",
+    "mobileAppFeature2": "Mapa interactivo de lugares y restaurantes",
+    "mobileAppFeature3": "Notificaciones de eventos y talleres",
+    "mobileAppFeature4": "Disponible completamente offline",
+    "downloadPlayStore": "Descargar en Google Play"
   },
   "locationsPage": {
     "main": {
@@ -159,65 +164,17 @@
   "eventsPage": {
     "main": {
       "title": "Eventos en Arroyo Seco",
-      "subtitle": "Descubre las festividades y eventos que hacen de nuestro pueblo un lugar vibrante y lleno de tradición",
-      "description": "Participa en talleres gastronómicos, rutas guiadas y eventos culturales especiales.",
-      "search": "Buscar eventos...",
-      "all": "Todos los Eventos",
-      "featured": "Destacado",
-      "noEventsFound": "No se encontraron eventos con los filtros seleccionados",
-      "date": "Fecha",
-      "schedule": "Horario",
-      "location": "Ubicación",
-      "price": "Precio",
-      "categories": {
-        "gastronomy": "Gastronomía",
-        "cultural": "Cultural",
-        "sports": "Deportivo"
-      }
-    },
-    "flavorRoute": {
-      "title": "La Ruta del Sabor",
-      "subtitle": "Un viaje culinario por las tradiciones de Arroyo Seco",
-      "description": "La Ruta del Sabor es el evento gastronómico más importante de Arroyo Seco, donde los visitantes pueden degustar los platillos más representativos de nuestra región mientras recorren las calles del centro histórico. Un evento que celebra nuestra identidad culinaria y cultural.",
-      "aboutEvent": "Sobre el Evento",
-      "highlights": "Lo Más Destacado",
-      "routeTitle": "Recorrido de la Ruta",
-      "practicalInfo": "Información Práctica",
-      "dontMissIt": "¡No te lo pierdas!",
-      "uniqueEvent": "Un evento único que celebra lo mejor de nuestra tradición culinaria",
-      "shareEvent": "Comparte este evento con tus amigos y familiares",
-      "freeEntry": "Entrada libre"
-    },
-    "workshops": {
-      "title": "Talleres y Workshops",
-      "subtitle": "Aprende nuevas habilidades y sumérgete en las tradiciones de Arroyo Seco con nuestros talleres especializados",
-      "filterByCategory": "Filtrar por Categoría",
-      "all": "Todos los Talleres",
-      "noWorkshopsFound": "No se encontraron talleres en esta categoría",
-      "instructor": "Instructor",
-      "duration": "Duración",
-      "capacity": "Cupo",
-      "materials": "Materiales",
-      "requirements": "Requisitos",
-      "level": {
-        "beginner": "Principiante",
-        "intermediate": "Intermedio",
-        "advanced": "Avanzado",
-        "allLevels": "Todos los niveles"
-      },
-      "categories": {
-        "gastronomy": "Gastronomía",
-        "crafts": "Artesanías",
-        "photography": "Fotografía",
-        "cultural": "Cultural"
-      },
-      "generalInfo": "Información General",
-      "registrations": "Inscripciones",
-      "registrationsDesc": "Los talleres son gratuitos y de cupo limitado. Consulta disponibilidad en la Casa de la Cultura.",
-      "certificates": "Certificados",
-      "certificatesDesc": "Se entregan constancias de participación a quienes completen el taller.",
-      "contact": "Contacto",
-      "contactDesc": "Para más información, visita la Casa de la Cultura o llama al (414) 123-4567"
+      "description": "Descubre las festividades y eventos que hacen de nuestro pueblo un lugar vibrante y lleno de tradición",
+      "subtitle": "Participa en talleres gastronómicos, rutas guiadas y eventos culturales especiales",
+      "downloadAppTitle": "Descarga Nuestra App para Ver Eventos",
+      "downloadAppDescription": "Todos los eventos, festivales y celebraciones especiales de Arroyo Seco se gestionan a través de nuestra aplicación móvil. Descárgala ahora para estar al tanto de todo lo que sucede en nuestro pueblo.",
+      "eventsInclude": "En la app encontrarás:",
+      "feature1": "Ruta del Sabor - Nuestro evento gastronómico más importante",
+      "feature2": "Celebraciones de festivales y eventos culturales",
+      "feature3": "Horarios de talleres e inscripciones",
+      "feature4": "Notificaciones en tiempo real de actividades",
+      "downloadNow": "Descargar en Google Play",
+      "moreInfo": "Conoce más sobre nuestros eventos en la app"
     }
   },
   "common": {

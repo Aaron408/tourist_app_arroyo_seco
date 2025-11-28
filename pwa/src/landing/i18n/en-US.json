@@ -19,9 +19,7 @@
       "interactiveMap": "Interactive Map"
     },
     "events": {
-      "title": "Events",
-      "workshops": "Workshops",
-      "flavorRoute": "Ruta del Sabor"
+      "title": "Events"
     }
   },
   "homePage": {
@@ -34,7 +32,14 @@
     "whatWeOffer": "What We Offer?",
     "offerDescription": "Everything you need to explore and enjoy the gastronomic culture of Arroyo Seco",
     "ctaTitle": "Ready to Explore?",
-    "ctaDescription": "Start your gastronomic journey through Arroyo Seco today"
+    "ctaDescription": "Start your gastronomic journey through Arroyo Seco today",
+    "mobileAppTitle": "Download Our Mobile App",
+    "mobileAppDescription": "Bring the gastronomic experience of Arroyo Seco with you. Access recipes, locations and events from your phone anytime.",
+    "mobileAppFeature1": "Access to all traditional recipes",
+    "mobileAppFeature2": "Interactive map of places and restaurants",
+    "mobileAppFeature3": "Notifications of events and workshops",
+    "mobileAppFeature4": "Completely available offline",
+    "downloadPlayStore": "Download on Google Play"
   },
   "locationsPage": {
     "main": {
@@ -159,65 +164,17 @@
   "eventsPage": {
     "main": {
       "title": "Events in Arroyo Seco",
-      "subtitle": "Discover the festivities and events that make our town a vibrant place full of tradition",
-      "description": "Participate in gastronomic workshops, guided tours, and special cultural events.",
-      "search": "Search events...",
-      "all": "All Events",
-      "featured": "Featured",
-      "noEventsFound": "No events found with the selected filters",
-      "date": "Date",
-      "schedule": "Schedule",
-      "location": "Location",
-      "price": "Price",
-      "categories": {
-        "gastronomy": "Gastronomy",
-        "cultural": "Cultural",
-        "sports": "Sports"
-      }
-    },
-    "flavorRoute": {
-      "title": "La Ruta del Sabor",
-      "subtitle": "A culinary journey through the traditions of Arroyo Seco",
-      "description": "La Ruta del Sabor is the most important gastronomic event in Arroyo Seco, where visitors can taste the most representative dishes of our region while walking through the streets of the historic center. An event that celebrates our culinary and cultural identity.",
-      "aboutEvent": "About the Event",
-      "highlights": "Highlights",
-      "routeTitle": "Route Journey",
-      "practicalInfo": "Practical Information",
-      "dontMissIt": "Don't miss it!",
-      "uniqueEvent": "A unique event that celebrates the best of our culinary tradition",
-      "shareEvent": "Share this event with your friends and family",
-      "freeEntry": "Free entry"
-    },
-    "workshops": {
-      "title": "Workshops",
-      "subtitle": "Learn new skills and immerse yourself in the traditions of Arroyo Seco with our specialized workshops",
-      "filterByCategory": "Filter by Category",
-      "all": "All Workshops",
-      "noWorkshopsFound": "No workshops found in this category",
-      "instructor": "Instructor",
-      "duration": "Duration",
-      "capacity": "Capacity",
-      "materials": "Materials",
-      "requirements": "Requirements",
-      "level": {
-        "beginner": "Beginner",
-        "intermediate": "Intermediate",
-        "advanced": "Advanced",
-        "allLevels": "All Levels"
-      },
-      "categories": {
-        "gastronomy": "Gastronomy",
-        "crafts": "Crafts",
-        "photography": "Photography",
-        "cultural": "Cultural"
-      },
-      "generalInfo": "General Information",
-      "registrations": "Registrations",
-      "registrationsDesc": "Workshops are free and have limited capacity. Check availability at Casa de la Cultura.",
-      "certificates": "Certificates",
-      "certificatesDesc": "Participation certificates are given to those who complete the workshop.",
-      "contact": "Contact",
-      "contactDesc": "For more information, visit Casa de la Cultura or call (414) 123-4567"
+      "description": "Discover the festivities and events that make our town vibrant and full of tradition",
+      "subtitle": "Participate in gastronomic workshops, guided tours, and special cultural events",
+      "downloadAppTitle": "Download Our App to See Events",
+      "downloadAppDescription": "All the events, festivals, and special celebrations of Arroyo Seco are managed through our mobile application. Download it now to stay updated on everything happening in our town.",
+      "eventsInclude": "In the app you will find:",
+      "feature1": "Ruta del Sabor - Our most important gastronomic event",
+      "feature2": "Festival celebrations and cultural events",
+      "feature3": "Workshop schedules and registrations",
+      "feature4": "Real-time notifications of activities",
+      "downloadNow": "Download on Google Play",
+      "moreInfo": "Learn more about our events in the app"
     }
   },
   "common": {
