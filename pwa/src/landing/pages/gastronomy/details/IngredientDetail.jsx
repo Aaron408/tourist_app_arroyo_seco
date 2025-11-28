@@ -7,7 +7,7 @@ import { useIngredients } from '../../../hooks/useIngredients';
 const IngredientDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getTranslations } = useLanguageStore();
+  const { getTranslations, currentLanguage } = useLanguageStore();
   const t = getTranslations();
 
   const { ingredient, loading, error, fetchIngredientById } = useIngredients();
@@ -21,16 +21,17 @@ const IngredientDetail = () => {
   };
 
   useEffect(() => {
-    const language = t.languageCode || 'es-MX';
+    const language = currentLanguage || 'es-MX';
     fetchIngredientById(id, language);
-  }, [id, t.languageCode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, currentLanguage]);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando ingrediente...</p>
+          <p className="text-gray-600">{t.ingredientDetail?.loading || 'Cargando ingrediente...'}</p>
         </div>
       </div>
     );
@@ -41,12 +42,12 @@ const IngredientDetail = () => {
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
         <div className="text-center">
           <Leaf className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Ingrediente no encontrado</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.ingredientDetail?.notFound || 'Ingrediente no encontrado'}</h3>
           <button
             onClick={() => navigate('/gastronomia/ingredientes')}
             className="text-green-600 hover:text-green-700 font-medium"
           >
-            Volver a ingredientes
+            {t.ingredientDetail?.backButton || 'Volver a ingredientes'}
           </button>
         </div>
       </div>
@@ -97,7 +98,7 @@ const IngredientDetail = () => {
             {/* Description */}
             {translation.description && (
               <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Descripción</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{t.ingredientDetail?.description || 'Descripción'}</h2>
                 <p className="text-gray-700 leading-relaxed">{translation.description}</p>
               </div>
             )}
@@ -108,14 +109,14 @@ const IngredientDetail = () => {
                 <div className="p-3 bg-gradient-to-br from-green-100 to-emerald-100 rounded-lg">
                   <Sparkles className="w-6 h-6 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">Información del Ingrediente</h2>
+                <h2 className="text-2xl font-bold text-gray-900">{t.ingredientDetail?.ingredientInfo || 'Información del Ingrediente'}</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {ingredient.unit && (
                   <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border-2 border-green-100">
                     <div className="flex items-center gap-2 mb-2">
                       <Package className="w-5 h-5 text-green-600" />
-                      <h3 className="text-sm font-semibold text-green-900">Unidad de Medida</h3>
+                      <h3 className="text-sm font-semibold text-green-900">{t.ingredientDetail?.unit || 'Unidad de Medida'}</h3>
                     </div>
                     <p className="text-gray-700 font-medium">{ingredient.unit}</p>
                   </div>
@@ -124,7 +125,7 @@ const IngredientDetail = () => {
                   <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border-2 border-green-100">
                     <div className="flex items-center gap-2 mb-2">
                       <Calendar className="w-5 h-5 text-green-600" />
-                      <h3 className="text-sm font-semibold text-green-900">Inicio de Cosecha</h3>
+                      <h3 className="text-sm font-semibold text-green-900">{t.ingredientDetail?.harvestStart || 'Inicio de Cosecha'}</h3>
                     </div>
                     <p className="text-gray-700 font-medium">{formatHarvestDate(ingredient.harvest_start_month, ingredient.harvest_start_day)}</p>
                   </div>
@@ -133,7 +134,7 @@ const IngredientDetail = () => {
                   <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border-2 border-green-100">
                     <div className="flex items-center gap-2 mb-2">
                       <Calendar className="w-5 h-5 text-green-600" />
-                      <h3 className="text-sm font-semibold text-green-900">Fin de Cosecha</h3>
+                      <h3 className="text-sm font-semibold text-green-900">{t.ingredientDetail?.harvestEnd || 'Fin de Cosecha'}</h3>
                     </div>
                     <p className="text-gray-700 font-medium">{formatHarvestDate(ingredient.harvest_end_month, ingredient.harvest_end_day)}</p>
                   </div>
@@ -146,10 +147,9 @@ const IngredientDetail = () => {
                   <div className="flex items-start gap-3">
                     <Leaf className="w-6 h-6 text-amber-600 mt-1 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-amber-900 mb-2">Ingrediente Local</h3>
+                      <h3 className="font-semibold text-amber-900 mb-2">{t.ingredientDetail?.localIngredient || 'Ingrediente Local'}</h3>
                       <p className="text-gray-700 text-sm leading-relaxed">
-                        Este ingrediente forma parte de la rica tradición gastronómica local,
-                        destacando por su frescura y calidad en la preparación de platillos típicos.
+                        {t.ingredientDetail?.localDescription || 'Este ingrediente forma parte de la rica tradición gastronómica local, destacando por su frescura y calidad en la preparación de platillos típicos.'}
                       </p>
                     </div>
                   </div>
@@ -162,11 +162,11 @@ const IngredientDetail = () => {
           <div className="space-y-6">
             {/* Quick Info */}
             <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-lg font-bold mb-4">Información Rápida</h3>
+              <h3 className="text-lg font-bold mb-4">{t.ingredientDetail?.quickInfo || 'Información Rápida'}</h3>
               <div className="space-y-3">
                 {ingredient.unit && (
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold">Unidad:</span>
+                    <span className="font-semibold">{t.ingredientDetail?.unit || 'Unidad'}:</span>
                     <span>{ingredient.unit}</span>
                   </div>
                 )}
@@ -175,13 +175,13 @@ const IngredientDetail = () => {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <Calendar className="w-5 h-5" />
-                      <span className="font-semibold">Temporada:</span>
+                      <span className="font-semibold">{t.ingredientDetail?.season || 'Temporada'}:</span>
                     </div>
                     <div className="text-sm pl-7">
                       {formatHarvestDate(ingredient.harvest_start_month, ingredient.harvest_start_day) &&
-                        <div>Inicio: {formatHarvestDate(ingredient.harvest_start_month, ingredient.harvest_start_day)}</div>}
+                        <div>{t.ingredientDetail?.start || 'Inicio'}: {formatHarvestDate(ingredient.harvest_start_month, ingredient.harvest_start_day)}</div>}
                       {formatHarvestDate(ingredient.harvest_end_month, ingredient.harvest_end_day) &&
-                        <div>Fin: {formatHarvestDate(ingredient.harvest_end_month, ingredient.harvest_end_day)}</div>}
+                        <div>{t.ingredientDetail?.end || 'Fin'}: {formatHarvestDate(ingredient.harvest_end_month, ingredient.harvest_end_day)}</div>}
                     </div>
                   </div>
                 )}
@@ -191,7 +191,7 @@ const IngredientDetail = () => {
             {/* Related Recipes */}
             {ingredient.recipes && ingredient.recipes.length > 0 && (
               <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Recetas Relacionadas</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-4">{t.ingredientDetail?.relatedRecipes || 'Recetas Relacionadas'}</h3>
                 <div className="space-y-2">
                   {ingredient.recipes.slice(0, 5).map((recipe) => {
                     const recipeTranslation = recipe.translations?.[0] || {};

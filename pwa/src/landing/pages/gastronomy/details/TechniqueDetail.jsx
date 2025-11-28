@@ -7,22 +7,23 @@ import { useTechniques } from '../../../hooks/useTechniques';
 const TechniqueDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getTranslations } = useLanguageStore();
+  const { getTranslations, currentLanguage } = useLanguageStore();
   const t = getTranslations();
 
   const { technique, loading, error, fetchTechniqueById } = useTechniques();
 
   useEffect(() => {
-    const language = t.languageCode || 'es-MX';
+    const language = currentLanguage || 'es-MX';
     fetchTechniqueById(id, language);
-  }, [id, t.languageCode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, currentLanguage]);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando técnica...</p>
+          <p className="text-gray-600">{t.techniqueDetail?.loading || 'Cargando técnica...'}</p>
         </div>
       </div>
     );
@@ -33,12 +34,12 @@ const TechniqueDetail = () => {
       <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white flex items-center justify-center">
         <div className="text-center">
           <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Técnica no encontrada</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.techniqueDetail?.notFound || 'Técnica no encontrada'}</h3>
           <button
             onClick={() => navigate('/gastronomia/tecnicas')}
             className="text-purple-600 hover:text-purple-700 font-medium"
           >
-            Volver a técnicas
+            {t.techniqueDetail?.backButton || 'Volver a técnicas'}
           </button>
         </div>
       </div>
@@ -90,7 +91,7 @@ const TechniqueDetail = () => {
                 <div className="p-3 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-lg">
                   <BookOpen className="w-6 h-6 text-purple-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">Descripción de la Técnica</h2>
+                <h2 className="text-2xl font-bold text-gray-900">{t.techniqueDetail?.description || 'Descripción de la Técnica'}</h2>
               </div>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -105,20 +106,20 @@ const TechniqueDetail = () => {
                 <div className="p-3 bg-white rounded-lg shadow-sm">
                   <Lightbulb className="w-6 h-6 text-purple-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">Consejos para dominar esta técnica</h3>
+                <h3 className="text-xl font-bold text-gray-900">{t.techniqueDetail?.tips || 'Consejos para dominar esta técnica'}</h3>
               </div>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Practica con paciencia y constancia para perfeccionar los movimientos</span>
+                  <span className="text-gray-700">{t.techniqueDetail?.tip1 || 'Practica con paciencia y constancia para perfeccionar los movimientos'}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Observa las señales visuales y texturales durante el proceso</span>
+                  <span className="text-gray-700">{t.techniqueDetail?.tip2 || 'Observa las señales visuales y texturales durante el proceso'}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Ajusta la técnica según los ingredientes que estés utilizando</span>
+                  <span className="text-gray-700">{t.techniqueDetail?.tip3 || 'Ajusta la técnica según los ingredientes que estés utilizando'}</span>
                 </li>
               </ul>
             </div>
@@ -130,15 +131,15 @@ const TechniqueDetail = () => {
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="text-center space-y-4">
                 <BookOpen className="w-12 h-12 text-purple-600 mx-auto" />
-                <h3 className="text-lg font-bold text-gray-900">¿Quieres aprender más?</h3>
+                <h3 className="text-lg font-bold text-gray-900">{t.techniqueDetail?.learnMore || '¿Quieres aprender más?'}</h3>
                 <p className="text-gray-600 text-sm">
-                  Explora nuestras recetas que utilizan esta técnica
+                  {t.techniqueDetail?.learnMoreDesc || 'Explora nuestras recetas que utilizan esta técnica'}
                 </p>
                 <button
                   onClick={() => navigate('/gastronomia/recetas')}
                   className="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-lg font-medium hover:from-purple-600 hover:to-indigo-600 transition-all"
                 >
-                  Ver Recetas
+                  {t.techniqueDetail?.viewRecipes || 'Ver Recetas'}
                 </button>
               </div>
             </div>

@@ -22,11 +22,11 @@ const RecipeDetail = () => {
 
   const getDifficultyLabel = (difficulty) => {
     const labels = {
-      1: 'Fácil',
-      2: 'Media',
-      3: 'Difícil',
+      1: t.recipeDetail?.easy || 'Fácil',
+      2: t.recipeDetail?.medium || 'Media',
+      3: t.recipeDetail?.hard || 'Difícil',
     };
-    return labels[difficulty] || 'Media';
+    return labels[difficulty] || t.recipeDetail?.medium || 'Media';
   };
 
   const getDifficultyColor = (difficulty) => {
@@ -43,7 +43,7 @@ const RecipeDetail = () => {
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando receta...</p>
+          <p className="text-gray-600">{t.recipeDetail?.loading || 'Cargando receta...'}</p>
         </div>
       </div>
     );
@@ -54,12 +54,12 @@ const RecipeDetail = () => {
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center">
         <div className="text-center">
           <ChefHat className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Receta no encontrada</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.recipeDetail?.notFound || 'Receta no encontrada'}</h3>
           <button
             onClick={() => navigate('/gastronomia/recetas')}
             className="text-orange-600 hover:text-orange-700 font-medium"
           >
-            Volver a recetas
+            {t.recipeDetail?.backButton || 'Volver a recetas'}
           </button>
         </div>
       </div>
@@ -103,7 +103,7 @@ const RecipeDetail = () => {
               {recipe.duration && (
                 <span className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold text-gray-900">
                   <Clock className="w-4 h-4 inline mr-1" />
-                  {recipe.duration} minutos
+                  {recipe.duration} {t.recipeDetail?.minutes || 'minutos'}
                 </span>
               )}
             </div>
@@ -119,7 +119,7 @@ const RecipeDetail = () => {
             {/* Description */}
             {translation.description && (
               <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Descripción</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{t.recipeDetail?.description || 'Descripción'}</h2>
                 <p className="text-gray-700 leading-relaxed">{translation.description}</p>
               </div>
             )}
@@ -127,7 +127,7 @@ const RecipeDetail = () => {
             {/* Multimedia Gallery */}
             {recipe.multimedia && recipe.multimedia.length > 0 && (
               <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Galería</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{t.recipeDetail?.gallery || 'Galería'}</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {recipe.multimedia.map((media, index) => (
                     <div
@@ -172,7 +172,7 @@ const RecipeDetail = () => {
             {/* Steps */}
             {recipe.steps && recipe.steps.length > 0 && (
               <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Pasos de Preparación</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">{t.recipeDetail?.steps || 'Pasos de Preparación'}</h2>
                 <div className="space-y-6">
                   {recipe.steps.sort((a, b) => a.step_number - b.step_number).map((step) => {
                     // Find translation matching current language, fallback to first translation
@@ -204,17 +204,17 @@ const RecipeDetail = () => {
           <div className="space-y-6">
             {/* Additional Info */}
             <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-lg font-bold mb-4">Información Adicional</h3>
+              <h3 className="text-lg font-bold mb-4">{t.recipeDetail?.additionalInfo || 'Información Adicional'}</h3>
               <div className="space-y-3">
                 {recipe.duration && (
                   <div className="flex items-center gap-2">
                     <Clock className="w-5 h-5" />
-                    <span>Tiempo: {recipe.duration} minutos</span>
+                    <span>{t.recipeDetail?.time || 'Tiempo'}: {recipe.duration} {t.recipeDetail?.minutes || 'minutos'}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-2">
                   <Flame className="w-5 h-5" />
-                  <span>Dificultad: {getDifficultyLabel(recipe.difficulty)}</span>
+                  <span>{t.recipeDetail?.difficulty || 'Dificultad'}: {getDifficultyLabel(recipe.difficulty)}</span>
                 </div>
               </div>
             </div>
@@ -222,7 +222,7 @@ const RecipeDetail = () => {
             {/* Ingredients */}
             {recipe.ingredients && recipe.ingredients.length > 0 && (
               <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Ingredientes</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-4">{t.recipeDetail?.ingredients || 'Ingredientes'}</h2>
                 <ul className="space-y-3">
                   {recipe.ingredients.map((ingredient) => {
                     const ingredientTranslation = ingredient.translations?.[0] || {};
@@ -272,7 +272,7 @@ const RecipeDetail = () => {
                 autoPlay
                 className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
               >
-                Tu navegador no soporta el elemento de video.
+                {t.recipeDetail?.noVideoSupport || 'Tu navegador no soporta el elemento de video.'}
               </video>
             )}
           </div>

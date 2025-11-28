@@ -7,22 +7,23 @@ import { useTools } from '../../../hooks/useTools';
 const ToolDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getTranslations } = useLanguageStore();
+  const { getTranslations, currentLanguage } = useLanguageStore();
   const t = getTranslations();
 
   const { tool, loading, error, fetchToolById } = useTools();
 
   useEffect(() => {
-    const language = t.languageCode || 'es-MX';
+    const language = currentLanguage || 'es-MX';
     fetchToolById(id, language);
-  }, [id, t.languageCode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, currentLanguage]);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando herramienta...</p>
+          <p className="text-gray-600">{t.toolDetail?.loading || 'Cargando herramienta...'}</p>
         </div>
       </div>
     );
@@ -33,12 +34,12 @@ const ToolDetail = () => {
       <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white flex items-center justify-center">
         <div className="text-center">
           <Wrench className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Herramienta no encontrada</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.toolDetail?.notFound || 'Herramienta no encontrada'}</h3>
           <button
             onClick={() => navigate('/gastronomia/herramientas')}
             className="text-amber-600 hover:text-amber-700 font-medium"
           >
-            Volver a herramientas
+            {t.toolDetail?.backButton || 'Volver a herramientas'}
           </button>
         </div>
       </div>
@@ -90,7 +91,7 @@ const ToolDetail = () => {
                 <div className="p-3 bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg">
                   <Wrench className="w-6 h-6 text-amber-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">Descripción de la Herramienta</h2>
+                <h2 className="text-2xl font-bold text-gray-900">{t.toolDetail?.description || 'Descripción de la Herramienta'}</h2>
               </div>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -105,20 +106,20 @@ const ToolDetail = () => {
                 <div className="p-3 bg-white rounded-lg shadow-sm">
                   <Info className="w-6 h-6 text-amber-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">Consejos de uso y mantenimiento</h3>
+                <h3 className="text-xl font-bold text-gray-900">{t.toolDetail?.tips || 'Consejos de uso y mantenimiento'}</h3>
               </div>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Limpia la herramienta después de cada uso para mantenerla en buen estado</span>
+                  <span className="text-gray-700">{t.toolDetail?.tip1 || 'Limpia la herramienta después de cada uso para mantenerla en buen estado'}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Almacena en un lugar seco y seguro para prolongar su vida útil</span>
+                  <span className="text-gray-700">{t.toolDetail?.tip2 || 'Almacena en un lugar seco y seguro para prolongar su vida útil'}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Utiliza la herramienta adecuada para cada tarea específica</span>
+                  <span className="text-gray-700">{t.toolDetail?.tip3 || 'Utiliza la herramienta adecuada para cada tarea específica'}</span>
                 </li>
               </ul>
             </div>
@@ -130,15 +131,15 @@ const ToolDetail = () => {
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="text-center space-y-4">
                 <Wrench className="w-12 h-12 text-amber-600 mx-auto" />
-                <h3 className="text-lg font-bold text-gray-900">¿Quieres ver más?</h3>
+                <h3 className="text-lg font-bold text-gray-900">{t.toolDetail?.seeMore || '¿Quieres ver más?'}</h3>
                 <p className="text-gray-600 text-sm">
-                  Explora otras herramientas de cocina tradicionales
+                  {t.toolDetail?.seeMoreDesc || 'Explora otras herramientas de cocina tradicionales'}
                 </p>
                 <button
                   onClick={() => navigate('/gastronomia/herramientas')}
                   className="w-full px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-medium hover:from-amber-600 hover:to-orange-600 transition-all"
                 >
-                  Ver todas las herramientas
+                  {t.toolDetail?.viewTools || 'Ver todas las herramientas'}
                 </button>
               </div>
             </div>
