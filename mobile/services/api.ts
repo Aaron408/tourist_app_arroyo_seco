@@ -4,7 +4,7 @@ import { API_BASE_URL, API_CONFIG } from '../constants/config';
 
 // Keys de AsyncStorage (deben coincidir con authService)
 const STORAGE_KEYS = {
-  TOKEN: '@auth:token',
+  TOKEN: '@auth:tokenn',
   USER: '@auth:user',
   EXPIRY: '@auth:expiry',
   LOGIN_DATE: '@auth:loginDate',
